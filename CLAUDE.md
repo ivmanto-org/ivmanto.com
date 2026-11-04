@@ -2,6 +2,10 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Reminder for the owner
+
+At the start of a session, remind the owner of the unchecked items under "Open tasks" at the end of `tasks/todo.md`. Remove this section once they are done.
+
 ## Repository layout
 
 This is a monorepo with two independent services:

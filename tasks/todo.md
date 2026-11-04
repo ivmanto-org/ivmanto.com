@@ -131,3 +131,10 @@ The whole task is shipped as ONE PR (single bundle) so the rename and the redire
 - Plagiarism re-check on the 10 articles (no content changed)
 - Any change to the Go backend (slug derivation in `cache.go:116` continues to work for the new filenames)
 - Any change to `cloudbuild.yaml`, the `dist` symlink, or Secret Manager
+
+---
+
+# Open tasks
+
+- [ ] **Share your Applied Agentic AI for Organizational Transformation credential**
+      Accredible URL: https://www.credential.net/100ff9ab-e82e-41ee-b16e-4ce596b190bb#acc.lWqCGLPj
