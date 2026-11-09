@@ -33,8 +33,10 @@ terraform plan
 terraform apply
 ```
 
-Secret **values** are never stored in Terraform; it only creates the Secret Manager
-secrets. Add versions with `gcloud secrets versions add <name> --data-file=-`.
+Secret **values** are never stored in Terraform; it adopts the existing Secret
+Manager secrets via `import` blocks (replication pinned to `europe-west3`,
+`prevent_destroy` on). Add versions with
+`gcloud secrets versions add <name> --data-file=-`.
 
 ## Operator permissions
 
