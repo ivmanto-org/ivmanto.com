@@ -18,7 +18,7 @@ Plan and task list: `tasks/2026-11-09-gcp-infra-terraform.md`.
 ## Usage
 
 ```bash
-gcloud auth application-default login   # an account with Owner on the project
+gcloud auth application-default login   # operator account, see "Operator permissions"
 
 # one-time (already done 2026-11-09): with the backend block in bootstrap/main.tf
 # commented out, run init + apply, then restore the block and migrate local state
@@ -35,3 +35,22 @@ terraform apply
 
 Secret **values** are never stored in Terraform; it only creates the Secret Manager
 secrets. Add versions with `gcloud secrets versions add <name> --data-file=-`.
+
+## Operator permissions
+
+Owner works but is broader than needed. A least-privilege operator for `envs/prod` needs:
+
+| Role | For |
+|---|---|
+| `roles/serviceusage.serviceUsageAdmin` | API enablement |
+| `roles/storage.admin` | state bucket, blog bucket |
+| `roles/artifactregistry.admin` | image repository |
+| `roles/iam.serviceAccountAdmin` | service accounts and their IAM |
+| `roles/resourcemanager.projectIamAdmin` | project-level role grants |
+| `roles/secretmanager.admin` | secrets and accessor bindings |
+| `roles/run.admin` | Cloud Run services |
+| `roles/compute.loadBalancerAdmin`, `roles/compute.securityAdmin` | NEGs, backend services, Cloud Armor |
+| `roles/pubsub.admin` | blog publish notifications |
+| `roles/cloudbuild.builds.editor`, `roles/cloudbuild.connectionAdmin` | Cloud Build connection and triggers |
+
+Narrowing the current Owner-based operator to this set is tracked as a follow-up.
