@@ -25,3 +25,8 @@ output "cloud_run_services" {
   description = "Cloud Run service names, keyed by role; the serverless NEGs (#103) point at these."
   value       = { for k, s in google_cloud_run_v2_service.this : k => s.name }
 }
+
+output "lb_backend_services" {
+  description = "Backend service self-links for Nestbalm's URL map host rules (#104)."
+  value       = { for k, v in google_compute_backend_service.this : k => v.self_link }
+}
