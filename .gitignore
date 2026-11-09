@@ -50,3 +50,10 @@ docs/SEO-reports/
 grok-generated.jpg
 generated_video_1.mp4
 Gemini_Generated_Image_wyh630wyh630wyh6.png
+
+# Terraform
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
