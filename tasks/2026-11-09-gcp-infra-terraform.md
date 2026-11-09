@@ -21,7 +21,7 @@ served through the existing Nestbalm global external Application Load Balancer.
 | **DNS** (ivmanto.com registrar/DNS) | `A ivmanto.com`, `A www.ivmanto.com` → `136.68.185.92` |
 
 ## Plan
-- [ ] **IV-INFRA-1** Bootstrap: state bucket (versioned, uniform access), enable APIs, `infra/terraform/envs/prod` skeleton with `backend "gcs"`, pinned provider versions
+- [x] **IV-INFRA-1** Bootstrap: state bucket (versioned, uniform access), enable APIs, `infra/terraform/envs/prod` skeleton with `backend "gcs"`, pinned provider versions
 - [ ] **IV-INFRA-2** Artifact Registry repo, runtime service accounts (frontend, backend) with least-privilege IAM
 - [ ] **IV-INFRA-3** Secret Manager secret shells: `smtp-password`, `ideas-prompt`, `ga-api-secret`, `pubsub-push-token`, `frontend-rebuild-webhook-url` (values added by Nick out-of-band, never in Terraform)
 - [ ] **IV-INFRA-4** Blog GCS bucket + Pub/Sub notification → backend push subscription
