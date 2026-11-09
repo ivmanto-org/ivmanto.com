@@ -16,7 +16,7 @@ served through the existing Nestbalm global external Application Load Balancer.
 
 | Lives in | Resources |
 |---|---|
-| **this repo** `infra/terraform/` → `ivmanto-com-prod-514215` | APIs, Artifact Registry, service accounts, Secret Manager secrets (shells only), Cloud Run frontend + backend, serverless NEGs, backend services, Cloud Armor policy, blog GCS bucket, Pub/Sub (blog refresh), IAM grant `roles/compute.loadBalancerServiceUser` to Nestbalm's Terraform identity, CI/CD identity (WIF) |
+| **this repo** `infra/terraform/` → `ivmanto-com-prod-514215` | APIs, Artifact Registry, service accounts, Secret Manager secrets (shells only), Cloud Run frontend + backend, serverless NEGs, backend services, Cloud Armor policy, blog GCS bucket, Pub/Sub (blog refresh), IAM grant `roles/compute.loadBalancerServiceUser` to Nestbalm's Terraform identity, Cloud Build connection + triggers |
 | **Nestbalm repo** `infra/terraform/modules/app_edge` → `nestbalm-app-prod` | URL map host rules `ivmanto.com`, `www.ivmanto.com` → ivmanto backends (`/api/*` → backend, rest → frontend), managed cert for ivmanto domains added to the HTTPS proxy |
 | **DNS** (ivmanto.com registrar/DNS) | `A ivmanto.com`, `A www.ivmanto.com` → `136.68.185.92` |
 
