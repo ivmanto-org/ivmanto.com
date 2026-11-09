@@ -32,7 +32,7 @@
 # Acceptance: plan shows 0 import / +N add / 0 change / 0 destroy (all new).
 
 locals {
-  blog_bucket_name   = "ivmanto_com_blog_articles" # _GCS_BLOG_BUCKET in cloudbuild.yaml
+  blog_bucket_name   = "ivmanto_com_blog_articles_v2" # _GCS_BLOG_BUCKET in cloudbuild.yaml
   blog_topic_name    = "ivmanto-blog-refresh"
   blog_subscription  = "ivmanto-blog-refresh-push"
   blog_push_endpoint = "https://ivmanto.com/api/_internal/pubsub/blog-refresh"
