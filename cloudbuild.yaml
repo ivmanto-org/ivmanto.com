@@ -117,7 +117,7 @@ substitutions:
   # Add new substitutions for analytics
   _GA_API_SECRET_NAME: 'ga-api-secret' # The name of the secret in Secret Manager
   _GA_MEASUREMENT_ID: 'G-W1TJ3KMZ6V' # Your GA4 Measurement ID - Set in Trigger UI
-  _GCS_BLOG_BUCKET: 'ivmanto_com_blog_articles' # GCS bucket for blog markdown files
+  _GCS_BLOG_BUCKET: 'ivmanto-com-prod-514215-blog' # GCS bucket for blog markdown files
   # Pub/Sub push token for blog cache refresh (secret name in Secret Manager)
   _PUBSUB_PUSH_TOKEN_SECRET_NAME: 'pubsub-push-token'
   # Front End Build Webhook URL (secret name in Secret Manager)
