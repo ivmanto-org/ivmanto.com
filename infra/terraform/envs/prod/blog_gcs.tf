@@ -38,10 +38,6 @@ locals {
   blog_push_endpoint = "https://ivmanto.com/api/_internal/pubsub/blog-refresh"
 }
 
-data "google_project" "this" {
-  project_id = var.project_id
-}
-
 # --- Bucket ------------------------------------------------------------
 resource "google_storage_bucket" "blog" {
   name                        = local.blog_bucket_name
@@ -59,15 +55,13 @@ resource "google_storage_bucket" "blog" {
 
 # Backend reads the .md articles and writes the metadata.json cache
 # (backend/internal/blog/gcs.go: ListMarkdownFiles/ReadFile/WriteMetadataCache).
-resource "google_storage_bucket_iam_member" "backend_blog_reader" {
+# The cache write is an OVERWRITE of metadata.json (gcs.go Writer), which
+# GCS implements as delete+create -> objectCreator alone fails on the 2nd
+# write (needs storage.objects.delete). objectUser bundles viewer+creator
+# + delete, so one binding covers read, create and overwrite.
+resource "google_storage_bucket_iam_member" "backend_blog_access" {
   bucket = google_storage_bucket.blog.name
-  role   = "roles/storage.objectViewer"
-  member = google_service_account.backend.member
-}
-
-resource "google_storage_bucket_iam_member" "backend_blog_cache_writer" {
-  bucket = google_storage_bucket.blog.name
-  role   = "roles/storage.objectCreator"
+  role   = "roles/storage.objectUser"
   member = google_service_account.backend.member
 }
 
@@ -79,13 +73,20 @@ resource "google_pubsub_topic" "blog" {
   depends_on = [google_project_service.this]
 }
 
-# GCS notifications are published by the gs-project-accounts service account,
-# so it needs pubsub.publisher on the topic.
+# GCS notifications are published by the project's GCS service agent
+# (gs-project-accounts). Resolving it via the data source (instead of a
+# hard-coded service-${project.number}@gs-project-accounts... address)
+# makes Terraform verify/provision the service agent exists in a fresh
+# project before the IAM grant.
+data "google_storage_project_service_account" "gcs" {
+  project = var.project_id
+}
+
 resource "google_pubsub_topic_iam_member" "blog_gcs_publisher" {
   project = var.project_id
   topic   = google_pubsub_topic.blog.name
   role    = "roles/pubsub.publisher"
-  member  = "serviceAccount:service-${data.google_project.this.number}@gs-project-accounts.iam.gserviceaccount.com"
+  member  = "serviceAccount:${data.google_storage_project_service_account.gcs.email_address}"
 
   depends_on = [google_project_service.this]
 }
