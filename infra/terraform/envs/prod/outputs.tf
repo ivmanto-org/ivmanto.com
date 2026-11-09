@@ -20,3 +20,8 @@ output "gcal_sa_client_id" {
   description = "OAuth client ID to authorise for DWD in the Workspace Admin Console (#107)."
   value       = google_service_account.gcal.unique_id
 }
+
+output "cloud_run_services" {
+  description = "Cloud Run service names, keyed by role; the serverless NEGs (#103) point at these."
+  value       = { for k, s in google_cloud_run_v2_service.this : k => s.name }
+}

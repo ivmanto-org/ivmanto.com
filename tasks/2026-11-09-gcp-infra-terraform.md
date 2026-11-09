@@ -25,7 +25,7 @@ served through the existing Nestbalm global external Application Load Balancer.
 - [x] **IV-INFRA-2** Artifact Registry repo, runtime service accounts (frontend, backend) with least-privilege IAM
 - [ ] **IV-INFRA-3** Secret Manager secret shells: `smtp-password`, `ideas-prompt`, `ga-api-secret`, `pubsub-push-token`, `frontend-rebuild-webhook-url` (values added by Nick out-of-band, never in Terraform)
 - [ ] **IV-INFRA-4** Blog GCS bucket + Pub/Sub notification → backend push subscription
-- [ ] **IV-INFRA-5** Cloud Run services `ivmanto-com` (frontend) and `ivmanto-backend-service`, ingress `internal-and-cloud-load-balancing`, placeholder image until CI pushes the first build
+- [x] **IV-INFRA-5** Cloud Run services `ivmanto-com` (frontend) and `ivmanto-backend-service`, ingress `internal-and-cloud-load-balancing`, placeholder image until CI pushes the first build
 - [ ] **IV-INFRA-6** Serverless NEGs + backend services + Cloud Armor policy; grant LB service user to Nestbalm's identity; output backend service self-links
 - [ ] **IV-INFRA-7** Nestbalm repo PR: host rules + ivmanto cert in `app_edge` (separate PR in `Nestbalm/nestbalm-saas`, reviewed there)
 - [ ] **IV-INFRA-8** CI/CD stays on **Cloud Build, `cloudbuild*.yaml` unchanged**. Terraform recreates: Cloud Build GitHub connection (2nd gen) to `ivmanto-org/ivmanto.com` (Nick authorises the GitHub App once), push-to-`main` trigger → `cloudbuild.yaml`, webhook trigger → `cloudbuild-frontend-only.yaml` (its URL stored in secret `frontend-rebuild-webhook-url`, used by the backend after a blog publish), Cloud Build SA with deploy rights
