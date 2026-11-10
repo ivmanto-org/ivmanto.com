@@ -1,6 +1,6 @@
 # Blog Article Specification
 
-This document defines the frontmatter contract for blog articles published to the GCS bucket `ivmanto_com_blog_articles`.
+This document defines the frontmatter contract for blog articles published to the GCS bucket `ivmanto-com-prod-514215-blog`.
 
 ## Filename Convention
 
