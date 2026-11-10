@@ -36,14 +36,22 @@ type GeneratedIdea struct {
 	Summary string
 }
 
-// LeadInfo holds the data from the advisor lead-capture form (epic #112,
-// spec: LeadForm). Name, Email, Company and Message are required; Consent
-// documents the Art. 6(1)(a) conversation-sharing consent and must be true
-// for the email to be sent. The lead is emailed to Nick and NOT stored.
+// LeadInfo holds the data from the lead-capture forms (epic #112, spec:
+// LeadForm). Source is which surface produced the lead (advisor | order |
+// contact); PackageID is set only on the advisor order flow (rendered into
+// the email, never used to look anything up server-side). Name, Email,
+// Company and Message are required; Consent documents the Art. 6(1)(a)
+// conversation-sharing consent and must be true for the email to be sent.
+// InsightsOptIn is the visitor's insights double-opt-in flag — captured and
+// forwarded to Nick, never acted on server-side. The lead is emailed to
+// Nick and NOT stored.
 type LeadInfo struct {
-	Name    string
-	Email   string
-	Company string
-	Message string
-	Consent bool
+	Source        string
+	PackageID     string
+	Name          string
+	Email         string
+	Company       string
+	Message       string
+	Consent       bool
+	InsightsOptIn bool
 }

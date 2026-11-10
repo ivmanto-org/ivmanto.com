@@ -47,7 +47,7 @@ func post(t *testing.T, srv *httptest.Server, body string) (*http.Response, map[
 }
 
 func validBody() string {
-	return `{"name":"Ada Lovelace","email":"ada@example.com","company":"Analytical Engines","message":"We need an AI governance framework.","consent":true}`
+	return `{"source":"advisor","name":"Ada Lovelace","email":"ada@example.com","company":"Analytical Engines","message":"We need an AI governance framework.","consent":true,"insights_optin":true}`
 }
 
 func TestLeadHappyPath(t *testing.T) {
@@ -67,6 +67,9 @@ func TestLeadHappyPath(t *testing.T) {
 	lead := m.sent[0]
 	if lead.Name != "Ada Lovelace" || lead.Email != "ada@example.com" || lead.Company != "Analytical Engines" || !lead.Consent {
 		t.Fatalf("lead mismatch: %+v", lead)
+	}
+	if lead.Source != "advisor" || !lead.InsightsOptIn {
+		t.Fatalf("source/insights passthrough mismatch: %+v", lead)
 	}
 	if strings.Contains(body["message"].(string), "within one working day") == false {
 		t.Fatalf("success message mismatch: %v", body["message"])
@@ -97,7 +100,7 @@ func TestLeadRequiresConsent(t *testing.T) {
 	}
 
 	// consent omitted entirely: default false -> refused
-	resp, _ = post(t, srv, `{"name":"a","email":"b@c.d","company":"x","message":"m"}`)
+	resp, _ = post(t, srv, `{"source":"contact","name":"a","email":"b@c.d","company":"x","message":"m"}`)
 	if resp.StatusCode != http.StatusUnprocessableEntity {
 		t.Fatalf("want 422 when consent omitted, got %d", resp.StatusCode)
 	}
@@ -114,10 +117,13 @@ func TestLeadValidation(t *testing.T) {
 		code string
 		stat int
 	}{
-		{"missing fields", `{"email":"a@b.c","consent":true}`, "bad_request", http.StatusBadRequest},
-		{"bad email", `{"name":"a","email":"not-an-email","company":"x","message":"m","consent":true}`, "bad_email", http.StatusBadRequest},
-		{"empty message", `{"name":"a","email":"a@b.c","company":"x","message":"  ","consent":true}`, "bad_request", http.StatusBadRequest},
+		{"missing fields", `{"email":"a@b.c","source":"contact","consent":true}`, "bad_request", http.StatusBadRequest},
+		{"bad email", `{"source":"contact","name":"a","email":"not-an-email","company":"x","message":"m","consent":true}`, "bad_email", http.StatusBadRequest},
+		{"empty message", `{"source":"order","name":"a","email":"a@b.c","company":"x","message":"  ","consent":true}`, "bad_request", http.StatusBadRequest},
 		{"invalid json", `not json`, "bad_request", http.StatusBadRequest},
+		{"missing source", `{"name":"a","email":"a@b.c","company":"x","message":"m","consent":true}`, "bad_source", http.StatusBadRequest},
+		{"invalid source", `{"source":"newsletter","name":"a","email":"a@b.c","company":"x","message":"m","consent":true}`, "bad_source", http.StatusBadRequest},
+		{"package id passthrough ok", `{"source":"order","package_id":"gov-ai-policy","name":"a","email":"a@b.c","company":"x","message":"m","consent":true,"insights_optin":false}`, "", http.StatusOK},
 	}
 	for _, tc := range cases {
 		resp, out := post(t, srv, tc.body)
@@ -128,8 +134,9 @@ func TestLeadValidation(t *testing.T) {
 			t.Errorf("%s: want code %s, got %v", tc.name, tc.code, out["code"])
 		}
 	}
-	if m.calls != 0 {
-		t.Fatalf("mailer must not fire on invalid input, calls=%d", m.calls)
+	// The passthrough-ok case legitimately sends one lead.
+	if m.calls != 1 {
+		t.Fatalf("mailer calls: want 1 (passthrough-ok case), got %d", m.calls)
 	}
 }
 

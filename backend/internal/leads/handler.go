@@ -36,15 +36,32 @@ func (h *Handler) RegisterRoutes(mux *http.ServeMux) {
 	mux.HandleFunc("POST /api/leads", h.handleLead)
 }
 
-// leadRequest is the frontend LeadForm payload. Consent is a required,
-// explicitly-ticked checkbox (Art. 6(1)(a)); the handler refuses to send
-// without it. Message is the editable prefill of the conversation summary.
+// leadRequest is the frontend LeadForm payload (contract per PR #129/#126,
+// Clauco 2026-11-10 21:36Z): {source:'advisor'|'order'|'contact',
+// package_id?, name, email, company, message, consent:true,
+// insights_optin:bool}. Source tells Nick which surface produced the lead;
+// package_id is set only on the advisor order flow; insights_optin is the
+// double-opt-in flag for future insights emails (Brio's privacy draft: the
+// opt-in is captured now, the actual double opt-in comes later).
+// Consent is a required, explicitly-ticked checkbox (Art. 6(1)(a)); the
+// handler refuses to send without it. Message is the editable prefill of
+// the conversation summary.
 type leadRequest struct {
-	Name    string `json:"name"`
-	Email   string `json:"email"`
-	Company string `json:"company"`
-	Message string `json:"message"`
-	Consent bool   `json:"consent"`
+	Source        string `json:"source"`
+	PackageID     string `json:"package_id"`
+	Name          string `json:"name"`
+	Email         string `json:"email"`
+	Company       string `json:"company"`
+	Message       string `json:"message"`
+	Consent       bool   `json:"consent"`
+	InsightsOptIn bool   `json:"insights_optin"`
+}
+
+// validLeadSources are the three surfaces that submit to /api/leads.
+var validLeadSources = map[string]bool{
+	"advisor": true,
+	"order":   true,
+	"contact": true,
 }
 
 const (
@@ -69,6 +86,12 @@ func (h *Handler) handleLead(w http.ResponseWriter, r *http.Request) {
 	req.Email = strings.TrimSpace(req.Email)
 	req.Company = strings.TrimSpace(req.Company)
 	req.Message = strings.TrimSpace(req.Message)
+	req.PackageID = strings.TrimSpace(req.PackageID)
+
+	if !validLeadSources[req.Source] {
+		writeError(w, http.StatusBadRequest, `source must be "advisor", "order" or "contact"`, "bad_source")
+		return
+	}
 
 	if req.Name == "" || req.Email == "" || req.Company == "" {
 		writeError(w, http.StatusBadRequest, "name, email and company are required", "bad_request")
@@ -96,11 +119,14 @@ func (h *Handler) handleLead(w http.ResponseWriter, r *http.Request) {
 	// Send to Nick. Minimal logging: count and recipient only, never the
 	// message/name/email (PII).
 	if err := h.emailer.SendLeadNotification(email.LeadInfo{
-		Name:    req.Name,
-		Email:   req.Email,
-		Company: req.Company,
-		Message: req.Message,
-		Consent: req.Consent,
+		Source:        req.Source,
+		PackageID:     req.PackageID,
+		Name:          req.Name,
+		Email:         req.Email,
+		Company:       req.Company,
+		Message:       req.Message,
+		Consent:       req.Consent,
+		InsightsOptIn: req.InsightsOptIn,
 	}); err != nil {
 		h.logger.Error("failed to send lead notification", "error", err.Error())
 		writeError(w, http.StatusInternalServerError, "failed to submit lead", "send_failed")

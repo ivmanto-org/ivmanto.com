@@ -306,22 +306,35 @@ func (s *SmtpService) SendLeadNotification(lead LeadInfo) error {
 	return s.send([]string{leadRecipient}, nil, subject, buildLeadNotificationHTML(lead), nil)
 }
 
-// buildLeadNotificationHTML renders the advisor-lead email body. Consent is
-// already checked true by the handler before this is called.
+// buildLeadNotificationHTML renders the lead email body. Consent is already
+// checked true by the handler before this is called. Source, package and
+// insights opt-in are rendered so Nick knows which surface produced the
+// lead and what future consent the visitor gave.
 func buildLeadNotificationHTML(lead LeadInfo) string {
-	return fmt.Sprintf(`<p><strong>New lead from the AI service advisor.</strong></p>
+	packageLine := ""
+	if lead.PackageID != "" {
+		packageLine = fmt.Sprintf("<li><strong>Package:</strong> %s</li>\n", htmlEscape(lead.PackageID))
+	}
+	insights := "no"
+	if lead.InsightsOptIn {
+		insights = "yes"
+	}
+	return fmt.Sprintf(`<p><strong>New lead (source: %s) from the ivmanto.com AI service advisor funnel.</strong></p>
 <ul>
 <li><strong>Name:</strong> %s</li>
 <li><strong>Email:</strong> <a href="mailto:%s">%s</a></li>
 <li><strong>Company:</strong> %s</li>
-</ul>
+%s</ul>
 <p><strong>Request / conversation summary:</strong></p>
 <p>%s</p>
-<p><em>Consent given (Art. 6(1)(a)): yes.</em></p>`,
+<p><em>Consent given (Art. 6(1)(a)): yes. Insights opt-in: %s.</em></p>`,
+		htmlEscape(lead.Source),
 		htmlEscape(lead.Name),
 		htmlEscape(lead.Email), htmlEscape(lead.Email),
 		htmlEscape(lead.Company),
-		htmlEscape(lead.Message))
+		packageLine,
+		htmlEscape(lead.Message),
+		insights)
 }
 
 var htmlEscaper = strings.NewReplacer(
