@@ -1,7 +1,19 @@
-/* assets/css/main.css — Design System v2.1 — Dynamic Overhaul */
+/* ivmanto design system v1.0 (docs/design-system), Brio. Fonts are self-hosted (no Google CDN, GDPR). */
+@import '@fontsource/inter/400.css';
+@import '@fontsource/inter/500.css';
+@import '@fontsource/inter/600.css';
+@import '@fontsource/montserrat/500.css';
+@import '@fontsource/montserrat/600.css';
+@import '@fontsource/jetbrains-mono/400.css';
+@import './ds/tokens.css';
+@import './ds/foundation.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ===== Legacy styles (old design) for pages not yet redesigned: blog, booking, about, legal. Remove page by page. ===== */
+/* assets/css/main.css — Design System v2.1 — Dynamic Overhaul */
 
 /* ─── Custom Properties ─── */
 :root {
@@ -442,3 +454,12 @@
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
+/* ===== end legacy ===== */
+
+
+/* Logo SVGs inlined by <BrandLogo>: colours follow the theme. */
+.brand-logo [data-ink] { stroke: var(--text); }
+.brand-logo [data-ink-fill] { fill: var(--text); }
+.brand-logo [data-brand] { stroke: var(--brand); }
+.brand-logo [data-brand-fill] { fill: var(--brand); }

@@ -1,11 +1,11 @@
 <script setup lang="ts">
 const route = useRoute()
 
-const siteTitle = 'ivmanto.com | Data & AI Consultancy'
+const siteTitle = 'ivmanto | AI governance, risk and compliance'
 const siteDescription =
-  'Data & AI Consultancy on Google Cloud Platform. Expert data architecture, governance, and AI solutions that turn your data into a strategic asset.'
+  'Fixed-scope services that get your company ready for the EU AI Act and ISO/IEC 42001: clear owners, documented risks, audit-ready evidence.'
 const siteUrl = 'https://ivmanto.com'
-const ogImage = `${siteUrl}/social-sharing-card.webp`
+const ogImage = `${siteUrl}/og-image.png`
 
 useHead({
   titleTemplate: (titleChunk) => {

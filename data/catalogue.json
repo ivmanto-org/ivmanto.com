@@ -1,5 +1,5 @@
 {
-  "_status": "PLACEHOLDER v0: names, scope, durations and prices are Brio's design placeholders (docs/design-system). Nick defines the real catalogue (#112). price_eur null = not set yet; the site shows '€ —'.",
+  "_status": "PLACEHOLDER v0: names, scope, durations and prices are Brio's design placeholders (docs/design-system). Nick defines the real catalogue (#112). price_eur null = not set yet; the site shows '€ [price]'.",
   "version": 0,
   "currency": "EUR",
   "pillars": [
@@ -16,7 +16,7 @@
     {
       "id": "compliance",
       "name": "Compliance",
-      "summary": "Know your obligations and prove you meet them: audit-proof documentation, not binders."
+      "summary": "Know your obligations and prove you meet them: audit-ready documentation, not binders."
     }
   ],
   "packages": [
@@ -25,13 +25,14 @@
       "pillar": "governance",
       "name": "AI policy & acceptable use",
       "outcome": "A written AI policy and acceptable-use rules your staff can follow.",
-      "duration_weeks": 2,
+      "duration_weeks": 3,
       "deliverable": "Policy + rules",
-      "includes": ["Kickoff workshop", "AI policy draft and final", "Acceptable-use rules for staff"],
+      "includes": ["Kickoff workshop", "AI policy and acceptable-use rules", "Approval workflow for new AI tools", "Staff briefing (1 h)"],
       "not_included": ["Legal review of the policy"],
-      "frameworks": ["ISO/IEC 42001"],
+      "frameworks": ["ISO/IEC 42001", "EU AI Act"],
       "price_eur": null,
-      "recommended": false
+      "recommended": false,
+      "pillar_recommended": true
     },
     {
       "id": "gov-ai-inventory",
@@ -51,9 +52,9 @@
       "pillar": "governance",
       "name": "Governance operating model",
       "outcome": "Decision rights, committees and reporting lines for AI, written down and agreed.",
-      "duration_weeks": 4,
+      "duration_weeks": 6,
       "deliverable": "Operating model",
-      "includes": ["Stakeholder interviews", "Roles and decision rights", "Reporting and escalation paths"],
+      "includes": ["Stakeholder interviews", "AI governance board setup", "RACI and escalation paths", "Review cadence"],
       "not_included": ["Running the committee after handover"],
       "frameworks": ["ISO/IEC 42001", "NIST AI RMF"],
       "price_eur": null,
@@ -70,7 +71,8 @@
       "not_included": ["Implementing the mitigations"],
       "frameworks": ["NIST AI RMF", "ISO/IEC 42001"],
       "price_eur": null,
-      "recommended": false
+      "recommended": false,
+      "pillar_recommended": true
     },
     {
       "id": "risk-register-setup",
@@ -109,7 +111,8 @@
       "not_included": ["Legal advice; we work alongside your lawyer"],
       "frameworks": ["EU AI Act"],
       "price_eur": null,
-      "recommended": true
+      "recommended": true,
+      "pillar_recommended": true
     },
     {
       "id": "comp-iso-42001-gap",

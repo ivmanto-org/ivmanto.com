@@ -22,7 +22,7 @@
             strategic asset for your organization.
           </p>
           <NuxtLink
-            to="/services/data-strategy-and-governance"
+            to="/services"
             class="mt-4 inline-block text-primary font-semibold hover:underline"
           >
             Explore this service &rarr;
@@ -39,7 +39,7 @@
             for your data-driven future.
           </p>
           <NuxtLink
-            to="/services/data-architecture"
+            to="/services"
             class="mt-4 inline-block text-primary font-semibold hover:underline"
           >
             Explore this service &rarr;
@@ -56,7 +56,7 @@
             Lakehouses.
           </p>
           <NuxtLink
-            to="/services/ml-engineering"
+            to="/services"
             class="mt-4 inline-block text-primary font-semibold hover:underline"
           >
             Explore this service &rarr;

@@ -730,7 +730,7 @@ async function shareResults() {
           <h3 class="text-xl font-bold text-dark-slate mb-6">Services That Can Help</h3>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <NuxtLink
-              to="/services/data-strategy-and-governance"
+              to="/services"
               class="block p-6 bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-lg hover:-translate-y-0.5 transition-all"
             >
               <h4 class="font-bold text-dark-slate">Data Governance</h4>
@@ -738,7 +738,7 @@ async function shareResults() {
               <span class="mt-3 inline-block text-primary font-semibold text-sm">Learn More &rarr;</span>
             </NuxtLink>
             <NuxtLink
-              to="/services/data-architecture"
+              to="/services"
               class="block p-6 bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-lg hover:-translate-y-0.5 transition-all"
             >
               <h4 class="font-bold text-dark-slate">Data Architecture</h4>
@@ -746,7 +746,7 @@ async function shareResults() {
               <span class="mt-3 inline-block text-primary font-semibold text-sm">Learn More &rarr;</span>
             </NuxtLink>
             <NuxtLink
-              to="/services/ml-engineering"
+              to="/services"
               class="block p-6 bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-lg hover:-translate-y-0.5 transition-all"
             >
               <h4 class="font-bold text-dark-slate">AI & ML Solutions</h4>

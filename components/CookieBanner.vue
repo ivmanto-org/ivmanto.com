@@ -1,102 +1,63 @@
-<template>
-  <div v-if="showBanner" class="cookie-banner">
-    <p class="cookie-text">
-      This website uses cookies to enhance your browsing experience and analyze site traffic. By
-      clicking "Accept", you agree to our use of cookies.
-      <NuxtLink to="/privacy-policy">Full Privacy Policy</NuxtLink>.
-    </p>
-    <div class="cookie-actions">
-      <button @click="declineCookies" class="btn btn-secondary">Decline</button>
-      <button @click="acceptCookies" class="btn btn-primary">Accept</button>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
+// Consent gate for analytics (GTM loads only after "Accept"). Accept and Reject have
+// equal weight (TTDSG/GDPR). The footer's "Cookie settings" reopens this banner via
+// the 'ivm:cookie-settings' window event.
 import { initGtm } from '~/services/analytics'
-
-const showBanner = ref(false)
 
 const COOKIE_CONSENT_KEY = 'cookie_consent'
 
-onMounted(() => {
-  // Check if consent has already been given
-  if (!localStorage.getItem(COOKIE_CONSENT_KEY)) {
-    showBanner.value = true
+const showBanner = ref(false)
+
+function readConsent(): string | null {
+  try {
+    return localStorage.getItem(COOKIE_CONSENT_KEY)
+  } catch {
+    return null
   }
+}
+
+function writeConsent(value: 'accepted' | 'declined') {
+  try {
+    localStorage.setItem(COOKIE_CONSENT_KEY, value)
+  } catch {
+    // Storage blocked: the choice applies to this page view only.
+  }
+}
+
+const reopen = () => {
+  showBanner.value = true
+}
+
+onMounted(() => {
+  if (!readConsent()) showBanner.value = true
+  window.addEventListener('ivm:cookie-settings', reopen)
 })
 
+onBeforeUnmount(() => window.removeEventListener('ivm:cookie-settings', reopen))
+
 const acceptCookies = () => {
-  localStorage.setItem(COOKIE_CONSENT_KEY, 'accepted')
+  writeConsent('accepted')
   showBanner.value = false
-  // Initialize GTM immediately after consent is given.
   initGtm()
 }
 
 const declineCookies = () => {
-  localStorage.setItem(COOKIE_CONSENT_KEY, 'declined')
+  writeConsent('declined')
   showBanner.value = false
 }
 </script>
 
-<style scoped>
-.cookie-banner {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background-color: #2d3748;
-  color: #f7fafc;
-  padding: 1rem 1.5rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  z-index: 1000;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-.cookie-text {
-  margin: 0;
-  flex-grow: 1;
-  font-size: 0.9rem;
-}
-
-.cookie-text a {
-  color: #63b3ed;
-  text-decoration: underline;
-}
-
-.cookie-actions {
-  display: flex;
-  gap: 0.75rem;
-}
-
-.btn {
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 0.375rem;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.2s ease-in-out;
-}
-
-.btn-primary {
-  background-color: #2b6cb0;
-  color: white;
-}
-
-.btn-primary:hover {
-  background-color: #3182ce;
-}
-
-.btn-secondary {
-  background-color: #4a5568;
-  color: white;
-}
-
-.btn-secondary:hover {
-  background-color: #2d3748;
-}
-</style>
+<template>
+  <div v-if="showBanner" class="cookie" role="dialog" aria-labelledby="cookie-title">
+    <h4 id="cookie-title">Cookies</h4>
+    <p>
+      We use analytics cookies only if you agree. You can change this any time under
+      “Cookie settings” in the footer.
+      <NuxtLink to="/privacy-policy">Details</NuxtLink>
+    </p>
+    <div class="row">
+      <button type="button" class="btn btn--secondary btn--sm" @click="declineCookies">Reject</button>
+      <button type="button" class="btn btn--primary btn--sm" @click="acceptCookies">Accept</button>
+    </div>
+  </div>
+</template>
