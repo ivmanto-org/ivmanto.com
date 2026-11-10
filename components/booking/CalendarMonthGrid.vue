@@ -124,11 +124,11 @@ function shiftMonth(amount: number) {
         :disabled="isPrevMonthDisabled"
         aria-label="Previous month"
       >
-        <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <svg class="w-6 h-6 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
         </svg>
       </button>
-      <h3 class="text-lg font-semibold text-gray-700">{{ monthLabel }}</h3>
+      <h3 class="text-lg font-semibold text-muted">{{ monthLabel }}</h3>
       <button
         type="button"
         @click="shiftMonth(1)"
@@ -136,7 +136,7 @@ function shiftMonth(amount: number) {
         :disabled="isNextMonthDisabled"
         aria-label="Next month"
       >
-        <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <svg class="w-6 h-6 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
         </svg>
       </button>
@@ -144,7 +144,7 @@ function shiftMonth(amount: number) {
 
     <!-- Day-of-week header -->
     <div class="grid grid-cols-7 gap-1 mb-1">
-      <div v-for="d in dayLabels" :key="d" class="text-center text-xs font-medium text-gray-500">
+      <div v-for="d in dayLabels" :key="d" class="text-center text-xs font-medium text-muted">
         {{ d }}
       </div>
     </div>
@@ -165,7 +165,7 @@ function shiftMonth(amount: number) {
                 ? 'bg-primary text-white font-semibold'
                 : isSameDay(cell, todayMidnight) && !isSameDay(cell, modelValue)
                   ? 'border border-primary text-primary font-semibold hover:bg-primary hover:text-white cursor-pointer'
-                  : 'text-gray-700 hover:bg-primary hover:text-white cursor-pointer',
+                  : 'text-muted hover:bg-primary hover:text-white cursor-pointer',
           ]"
           :aria-label="cell.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })"
           :aria-pressed="isSameDay(cell, modelValue)"

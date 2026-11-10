@@ -582,16 +582,16 @@
   padding: 1rem 2rem;
   text-align: left;
   line-height: 1.6;
-  color: #333;
+  color: var(--text);
 }
 
 h1 {
-  border-bottom: 2px solid #eee;
+  border-bottom: 2px solid var(--border);
   padding-bottom: 0.5rem;
 }
 
 h2 {
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--border);
   padding-bottom: 0.3rem;
   margin-top: 2.5rem;
 }
@@ -612,7 +612,7 @@ li {
 }
 
 a {
-  color: #007bff;
+  color: var(--accent);
   text-decoration: none;
 }
 

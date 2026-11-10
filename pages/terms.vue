@@ -15,15 +15,15 @@ useSeoMeta({
 <template>
   <div class="bg-light-gray py-12 sm:py-16">
     <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-      <div class="bg-white rounded-lg shadow-lg p-8 md:p-12">
-        <h1 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl mb-8">
+      <div class="bg-surface rounded-lg shadow-lg p-8 md:p-12">
+        <h1 class="text-3xl font-bold tracking-tight text-text sm:text-4xl mb-8">
           Terms of Service
         </h1>
-        <p class="text-sm text-gray-500 mb-8">Last updated: March 5, 2026</p>
+        <p class="text-sm text-muted mb-8">Last updated: March 5, 2026</p>
 
-        <div class="prose prose-lg max-w-none text-gray-700 space-y-6">
+        <div class="prose prose-lg max-w-none text-muted space-y-6">
           <section>
-            <h2 class="text-xl font-semibold text-gray-900 mt-8 mb-4">1. Agreement to Terms</h2>
+            <h2 class="text-xl font-semibold text-text mt-8 mb-4">1. Agreement to Terms</h2>
             <p>
               By accessing and using the website <strong>ivmanto.com</strong> ("the Website") and
               any consulting services provided by IVMANTO — Nikolay Tonev Data &amp; Cloud Solutions
@@ -33,7 +33,7 @@ useSeoMeta({
           </section>
 
           <section>
-            <h2 class="text-xl font-semibold text-gray-900 mt-8 mb-4">2. Services</h2>
+            <h2 class="text-xl font-semibold text-text mt-8 mb-4">2. Services</h2>
             <p>
               IVMANTO provides data architecture, AI/ML engineering, data governance, and cloud
               consulting services on Google Cloud Platform. Services are provided on a project basis
@@ -46,7 +46,7 @@ useSeoMeta({
           </section>
 
           <section>
-            <h2 class="text-xl font-semibold text-gray-900 mt-8 mb-4">3. Intellectual Property</h2>
+            <h2 class="text-xl font-semibold text-text mt-8 mb-4">3. Intellectual Property</h2>
             <p>
               All content on the Website, including but not limited to text, graphics, logos, images,
               blog articles, and software, is the intellectual property of IVMANTO and is protected
@@ -60,7 +60,7 @@ useSeoMeta({
           </section>
 
           <section>
-            <h2 class="text-xl font-semibold text-gray-900 mt-8 mb-4">4. User Conduct</h2>
+            <h2 class="text-xl font-semibold text-text mt-8 mb-4">4. User Conduct</h2>
             <p>When using the Website, you agree not to:</p>
             <ul class="list-disc pl-6 space-y-2 mt-2">
               <li>Use the Website for any unlawful purpose or in violation of any applicable laws</li>
@@ -72,7 +72,7 @@ useSeoMeta({
           </section>
 
           <section>
-            <h2 class="text-xl font-semibold text-gray-900 mt-8 mb-4">5. Booking &amp; Consultations</h2>
+            <h2 class="text-xl font-semibold text-text mt-8 mb-4">5. Booking &amp; Consultations</h2>
             <p>
               The booking system on the Website allows you to schedule consultation sessions.
               By booking a session, you agree to provide accurate contact information and to attend
@@ -85,7 +85,7 @@ useSeoMeta({
           </section>
 
           <section>
-            <h2 class="text-xl font-semibold text-gray-900 mt-8 mb-4">6. Limitation of Liability</h2>
+            <h2 class="text-xl font-semibold text-text mt-8 mb-4">6. Limitation of Liability</h2>
             <p>
               The Website and its content are provided "as is" without warranties of any kind, either
               express or implied. IVMANTO does not guarantee that the Website will be available at
@@ -99,7 +99,7 @@ useSeoMeta({
           </section>
 
           <section>
-            <h2 class="text-xl font-semibold text-gray-900 mt-8 mb-4">7. Third-Party Links</h2>
+            <h2 class="text-xl font-semibold text-text mt-8 mb-4">7. Third-Party Links</h2>
             <p>
               The Website may contain links to third-party websites or services. IVMANTO is not
               responsible for the content, accuracy, or practices of any third-party websites.
@@ -108,7 +108,7 @@ useSeoMeta({
           </section>
 
           <section>
-            <h2 class="text-xl font-semibold text-gray-900 mt-8 mb-4">8. Governing Law</h2>
+            <h2 class="text-xl font-semibold text-text mt-8 mb-4">8. Governing Law</h2>
             <p>
               These Terms shall be governed by and construed in accordance with the laws of the
               Federal Republic of Germany. Any disputes arising from these Terms shall be subject to
@@ -117,7 +117,7 @@ useSeoMeta({
           </section>
 
           <section>
-            <h2 class="text-xl font-semibold text-gray-900 mt-8 mb-4">9. Changes to Terms</h2>
+            <h2 class="text-xl font-semibold text-text mt-8 mb-4">9. Changes to Terms</h2>
             <p>
               IVMANTO reserves the right to modify these Terms at any time. Changes will be
               effective immediately upon posting on the Website. Your continued use of the Website
@@ -126,7 +126,7 @@ useSeoMeta({
           </section>
 
           <section>
-            <h2 class="text-xl font-semibold text-gray-900 mt-8 mb-4">10. Contact</h2>
+            <h2 class="text-xl font-semibold text-text mt-8 mb-4">10. Contact</h2>
             <p>
               If you have any questions about these Terms, please contact us through the
               <NuxtLink to="/#contact" class="text-primary hover:underline">contact form</NuxtLink>

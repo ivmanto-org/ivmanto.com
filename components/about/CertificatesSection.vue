@@ -34,7 +34,7 @@ const certificates = [
     <div class="container mx-auto px-6">
       <div class="text-center max-w-3xl mx-auto">
         <h2 class="text-3xl md:text-4xl font-bold text-dark-slate">Certifications & Credentials</h2>
-        <p class="text-lg text-gray-600 mt-4">
+        <p class="text-lg text-muted mt-4">
           A testament to my commitment to excellence and continuous learning in the field of cloud
           and data architecture.
         </p>

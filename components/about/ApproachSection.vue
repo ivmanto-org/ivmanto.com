@@ -1,10 +1,10 @@
 <template>
-  <section class="py-20 md:py-28 bg-white">
+  <section class="py-20 md:py-28 bg-surface">
     <div class="container mx-auto px-6">
       <div class="text-center max-w-3xl mx-auto">
         <h2 class="text-3xl md:text-4xl font-bold text-dark-slate">My Philosophy & Approach</h2>
 
-        <p class="text-lg text-gray-600 mt-4">
+        <p class="text-lg text-muted mt-4">
           "No house should ever be on a hill or on anything. It should be of the hill. Belonging to
           it. Hill and house should live together each the happier for the other."
         </p>
@@ -15,7 +15,7 @@
         <!-- Organic Architecture -->
         <div class="bg-light-gray p-8 rounded-xl shadow-sm hover:shadow-lg transition-shadow">
           <h3 class="text-xl font-bold text-primary mb-4">"Organic Architecture"</h3>
-          <p class="text-gray-600">
+          <p class="text-muted">
             I am a firm believer of the philosophy of
             <strong>"Organic Architecture"</strong> defined by the famous architect Frank Lloyd
             Wright. His list of best principles is a comprehensive guide to best practices for
@@ -31,7 +31,7 @@
         <!-- Methodologies & Tools -->
         <div class="bg-light-gray p-8 rounded-xl shadow-sm hover:shadow-lg transition-shadow">
           <h3 class="text-xl font-bold text-primary mb-4">Methodologies & Tools</h3>
-          <p class="text-gray-600">
+          <p class="text-muted">
             My approach is built on:<br />
             <strong>* Agile methodology</strong>, focusing on collaborative sprints and continuous
             feedback to deliver value quickly and adapt to your evolving needs. I am proficient in
@@ -46,7 +46,7 @@
         <!-- Infrastructure & DataOps -->
         <div class="bg-light-gray p-8 rounded-xl shadow-sm hover:shadow-lg transition-shadow">
           <h3 class="text-xl font-bold text-primary mb-4">How We'll Work Together</h3>
-          <p class="text-gray-600">
+          <p class="text-muted">
             My work is built on the foundation of seamless collaboration and predictable outcomes.
             As your partner, I'll integrate with your existing business environment and culture,
             ensuring a smooth and effective process.<br />

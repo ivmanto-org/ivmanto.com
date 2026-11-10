@@ -68,7 +68,7 @@ async function handleSubmit() {
 </script>
 
 <template>
-  <div class="max-w-xl mx-auto bg-white/10 p-6 md:p-8 rounded-xl backdrop-blur-sm">
+  <div class="max-w-xl mx-auto bg-surface/10 p-6 md:p-8 rounded-xl backdrop-blur-sm">
     <div v-if="formState === 'success'" class="text-center p-8">
       <h3 class="text-2xl font-bold text-green-400">Thank You!</h3>
       <p class="text-gray-300 mt-2">
@@ -84,7 +84,7 @@ async function handleSubmit() {
             id="name"
             v-model="formData.name"
             required
-            class="w-full bg-white/20 border-transparent rounded-md py-2 px-3 text-white focus:ring-accent focus:border-accent"
+            class="w-full bg-surface/20 border-transparent rounded-md py-2 px-3 text-white focus:ring-accent focus:border-accent"
           />
         </div>
         <div>
@@ -94,7 +94,7 @@ async function handleSubmit() {
             id="email"
             v-model="formData.email"
             required
-            class="w-full bg-white/20 border-transparent rounded-md py-2 px-3 text-white focus:ring-accent focus:border-accent"
+            class="w-full bg-surface/20 border-transparent rounded-md py-2 px-3 text-white focus:ring-accent focus:border-accent"
           />
         </div>
         <div>
@@ -106,7 +106,7 @@ async function handleSubmit() {
             v-model="formData.message"
             required
             rows="5"
-            class="w-full bg-white/20 border-transparent rounded-md py-2 px-3 text-white focus:ring-accent focus:border-accent"
+            class="w-full bg-surface/20 border-transparent rounded-md py-2 px-3 text-white focus:ring-accent focus:border-accent"
           ></textarea>
         </div>
       </div>
@@ -115,7 +115,7 @@ async function handleSubmit() {
           <input
             type="checkbox"
             v-model="formData.sendCopyToSelf"
-            class="h-4 w-4 rounded border-gray-400 bg-white/20 text-accent focus:ring-accent"
+            class="h-4 w-4 rounded border-border bg-surface/20 text-accent focus:ring-accent"
           />
           <span class="ml-2 text-gray-300">Send a copy of this message to myself</span>
         </label>

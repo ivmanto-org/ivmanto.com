@@ -16,7 +16,7 @@
     <div v-else-if="article" class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
       <!-- Top Navigation Bar -->
       <div
-        class="mb-8 p-2 bg-white rounded-lg shadow-sm flex items-center justify-between gap-2 text-sm font-medium"
+        class="mb-8 p-2 bg-surface rounded-lg shadow-sm flex items-center justify-between gap-2 text-sm font-medium"
       >
         <!-- Previous Article Button -->
         <NuxtLink
@@ -51,7 +51,7 @@
             leave-from-class="transform opacity-100 scale-100"
             leave-to-class="transform opacity-0 scale-95"
           >
-            <div v-if="isDropdownOpen" class="absolute top-full mt-2 w-72 max-h-80 overflow-y-auto bg-white rounded-lg shadow-xl ring-1 ring-black ring-opacity-5 z-50">
+            <div v-if="isDropdownOpen" class="absolute top-full mt-2 w-72 max-h-80 overflow-y-auto bg-surface rounded-lg shadow-xl ring-1 ring-black ring-opacity-5 z-50">
               <div class="py-1">
                 <button v-for="a in otherArticles" :key="a.slug" @click="navigateToArticle(a.slug)" class="dropdown-item">
                   {{ a.title }}
@@ -79,7 +79,7 @@
         </span>
 
         <!-- Share Button -->
-        <div class="border-l border-gray-200 pl-2">
+        <div class="border-l border-border pl-2">
           <button @click="shareArticle" class="nav-button" title="Share article">
             <svg v-if="!copied" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
               <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" />
@@ -92,22 +92,22 @@
       </div>
 
       <!-- Article Content -->
-      <div class="bg-white rounded-lg shadow-lg p-8 md:p-12">
-        <div class="mb-8 border-b pb-8 border-gray-200">
-          <p class="text-base text-gray-500">Published on {{ formatDate(article.date) }}</p>
-          <h1 class="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+      <div class="bg-surface rounded-lg shadow-lg p-8 md:p-12">
+        <div class="mb-8 border-b pb-8 border-border">
+          <p class="text-base text-muted">Published on {{ formatDate(article.date) }}</p>
+          <h1 class="mt-2 text-3xl font-bold tracking-tight text-text sm:text-4xl">
             {{ article.title }}
           </h1>
-          <p class="mt-6 text-xl leading-8 text-gray-700">{{ article.summary }}</p>
+          <p class="mt-6 text-xl leading-8 text-muted">{{ article.summary }}</p>
         </div>
         <div class="prose prose-lg max-w-none" v-html="sanitizedContent"></div>
 
         <!-- Like button section -->
-        <div class="mt-12 pt-8 border-t border-gray-200 flex justify-end items-center">
+        <div class="mt-12 pt-8 border-t border-border flex justify-end items-center">
           <button
             @click="handleLike"
             :disabled="isLoadingLikes"
-            class="flex items-center gap-2 text-gray-500 hover:text-primary disabled:text-primary disabled:cursor-not-allowed transition-colors"
+            class="flex items-center gap-2 text-muted hover:text-primary disabled:text-primary disabled:cursor-not-allowed transition-colors"
             title="Like this article"
           >
             <svg
@@ -350,16 +350,16 @@ watch(slug, (newSlug) => {
 
 <style lang="postcss" scoped>
 .nav-button {
-  @apply h-10 w-10 flex items-center justify-center bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-primary rounded-md transition-all duration-200 hover:scale-110;
+  @apply h-10 w-10 flex items-center justify-center bg-surface-sunken hover:bg-border text-muted hover:text-primary rounded-md transition-all duration-200 hover:scale-110;
 }
 .nav-button-dropdown {
-  @apply h-10 px-4 flex items-center justify-center bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-primary rounded-md transition-all duration-200;
+  @apply h-10 px-4 flex items-center justify-center bg-surface-sunken hover:bg-border text-muted hover:text-primary rounded-md transition-all duration-200;
 }
 .nav-button-disabled {
-  @apply h-10 w-10 flex items-center justify-center bg-gray-100 text-gray-400 rounded-md cursor-not-allowed opacity-75;
+  @apply h-10 w-10 flex items-center justify-center bg-surface-sunken text-muted rounded-md cursor-not-allowed opacity-75;
 }
 .dropdown-item {
-  @apply block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900;
+  @apply block w-full text-left px-4 py-2 text-sm text-muted hover:bg-surface-sunken hover:text-text;
 }
 .tabular-nums {
   font-variant-numeric: tabular-nums;

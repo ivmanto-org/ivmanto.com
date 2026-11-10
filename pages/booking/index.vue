@@ -156,8 +156,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <section class="py-16 md:py-24 bg-gray-50 min-h-[70vh]">
-  <div class="max-w-2xl mx-auto bg-white p-8 rounded-2xl shadow-lg">
+  <section class="py-16 md:py-24 bg-surface-sunken min-h-[70vh]">
+  <div class="max-w-2xl mx-auto bg-surface p-8 rounded-2xl shadow-lg">
     <div v-if="!isBookingConfirmed">
       <h1 class="text-2xl font-bold text-dark-slate mb-6 text-center">Book a Consultation</h1>
 
@@ -170,7 +170,7 @@ onMounted(() => {
           :disabled="isLoading"
         />
       </div>
-      <p class="text-xs text-gray-500 text-center mb-6">Timezone: {{ timezone }}</p>
+      <p class="text-xs text-muted text-center mb-6">Timezone: {{ timezone }}</p>
 
       <!-- Error Message -->
       <div v-if="error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
@@ -179,12 +179,12 @@ onMounted(() => {
 
       <!-- Loading Spinner -->
       <div v-if="isLoading" class="grid grid-cols-2 sm:grid-cols-3 gap-4">
-        <div v-for="n in 6" :key="n" class="p-3 h-12 bg-gray-200 rounded-lg animate-pulse"></div>
+        <div v-for="n in 6" :key="n" class="p-3 h-12 bg-border rounded-lg animate-pulse"></div>
       </div>
 
       <!-- Time Slots -->
       <div v-else-if="!selectedSlot" class="min-h-[100px]">
-        <h4 class="text-sm font-medium text-gray-600 mb-3 text-center">
+        <h4 class="text-sm font-medium text-muted mb-3 text-center">
           Available slots for {{ formattedDate }}
         </h4>
         <div v-if="availableSlots.length > 0" class="grid grid-cols-2 sm:grid-cols-3 gap-4">
@@ -197,8 +197,8 @@ onMounted(() => {
             {{ formatTime(slot.start) }}
           </button>
         </div>
-        <div v-else-if="!error" class="flex items-center justify-center bg-blue-50 border border-blue-200 text-blue-800 px-4 py-3 rounded-lg" role="status">
-          <svg class="w-5 h-5 mr-3 text-blue-600" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <div v-else-if="!error" class="flex items-center justify-center bg-surface-sunken border border-border text-muted px-4 py-3 rounded-lg" role="status">
+          <svg class="w-5 h-5 mr-3 text-muted" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
           </svg>
           <span class="block sm:inline">There are no available slots for this day. Please try another date.</span>
@@ -210,20 +210,20 @@ onMounted(() => {
         <h4 class="text-xl font-semibold mb-4">Confirming for: {{ formatTime(selectedSlot.start) }}</h4>
         <div class="space-y-4">
           <div>
-            <label for="name" class="block text-gray-700 font-medium mb-1">Full Name</label>
+            <label for="name" class="block text-muted font-medium mb-1">Full Name</label>
             <input type="text" id="name" v-model="bookingDetails.name" required class="form-field" />
           </div>
           <div>
-            <label for="email" class="block text-gray-700 font-medium mb-1">Email</label>
+            <label for="email" class="block text-muted font-medium mb-1">Email</label>
             <input type="email" id="email" v-model="bookingDetails.email" required class="form-field" />
           </div>
           <div>
-            <label for="notes" class="block text-gray-700 font-medium mb-1">Project Notes (Optional)</label>
+            <label for="notes" class="block text-muted font-medium mb-1">Project Notes (Optional)</label>
             <textarea id="notes" v-model="bookingDetails.notes" rows="3" class="form-field"></textarea>
           </div>
         </div>
         <div class="flex justify-end gap-4 mt-6">
-          <button type="button" @click="selectedSlot = null" class="px-6 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300">Back</button>
+          <button type="button" @click="selectedSlot = null" class="px-6 py-2 bg-border text-text rounded-lg hover:bg-border">Back</button>
           <button type="submit" :disabled="isLoading" class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark disabled:bg-gray-400 disabled:cursor-not-allowed">
             <span v-if="isLoading">Booking...</span>
             <span v-else>Confirm Booking</span>
@@ -235,11 +235,11 @@ onMounted(() => {
     <!-- Confirmation Message -->
     <div v-else class="text-center py-12">
       <h2 class="text-2xl font-bold text-green-600 mb-4">Booking Confirmed!</h2>
-      <p class="text-gray-700">
+      <p class="text-muted">
         Thank you, {{ bookingDetails.name }}. A confirmation email has been sent to {{ bookingDetails.email }}.
       </p>
       <div class="flex justify-center gap-4 mt-8">
-        <NuxtLink to="/" class="px-6 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300">Home</NuxtLink>
+        <NuxtLink to="/" class="px-6 py-2 bg-border text-text rounded-lg hover:bg-border">Home</NuxtLink>
         <button @click="resetBookingProcess" class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark">Book Another</button>
       </div>
     </div>

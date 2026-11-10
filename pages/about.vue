@@ -66,13 +66,13 @@ useHead({
           <h1 class="text-3xl md:text-4xl font-bold text-dark-slate">
             A Partner in Your Data Journey
           </h1>
-          <p class="text-lg text-gray-600 mt-6">
+          <p class="text-lg text-muted mt-6">
             I am a dedicated Cloud Data Architect with extensive experience on the Google Cloud
             Platform. My passion is helping businesses unlock the true value of their data. I focus
             on building solutions that are not just technologically sound, but also align perfectly
             with your business goals.
           </p>
-          <p class="text-lg text-gray-600 mt-4">
+          <p class="text-lg text-muted mt-4">
             I'm currently on the path to becoming a DAMA Certified Data Management Professional,
             ensuring that my work adheres to the highest industry standards for data governance and
             quality.
@@ -115,11 +115,11 @@ useHead({
     <AboutCertificatesSection />
 
     <!-- Featured Insights — internal cross-links for SEO -->
-    <section class="py-16 md:py-20 bg-white">
+    <section class="py-16 md:py-20 bg-surface">
       <div class="container mx-auto px-6">
         <div class="text-center max-w-3xl mx-auto mb-12">
           <h2 class="text-3xl md:text-4xl font-bold text-dark-slate">Featured Insights</h2>
-          <p class="text-lg text-gray-600 mt-4">
+          <p class="text-lg text-muted mt-4">
             Explore my latest thinking on data strategy, cloud architecture, and AI.
           </p>
         </div>
@@ -129,7 +129,7 @@ useHead({
             class="block p-6 bg-light-gray rounded-xl hover:shadow-lg transition-shadow"
           >
             <h3 class="text-lg font-bold text-dark-slate">The Shift to Agentic AI</h3>
-            <p class="text-sm text-gray-600 mt-2">
+            <p class="text-sm text-muted mt-2">
               How autonomous workflows are reshaping enterprise AI strategy.
             </p>
             <span class="mt-3 inline-block text-primary font-semibold text-sm">Read Article &rarr;</span>
@@ -139,7 +139,7 @@ useHead({
             class="block p-6 bg-light-gray rounded-xl hover:shadow-lg transition-shadow"
           >
             <h3 class="text-lg font-bold text-dark-slate">Data Mesh Governance</h3>
-            <p class="text-sm text-gray-600 mt-2">
+            <p class="text-sm text-muted mt-2">
               How to enforce policies without becoming a bottleneck.
             </p>
             <span class="mt-3 inline-block text-primary font-semibold text-sm">Read Article &rarr;</span>
@@ -149,7 +149,7 @@ useHead({
             class="block p-6 bg-primary bg-opacity-5 rounded-xl border-2 border-primary border-opacity-20 hover:shadow-lg transition-shadow"
           >
             <h3 class="text-lg font-bold text-primary">Data Maturity Assessment</h3>
-            <p class="text-sm text-gray-600 mt-2">
+            <p class="text-sm text-muted mt-2">
               Take our free interactive assessment to evaluate your organization's data readiness.
             </p>
             <span class="mt-3 inline-block text-primary font-semibold text-sm">Start Assessment &rarr;</span>
@@ -169,7 +169,7 @@ useHead({
         </p>
         <NuxtLink
           to="/#contact"
-          class="mt-8 inline-block bg-white text-primary font-bold py-3 px-8 rounded-lg hover:bg-opacity-90 transition-all"
+          class="mt-8 inline-block bg-surface text-primary font-bold py-3 px-8 rounded-lg hover:bg-opacity-90 transition-all"
           >Get In Touch</NuxtLink
         >
       </div>

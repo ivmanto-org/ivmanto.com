@@ -84,12 +84,12 @@
 /* ─── Profile / social link buttons (about.vue) ─── */
 @layer components {
   .btn-profile-link {
-    @apply bg-white border border-gray-300 text-dark-slate font-medium py-2 px-4 rounded-lg hover:bg-gray-50 transition-all flex items-center gap-2;
+    @apply bg-surface border border-border text-dark-slate font-medium py-2 px-4 rounded-lg hover:bg-surface-sunken transition-all flex items-center gap-2;
   }
 
   /* ─── Booking: day-navigation arrow buttons ─── */
   .btn-day-nav {
-    @apply h-10 w-10 flex items-center justify-center bg-gray-100 text-gray-600 rounded-md transition-all duration-200 hover:bg-gray-200 hover:text-primary hover:scale-110 disabled:cursor-not-allowed disabled:opacity-75 disabled:scale-100 disabled:text-gray-400;
+    @apply h-10 w-10 flex items-center justify-center bg-surface-sunken text-muted rounded-md transition-all duration-200 hover:bg-border hover:text-primary hover:scale-110 disabled:cursor-not-allowed disabled:opacity-75 disabled:scale-100 disabled:text-gray-400;
   }
 
   /* ─── Booking / contact: form input fields ─── */
@@ -463,3 +463,24 @@
 .brand-logo [data-ink-fill] { fill: var(--text); }
 .brand-logo [data-brand] { stroke: var(--brand); }
 .brand-logo [data-brand-fill] { fill: var(--brand); }
+
+/* Blog and legal prose follow the theme (Montserrat headings, Inter body; spec pages/README.md). */
+.prose {
+  --tw-prose-body: var(--text);
+  --tw-prose-headings: var(--text);
+  --tw-prose-lead: var(--text-muted);
+  --tw-prose-links: var(--accent);
+  --tw-prose-bold: var(--text);
+  --tw-prose-counters: var(--text-muted);
+  --tw-prose-bullets: var(--text-muted);
+  --tw-prose-hr: var(--border);
+  --tw-prose-quotes: var(--text);
+  --tw-prose-quote-borders: var(--accent);
+  --tw-prose-captions: var(--text-muted);
+  --tw-prose-code: var(--text);
+  --tw-prose-pre-code: var(--text);
+  --tw-prose-pre-bg: var(--surface-sunken);
+  --tw-prose-th-borders: var(--border);
+  --tw-prose-td-borders: var(--border);
+}
+.prose :where(h1, h2, h3, h4) { font-family: var(--font-headline); letter-spacing: var(--tracking-headline); }

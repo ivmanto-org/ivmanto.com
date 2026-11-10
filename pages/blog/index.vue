@@ -1,8 +1,8 @@
 <script setup lang="ts">
 useSeoMeta({
-  title: 'Insights & Articles | ivmanto.com',
+  title: 'Insights',
   description:
-    'Read our latest articles and insights on data strategy, cloud architecture, AI/ML, and software engineering. Stay ahead of the curve with expert analysis.',
+    'Articles on AI governance, risk, compliance and the data foundations underneath.',
   ogTitle: 'Insights & Articles | ivmanto.com',
   ogDescription:
     'Expert articles on data strategy, cloud architecture, AI/ML, and software engineering.',
@@ -42,85 +42,53 @@ function formatDate(dateString: string) {
 </script>
 
 <template>
-  <div class="space-y-12 py-12 px-4 sm:px-6 lg:px-8 bg-light-gray flex-grow">
-    <header class="text-center">
-      <h1 class="font-mono text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
-        &lt;ivm <span class="text-red-500">/</span>&gt;
-      </h1>
-      <p class="mt-4 max-w-3xl mx-auto text-xl text-gray-600">
-        Insights on data, architecture, and cloud technology.
-      </p>
-    </header>
-
-    <!-- Search Bar -->
-    <div class="max-w-2xl mx-auto">
-      <input
-        v-model="searchQuery"
-        type="text"
-        placeholder="Search articles by title or keyword..."
-        class="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg shadow-sm focus:ring-primary focus:border-primary transition"
-      />
-    </div>
-
-    <main class="max-w-7xl mx-auto">
-      <!-- Loading State -->
-      <div v-if="isLoading" class="text-center py-16">
-        <p class="text-xl text-gray-500">Loading articles...</p>
+  <div>
+    <section class="section hexgrid" style="padding-bottom: var(--space-8)">
+      <div class="container">
+        <div class="section-head">
+          <p class="overline">Insights</p>
+          <h1>Notes on AI governance</h1>
+          <p class="lead">Articles on AI governance, risk, compliance and the data foundations underneath.</p>
+        </div>
+        <div class="field" style="max-width: 560px; margin: 0">
+          <label for="blog-search" class="sr-only">Search articles</label>
+          <input id="blog-search" v-model="searchQuery" type="search" class="input" placeholder="Search articles by title or keyword" />
+        </div>
       </div>
+    </section>
 
-      <!-- Error State -->
-      <div v-else-if="error" class="text-center py-16">
-        <h3 class="text-2xl font-semibold text-red-600">Failed to load articles</h3>
-        <p class="text-gray-500 mt-2">{{ error }}</p>
-      </div>
-
-      <div v-else-if="filteredArticles.length > 0">
-        <!-- Featured Articles -->
-        <section v-if="featuredArticles.length > 0">
-          <h2 class="text-3xl font-bold tracking-tight text-gray-900 mb-8">Featured Articles</h2>
-          <div class="grid gap-8 lg:grid-cols-3">
-            <NuxtLink
-              v-for="article in featuredArticles"
-              :key="article.slug"
-              :to="`/blog/${article.slug}`"
-              class="block p-6 bg-white rounded-lg border border-gray-200 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
-            >
-              <p class="text-sm text-gray-500 mb-2">{{ formatDate(article.date) }}</p>
-              <h3 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">
-                {{ article.title }}
+    <section class="section" style="padding-top: var(--space-8)">
+      <div class="container">
+        <div v-if="isLoading" class="muted">Loading articles…</div>
+        <div v-else-if="error" class="notice notice--error" role="alert">
+          <p><strong>Articles couldn’t be loaded.</strong> Please try again later.</p>
+        </div>
+        <template v-else-if="filteredArticles.length > 0">
+          <div v-if="featuredArticles.length > 0" class="grid grid-3">
+            <article v-for="article in featuredArticles" :key="article.slug" class="card card--link post">
+              <p class="meta">{{ formatDate(article.date) }}</p>
+              <h3>
+                <NuxtLink :to="`/blog/${article.slug}`" class="card__link" style="color: inherit; text-decoration: none">{{ article.title }}</NuxtLink>
               </h3>
-              <p class="font-normal text-gray-700">{{ article.summary }}</p>
-            </NuxtLink>
+              <p class="muted small clamp">{{ article.summary }}</p>
+            </article>
           </div>
-        </section>
-
-        <!-- All Other Articles -->
-        <section v-if="olderArticles.length > 0" class="mt-16">
-          <h2 class="text-3xl font-bold tracking-tight text-gray-900 mb-8">More Articles</h2>
-          <div class="grid md:grid-cols-2 gap-8">
-            <NuxtLink
-              v-for="article in olderArticles"
-              :key="article.slug"
-              :to="`/blog/${article.slug}`"
-              class="block p-6 bg-white rounded-lg border border-gray-200 hover:border-primary hover:shadow-md transition-all duration-200"
-            >
-              <p class="text-sm text-gray-500 mb-2">{{ formatDate(article.date) }}</p>
-              <h3 class="mb-2 text-xl font-bold tracking-tight text-gray-900">
-                {{ article.title }}
+          <div v-if="olderArticles.length > 0" class="grid grid-2" style="margin-top: var(--space-12)">
+            <article v-for="article in olderArticles" :key="article.slug" class="card card--link post">
+              <p class="meta">{{ formatDate(article.date) }}</p>
+              <h3 style="font-size: var(--text-lg)">
+                <NuxtLink :to="`/blog/${article.slug}`" class="card__link" style="color: inherit; text-decoration: none">{{ article.title }}</NuxtLink>
               </h3>
-              <p class="font-normal text-gray-700 text-sm line-clamp-2">
-                {{ article.summary }}
-              </p>
-            </NuxtLink>
+              <p class="muted small clamp">{{ article.summary }}</p>
+            </article>
           </div>
-        </section>
+        </template>
+        <div v-else class="muted">No articles match “{{ searchQuery }}”.</div>
       </div>
-
-      <!-- No Results Message -->
-      <div v-else class="text-center py-16">
-        <h3 class="text-2xl font-semibold text-gray-700">No articles found</h3>
-        <p class="text-gray-500 mt-2">Try adjusting your search query.</p>
-      </div>
-    </main>
+    </section>
   </div>
 </template>
+
+<style scoped>
+.clamp { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; margin: 0; }
+</style>

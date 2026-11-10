@@ -10,7 +10,7 @@
       <p>{{ error }}</p>
       <p>
         Please
-        <NuxtLink to="/booking" class="text-blue-600 hover:underline">contact us</NuxtLink>
+        <NuxtLink to="/booking" class="text-muted hover:underline">contact us</NuxtLink>
         if you need further assistance.
       </p>
     </div>
@@ -20,7 +20,7 @@
       <p>Your consultation has been cancelled. You will receive a confirmation email shortly.</p>
       <p>
         If you'd like to schedule a new time, feel free to visit our
-        <NuxtLink to="/booking" class="text-blue-600 hover:underline">booking page</NuxtLink>
+        <NuxtLink to="/booking" class="text-muted hover:underline">booking page</NuxtLink>
         again.
       </p>
     </div>
