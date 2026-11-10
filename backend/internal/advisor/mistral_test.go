@@ -95,7 +95,7 @@ func TestLoadCatalogueAndValidID(t *testing.T) {
 	if err := os.WriteFile(path, []byte(`{
 		"version": 0, "currency": "EUR",
 		"pillars": [{"id":"governance","name":"Governance","summary":"s"}],
-		"packages": [{"id":"gov-ai-policy","pillar":"governance","name":"AI policy","outcome":"o","price_eur":null}]
+		"packages": [{"id":"gov-ai-policy","pillar":"governance","name":"AI policy","outcome":"o","price_eur":null,"pillar_recommended":true}]
 	}`), 0o644); err != nil {
 		t.Fatal(err)
 	}

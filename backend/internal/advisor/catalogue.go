@@ -30,6 +30,11 @@ type Package struct {
 	Name     string `json:"name"`
 	Outcome  string `json:"outcome"`
 	PriceEur *int64 `json:"price_eur"`
+	// PillarRecommended is Brio's optional per-package flag (set on a few
+	// packages once #126's catalogue corrections land). Ignored by the
+	// advisor logic today; captured so the embedded-copy test tolerates it
+	// and a later slice can use it without a schema change.
+	PillarRecommended *bool `json:"pillar_recommended"`
 }
 
 // DefaultCataloguePath is where the backend looks for the shared service
