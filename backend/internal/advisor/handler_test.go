@@ -78,6 +78,23 @@ func TestAdvisorNotConfigured(t *testing.T) {
 	}
 }
 
+func TestAdvisorAcceptsSessionID(t *testing.T) {
+	// PR #129 contract: the frontend sends {session_id, messages}. The
+	// session_id must be accepted, and never echoed, stored or logged.
+	fake := &fakeProvider{resp: Response{Reply: "Hello.", NextAction: "contact"}}
+	srv := newServer(fake)
+	defer srv.Close()
+	resp, body := post(t, srv, `{"session_id":"s-abc123","messages":[{"role":"user","content":"hi"}]}`)
+	if resp.StatusCode != http.StatusOK {
+		t.Fatalf("want 200 with session_id present, got %d (%v)", resp.StatusCode, body)
+	}
+	for _, k := range []string{"session_id"} {
+		if _, ok := body[k]; ok {
+			t.Fatalf("session_id must not be echoed in the response, got %v", body)
+		}
+	}
+}
+
 func TestAdvisorHappyPath(t *testing.T) {
 	fake := &fakeProvider{resp: Response{
 		Reply: "Here is my advice.",

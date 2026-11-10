@@ -27,10 +27,18 @@ func (h *Handler) RegisterRoutes(mux *http.ServeMux) {
 	mux.HandleFunc("POST /api/advisor", h.handleAdvisor)
 }
 
-// advisorRequest is what the frontend (spec: AdvisorChat) sends: the full
-// conversation so far, ending with the new user message.
+// advisorRequest is what the frontend (spec: AdvisorChat, PR #129 contract
+// per Clauco 2026-11-10T21:36Z) sends: the client-generated session_id plus
+// the full conversation so far, ending with the new user message.
+//
+// SessionID is accepted but deliberately NOT used, persisted or logged:
+// per the privacy notice (Brio's draft) the session id is a client-side
+// random value that must never be linked to an identity — the endpoint
+// never sees name/email, and it stays that way. Decoding it into the
+// struct documents the contract instead of silently ignoring the field.
 type advisorRequest struct {
-	Messages []ChatMessage `json:"messages"`
+	SessionID string        `json:"session_id"`
+	Messages  []ChatMessage `json:"messages"`
 }
 
 // errorBody is the uniform error response. Code is machine-readable so the
