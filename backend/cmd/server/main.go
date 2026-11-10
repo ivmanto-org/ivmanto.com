@@ -98,7 +98,18 @@ func main() {
 	bookingHandler := booking.NewHandler(logger, gcalSvc, emailService, trackerSvc)
 	ideasHandler := ideas.NewHandler(logger, genaiClient, emailService, cfg.Ideas.GenerateIdeasPromptTemplate)
 	articlesHandler := articles.NewHandler(logger)
-	blogHandler := blog.NewHandler(logger, blogCache, cfg.Blog.PubSubPushToken, cfg.Blog.FrontendRebuildWebhookURL)
+	blogHandler := blog.NewHandler(logger, blogCache, cfg.Blog.ArticlesStatusToken, cfg.Blog.PubSubPushSAEmail, cfg.Blog.PubSubPushAudience, cfg.Blog.FrontendRebuildWebhookURL)
+
+	// Security note (#115 review, LOW-1): the /api/_internal/* endpoints sit
+	// behind Cloud Run with invoker_iam_disabled and the Load Balancer logging
+	// enabled — the backend is the ONLY gate. Warn loudly at startup if either
+	// auth knob is empty in a non-local run so a misconfigured deploy is caught
+	// at boot, not discovered as a public endpoint later.
+	if cfg.Blog.PubSubPushSAEmail == "" || cfg.Blog.ArticlesStatusToken == "" {
+		logger.Warn("blog push/status auth DISABLED (empty PUBSUB_PUSH_SA_EMAIL or ARTICLES_STATUS_TOKEN) — endpoints are unauthenticated; set both in production",
+			"pubsub_push_sa_email", cfg.Blog.PubSubPushSAEmail,
+			"articles_status_token_set", cfg.Blog.ArticlesStatusToken != "")
+	}
 
 	// 5. Register routes
 	mux := http.NewServeMux()

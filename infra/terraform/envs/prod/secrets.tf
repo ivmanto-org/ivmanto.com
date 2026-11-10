@@ -21,7 +21,7 @@ locals {
     smtp-password                = "SMTP password for the backend service"
     ideas-prompt                 = "LLM prompt used by the ideas-generation endpoint"
     ga-api-secret                = "Google Analytics API secret (Measurement Protocol)"
-    pubsub-push-token            = "OIDC token for the blog Pub/Sub push subscription"
+    pubsub-push-token            = "Shared bearer token for the operator-only articles status endpoint (Authorization header, constant-time compare, #115)"
     frontend-rebuild-webhook-url = "Cloud Build webhook trigger URL used by the backend after a blog publish (new version once #105 creates the trigger)"
     webhook-secret               = "Cloud Build webhook trigger secret (GitHub webhook)"
   }

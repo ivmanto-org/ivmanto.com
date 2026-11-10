@@ -29,6 +29,18 @@ resource "google_service_account" "gcal" {
   depends_on = [google_project_service.this]
 }
 
+# blog_push - OIDC signer identity for the blog-refresh Pub/Sub push
+# subscription (blog_gcs.tf, #115). Pub/Sub attaches this SA's OIDC token to
+# each push request (Authorization: Bearer header); the backend verifies the
+# token's signature, audience and this SA's email. No keys are ever created.
+resource "google_service_account" "blog_push" {
+  account_id   = "ivmanto-blog-push-sa"
+  display_name = "ivmanto.com blog Pub/Sub push (OIDC signer)"
+  description  = "Signs the OIDC bearer token the blog-refresh Pub/Sub push subscription sends to the backend (#115)."
+
+  depends_on = [google_project_service.this]
+}
+
 # Backend -> gcal SA: mint tokens / sign the DWD JWT (impersonate.CredentialsTokenSource).
 resource "google_service_account_iam_member" "backend_impersonates_gcal" {
   service_account_id = google_service_account.gcal.name

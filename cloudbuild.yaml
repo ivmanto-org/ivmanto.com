@@ -75,8 +75,9 @@ steps:
       - '--set-secrets=IDEAS_PROMPT=${_IDEAS_PROMPT_SECRET_NAME}:latest'
       # Add the new secret for Google Analytics
       - '--set-secrets=GA_API_SECRET=${_GA_API_SECRET_NAME}:latest'
-      # Pub/Sub push token for blog cache refresh notifications
-      - '--set-secrets=PUBSUB_PUSH_TOKEN=${_PUBSUB_PUSH_TOKEN_SECRET_NAME}:latest'
+      # Shared bearer token for the operator-only articles status endpoint
+      # (value lives in the existing pubsub-push-token Secret Manager secret)
+      - '--set-secrets=ARTICLES_STATUS_TOKEN=${_PUBSUB_PUSH_TOKEN_SECRET_NAME}:latest'
       # Front End Build Webhook URL (secret name in Secret Manager)
       - '--set-secrets=FRONTEND_REBUILD_WEBHOOK_URL=${_FRONTEND_REBUILD_WEBHOOK_URL_SECRET_NAME}:latest'
       # Set environment variables one by one for clarity and to avoid parsing issues with complex strings.
@@ -93,6 +94,10 @@ steps:
       # Add the new environment variable for Google Analytics
       - '--set-env-vars=GA_MEASUREMENT_ID=${_GA_MEASUREMENT_ID}'
       - '--set-env-vars=GCS_BLOG_BUCKET=${_GCS_BLOG_BUCKET}'
+      # Pub/Sub push OIDC auth (token out of the URL, #115): expected signer
+      # SA and audience, checked against the Bearer JWT the push subscription sends.
+      - '--set-env-vars=PUBSUB_PUSH_SA_EMAIL=${_PUBSUB_PUSH_SA_EMAIL}'
+      - '--set-env-vars=PUBSUB_PUSH_AUDIENCE=${_PUBSUB_PUSH_AUDIENCE}'
     waitFor: ['backend-push']
 
 # Substitution variables to be configured in the Cloud Build trigger.
@@ -118,6 +123,11 @@ substitutions:
   _GA_API_SECRET_NAME: 'ga-api-secret' # The name of the secret in Secret Manager
   _GA_MEASUREMENT_ID: 'G-W1TJ3KMZ6V' # Your GA4 Measurement ID - Set in Trigger UI
   _GCS_BLOG_BUCKET: 'ivmanto-com-prod-514215-blog' # GCS bucket for blog markdown files
+  # Pub/Sub push OIDC auth (#115): expected signer SA + audience of the Bearer
+  # JWT the push subscription attaches. Must match google_service_account.blog_push
+  # and the subscription's oidc_token audience in infra/terraform/envs/prod/blog_gcs.tf.
+  _PUBSUB_PUSH_SA_EMAIL: 'ivmanto-blog-push-sa@ivmanto-com-prod-514215.iam.gserviceaccount.com'
+  _PUBSUB_PUSH_AUDIENCE: 'https://ivmanto.com/api/_internal/pubsub/blog-refresh'
   # Pub/Sub push token for blog cache refresh (secret name in Secret Manager)
   _PUBSUB_PUSH_TOKEN_SECRET_NAME: 'pubsub-push-token'
   # Front End Build Webhook URL (secret name in Secret Manager)

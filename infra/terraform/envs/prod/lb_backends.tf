@@ -4,12 +4,13 @@
 # URL map, certificates and forwarding rule stay in nestbalm-app-prod (#104).
 
 locals {
-  # Request logs record the full URL. The Pub/Sub push to /api carries its
-  # token in the query string (#101, #115), so the API backend stays unlogged
-  # until the token moves out of the URL.
+  # Request logs record the full URL. The Pub/Sub push and the status
+  # endpoint no longer carry their token in the URL (OIDC Bearer header
+  # and header-shared-secret respectively, #115), so the API backend can
+  # be logged without leaking auth material.
   lb_backends = {
     frontend = { log_requests = true }
-    backend  = { log_requests = false }
+    backend  = { log_requests = true }
   }
 }
 
