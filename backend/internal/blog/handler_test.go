@@ -9,6 +9,8 @@ import (
 	"net/http/httptest"
 	"strings"
 	"testing"
+
+	"google.golang.org/api/idtoken"
 )
 
 const (
@@ -37,6 +39,65 @@ func newTestHandler(saEmail, statusToken string) *Handler {
 	h := NewHandler(logger, nil, statusToken, saEmail, testAudience, "")
 	h.oidcValidate = stubOIDC
 	return h
+}
+
+// --- googleOIDCValidator claim checks that idtoken.Validate does NOT do (#115, M1) ---
+
+// validPayload builds an idtoken.Payload mimicking a real Pub/Sub push OIDC
+// token (see Google's push-subscription auth docs: iss + email_verified + email).
+func validPayload() *idtoken.Payload {
+	return &idtoken.Payload{
+		Issuer: "https://accounts.google.com",
+		Claims: map[string]interface{}{
+			"email":          testSAEmail,
+			"email_verified": true,
+		},
+	}
+}
+
+func TestVerifyGoogleClaims_ValidToken_ReturnsEmail(t *testing.T) {
+	email, err := verifyGoogleClaims(validPayload())
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+	if email != testSAEmail {
+		t.Errorf("expected email %q, got %q", testSAEmail, email)
+	}
+}
+
+func TestVerifyGoogleClaims_BadIssuer_Rejected(t *testing.T) {
+	for _, iss := range []string{"https://attacker.example", "https://accounts.evil.com", ""} {
+		p := validPayload()
+		p.Issuer = iss
+		if _, err := verifyGoogleClaims(p); err == nil {
+			t.Errorf("expected error for issuer %q, got nil", iss)
+		}
+	}
+}
+
+func TestVerifyGoogleClaims_SchemeLessGoogleIssuer_Accepted(t *testing.T) {
+	// Some Google-issued tokens carry the issuer without the scheme.
+	p := validPayload()
+	p.Issuer = "accounts.google.com"
+	if _, err := verifyGoogleClaims(p); err != nil {
+		t.Errorf("expected scheme-less Google issuer to pass, got %v", err)
+	}
+}
+
+func TestVerifyGoogleClaims_EmailNotVerified_Rejected(t *testing.T) {
+	p := validPayload()
+	p.Claims["email_verified"] = false
+	if _, err := verifyGoogleClaims(p); err == nil {
+		t.Error("expected error when email_verified is false, got nil")
+	}
+}
+
+func TestVerifyGoogleClaims_MissingEmail_Rejected(t *testing.T) {
+	p := validPayload()
+	delete(p.Claims, "email")
+	if _, err := verifyGoogleClaims(p); err == nil {
+		t.Error("expected error when email claim is missing, got nil")
+	}
 }
 
 func pubsubPushRequest(t *testing.T, authHeader string) *http.Request {

@@ -55,7 +55,17 @@ Article content in Markdown...
 To check why an article isn't appearing, query:
 
 ```
-GET /api/_internal/articles/status?token=<PUSH_TOKEN>
+GET /api/_internal/articles/status
+Authorization: Bearer <ARTICLES_STATUS_TOKEN>
+```
+
+The token travels in the `Authorization` header, **never in the URL** — the
+shared request logging on the LB records the full query string, so a token in
+the URL would leak into the logs. Pass it with curl as:
+
+```
+curl -H "Authorization: Bearer <ARTICLES_STATUS_TOKEN>" \
+  https://ivmanto.com/api/_internal/articles/status
 ```
 
 This returns a JSON object with:

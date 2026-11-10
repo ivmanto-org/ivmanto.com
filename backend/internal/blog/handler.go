@@ -24,19 +24,39 @@ const DefaultPushAudience = "https://ivmanto.com/api/_internal/pubsub/blog-refre
 
 // oidcTokenValidator validates a Google-signed OIDC JWT (the Bearer token a
 // Pub/Sub push subscription sends) against an audience. Implementations must
-// verify signature, issuer, audience and expiry, and return the token's
-// email claim. An interface so tests can stub the network fetch.
+// verify signature, issuer, audience, expiry and the email claim, and return
+// the token's email claim. An interface so tests can stub the network fetch.
 type oidcTokenValidator func(ctx context.Context, rawToken, audience string) (email string, err error)
 
 // googleOIDCValidator is the production validator: it verifies the JWT
-// signature against Google's public certs plus iss/aud/exp, using
-// google.golang.org/api/idtoken.
+// signature against Google's public certs plus aud/exp via
+// google.golang.org/api/idtoken, then performs the claim checks idtoken does
+// NOT do: the issuer and email_verified claims as described in Google's
+// Pub/Sub push-subscription auth docs.
 func googleOIDCValidator(ctx context.Context, rawToken, audience string) (string, error) {
 	payload, err := idtoken.Validate(ctx, rawToken, audience)
 	if err != nil {
 		return "", err
 	}
+	return verifyGoogleClaims(payload)
+}
+
+// verifyGoogleClaims checks the issuer and email_verified claims that
+// idtoken.Validate intentionally leaves to the caller, and returns the token's
+// email claim. Issuer must be Google's accounts host (with or without scheme).
+// Extractable so tests can exercise the claim checks without a network fetch.
+func verifyGoogleClaims(payload *idtoken.Payload) (string, error) {
+	if payload.Issuer != "https://accounts.google.com" && payload.Issuer != "accounts.google.com" {
+		return "", fmt.Errorf("idtoken: unexpected issuer %q", payload.Issuer)
+	}
+	emailVerified, _ := payload.Claims["email_verified"].(bool)
+	if !emailVerified {
+		return "", fmt.Errorf("idtoken: email_verified claim is not true")
+	}
 	email, _ := payload.Claims["email"].(string)
+	if email == "" {
+		return "", fmt.Errorf("idtoken: missing email claim")
+	}
 	return email, nil
 }
 

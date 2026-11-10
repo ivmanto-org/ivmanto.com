@@ -19,21 +19,36 @@
 # does NOT validate the OIDC token a push subscription normally carries - the
 # backend is the ONLY gate. The subscription's oidc_token block attaches a
 # Google-signed OIDC JWT for google_service_account.blog_push
-# (Authorization: Bearer header, audience = the push endpoint). The backend
-# verifies signature, issuer, audience and expiry, and checks the token's
-# email claim equals the expected signer SA (PUBSUB_PUSH_SA_EMAIL). No secret
-# value exists in the URL or in Terraform, so LB request logging of this
-# backend is enabled (lb_backends.tf). The token value is never logged or
+# (Authorization: Bearer *** audience = the push endpoint). The backend
+# verifies signature, issuer, audience, expiry and email_verified, and checks
+# the token's email claim equals the expected signer SA (PUBSUB_PUSH_SA_EMAIL).
+# No secret value exists in the URL or in Terraform, so LB request logging of
+# this backend is enabled (lb_backends.tf). The token value is never logged or
 # echoed by the backend.
 #
-# One-time operator step BEFORE the first apply that adds oidc_token: grant the
-# identity creating/updating the subscription (the Terraform applier) the
-# Service Account Token Creator role on the push SA:
+# One-time operator step BEFORE the first apply that adds oidc_token: per the
+# Pub/Sub push-authentication docs, TWO roles are needed on the push SA:
+#
+#   (1) the identity creating/updating the subscription (the Terraform
+#       applier) needs iam.serviceAccounts.actAs, bundled in
+#       roles/iam.serviceAccountUser ...
+#   (2) the Pub/Sub signing service agent (which mints the JWT) needs
+#       roles/iam.serviceAccountTokenCreator ...
+#
+# Grants (run as an operator/allowed-user; both reference the push SA):
 #
 #   gcloud iam service-accounts add-iam-policy-binding \
 #     ivmanto-blog-push-sa@ivmanto-com-prod-514215.iam.gserviceaccount.com \
 #     --member="user:<applier-identity>" \
+#     --role="roles/iam.serviceAccountUser"
+#
+#   gcloud projects add-iam-policy-binding ivmanto-com-prod-514215 \
+#     --member="serviceAccount:service-<PROJECT_NUMBER>@gcp-sa-pubsub.iam.gserviceaccount.com" \
 #     --role="roles/iam.serviceAccountTokenCreator"
+#
+# (grant #2 can also be scoped to just the push SA, not the whole project.)
+# If the applier is a project Owner, grant #1 is implied; grant #2 must exist
+# regardless — Pub/Sub cannot mint the push token without it.
 #
 # The articles status endpoint (/api/_internal/articles/status) is operator-
 # only and uses a separate shared bearer token (ARTICLES_STATUS_TOKEN, read
