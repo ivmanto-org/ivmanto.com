@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>ivmanto governance pillar</title>
+{{HEAD}}
+<style>
+.pillar-hero { padding: var(--space-16) 0 var(--space-12); }
+.split { display: grid; gap: var(--space-12); }
+@media (min-width: 960px) { .split { grid-template-columns: 1.3fr 1fr; } }
+.problems { list-style: none; padding: 0; margin: 0; }
+.problems li { padding: var(--space-4) 0; border-top: 1px solid var(--border); display: grid; grid-template-columns: 28px 1fr; gap: var(--space-3); }
+.problems li::before { content: ""; width: 8px; height: 8px; margin-top: 8px; border-right: 2px solid var(--accent); border-top: 2px solid var(--accent); transform: rotate(45deg); }
+.crumbs { font-size: var(--text-sm); color: var(--text-muted); margin-bottom: var(--space-6); }
+.crumbs a { color: var(--text-muted); }
+</style>
+</head>
+<body>
+{{HEADER}}
+<main>
+  <section class="pillar-hero hexgrid"><div class="container">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="home.html">Home</a> / <a href="#">Services</a> / Governance</nav>
+    <div class="split">
+      <div>
+        {{PILLAR:G}}
+        <p class="overline">Pillar 1 · Governance</p>
+        <h1>Clear owners and rules for every AI system you use</h1>
+        <p class="lead">Governance sets how your company decides about AI: who may introduce a tool, who owns it, and which policy applies. It's the base that risk management and compliance build on.</p>
+        <div class="row" style="margin-top:var(--space-6)"><a class="btn btn--primary" href="#packages">See governance packages</a><a class="btn btn--ghost" href="#">Ask the advisor {{ICON:chev}}</a></div>
+      </div>
+      <aside class="card" aria-label="You might need this if">
+        <h3>You likely need this if…</h3>
+        <ul class="problems small">
+          <li>Teams use AI tools nobody formally approved</li>
+          <li>No one can say who owns which AI system</li>
+          <li>You have no written AI or acceptable-use policy</li>
+          <li>Your board or customers ask "how do you control AI?"</li>
+        </ul>
+      </aside>
+    </div>
+  </div></section>
+
+  <section class="section section--sunken"><div class="container">
+    <div class="section-head"><p class="overline">What you get</p><h2>Concrete deliverables, in your tools</h2></div>
+    <div class="grid grid-3">
+      <div class="card"><h4>AI inventory</h4><p class="small muted">A register of every AI system in use, with purpose, data, vendor and owner.</p></div>
+      <div class="card"><h4>Responsibility matrix</h4><p class="small muted">Who approves, operates and monitors each AI system (RACI).</p></div>
+      <div class="card"><h4>AI policy set</h4><p class="small muted">AI policy, acceptable-use rules and an approval process people actually follow.</p></div>
+    </div>
+    <div class="row" style="margin-top:var(--space-8)"><span class="small muted">Aligned with</span><span class="tag tag--framework">ISO/IEC 42001 §5</span><span class="tag tag--framework">EU AI Act Art. 4, 26</span><span class="tag tag--framework">NIST AI RMF · Govern</span></div>
+    <p class="small muted" style="margin-top:var(--space-3)">[Clause references to be checked by Ivgil before publishing.]</p>
+  </div></section>
+
+  <section class="section" id="packages"><div class="container">
+    <div class="section-head"><p class="overline">Governance packages</p><h2>Pick a starting point</h2></div>
+    <div class="grid grid-3">
+      <div class="card package"><h3>AI inventory &amp; ownership</h3><div class="package__price">€ —<small>fixed</small></div><div class="package__meta"><span>{{ICON:clock}} 2 weeks</span></div><ul class="ticks"><li>Discovery interviews</li><li>AI system register</li><li>Owner per system</li></ul><a class="btn btn--secondary" href="package.html">View package</a></div>
+      <div class="card package package--recommended"><div class="package__top"><span></span><span class="badge-recommended">Recommended start</span></div><h3>AI policy starter</h3><div class="package__price">€ —<small>fixed</small></div><div class="package__meta"><span>{{ICON:clock}} 3 weeks</span></div><ul class="ticks"><li>AI policy + acceptable use</li><li>Approval workflow</li><li>Staff briefing (1 h)</li></ul><a class="btn btn--primary" href="package.html">View package</a></div>
+      <div class="card package"><h3>Governance operating model</h3><div class="package__price">€ —<small>fixed</small></div><div class="package__meta"><span>{{ICON:clock}} 6 weeks</span></div><ul class="ticks"><li>AI governance board setup</li><li>RACI and escalation</li><li>Review cadence</li></ul><a class="btn btn--secondary" href="package.html">View package</a></div>
+    </div>
+  </div></section>
+
+  <section class="section section--sunken"><div class="container">
+    <div class="section-head"><p class="overline">Next pillars</p><h2>Governance connects to</h2></div>
+    <div class="grid grid-2">
+      <a class="card card--link pillar" href="#" style="color:inherit;text-decoration:none">{{PILLAR:R}}<h3>Risk management</h3><p class="small muted">Once owners are clear, assess what can go wrong.</p></a>
+      <a class="card card--link pillar" href="#" style="color:inherit;text-decoration:none">{{PILLAR:C}}<h3>Compliance</h3><p class="small muted">Prove you meet the EU AI Act and ISO/IEC 42001.</p></a>
+    </div>
+  </div></section>
+</main>
+{{FOOTER}}
+{{THEME_JS}}
+</body>
+</html>

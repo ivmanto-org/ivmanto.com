@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>ivmanto order flow</title>
+{{HEAD}}
+<style>
+.order { display: grid; gap: var(--space-12); padding: var(--space-12) 0 var(--space-24); }
+@media (min-width: 1000px) { .order { grid-template-columns: 1fr 360px; align-items: start; } }
+.summary dl { display: grid; grid-template-columns: 1fr auto; gap: 8px var(--space-4); margin: 0; font-size: var(--text-sm); }
+.summary dt { color: var(--text-muted); }
+.summary dd { margin: 0; text-align: right; }
+.summary .total { border-top: 1px solid var(--border); padding-top: 8px; font-weight: 600; color: var(--text); }
+.fieldset { border: 0; padding: 0; margin: 0 0 var(--space-8); }
+.fieldset legend { font: 600 var(--text-xl) var(--font-headline); margin-bottom: var(--space-4); }
+.two { display: grid; gap: 0 var(--space-4); grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+</style>
+</head>
+<body>
+{{HEADER}}
+<main class="container" style="max-width:1080px">
+  <div class="order">
+    <div>
+      <p class="overline">Order · step 2 of 4</p>
+      <h1 class="h2">Your details</h1>
+      <ol class="stepper"><li class="done"><span>Package</span></li><li aria-current="step"><span>Your details</span></li><li><span>Review</span></li><li><span>Confirmation</span></li></ol>
+      <form onsubmit="return false">
+        <fieldset class="fieldset"><legend>Contact</legend>
+          <div class="two"><div class="field"><label for="fn">Full name</label><input class="input" id="fn" autocomplete="name"></div><div class="field"><label for="ro">Role</label><input class="input" id="ro" autocomplete="organization-title" placeholder="e.g. CEO, Chief Data Officer"></div></div>
+          <div class="two"><div class="field"><label for="em">Work email</label><input class="input" id="em" type="email" autocomplete="email"></div><div class="field"><label for="ph">Phone <span class="muted">(optional)</span></label><input class="input" id="ph" type="tel" autocomplete="tel"></div></div>
+        </fieldset>
+        <fieldset class="fieldset"><legend>Company and invoicing</legend>
+          <div class="two"><div class="field"><label for="co">Company</label><input class="input" id="co" autocomplete="organization"></div><div class="field"><label for="vat">VAT ID</label><input class="input" id="vat" placeholder="DE…"><span class="hint">Needed for B2B invoicing in the EU.</span></div></div>
+          <div class="field"><label for="ad">Billing address</label><textarea id="ad" rows="3" autocomplete="street-address"></textarea></div>
+          <div class="field"><label for="sz">Company size</label><select class="select" id="sz"><option>10–49</option><option>50–249</option><option>250+</option></select></div>
+        </fieldset>
+        <fieldset class="fieldset"><legend>Anything we should know?</legend>
+          <div class="field"><label for="nt">Context <span class="muted">(optional)</span></label><textarea id="nt" rows="4" placeholder="Systems in scope, deadlines, audits coming up…"></textarea></div>
+        </fieldset>
+        <label class="consent"><input type="checkbox"><span>I accept the <a href="#">terms</a> and have read the <a href="#">privacy notice</a>. I confirm I'm ordering on behalf of a business.</span></label>
+        <div class="row" style="justify-content:space-between;margin-top:var(--space-6)"><a class="btn btn--ghost" href="package.html">Back</a><button class="btn btn--primary">Continue to review {{ICON:chev}}</button></div>
+      </form>
+    </div>
+    <aside class="card summary">
+      <p class="overline">Your order</p>
+      <h3>EU AI Act readiness</h3>
+      <p class="small muted">4 weeks · remote · fixed scope</p>
+      <dl><dt>Package</dt><dd>€ —</dd><dt>VAT (19%)</dt><dd>€ —</dd><dt class="total">Total</dt><dd class="total">€ —</dd></dl>
+      <div class="notice" style="margin-top:var(--space-6)"><p style="margin:0">No payment now. You receive an order confirmation, a kickoff call proposal and the invoice after kickoff. [Depends on Nick's decision: order request vs Stripe checkout.]</p></div>
+    </aside>
+  </div>
+</main>
+{{FOOTER}}
+{{THEME_JS}}
+</body>
+</html>

@@ -1,0 +1,146 @@
+[
+  {
+    "theme": "light",
+    "fg": "text",
+    "bg": "bg",
+    "ratio": 17.06
+  },
+  {
+    "theme": "dark",
+    "fg": "text",
+    "bg": "bg",
+    "ratio": 15.89
+  },
+  {
+    "theme": "light",
+    "fg": "text",
+    "bg": "surface",
+    "ratio": 17.85
+  },
+  {
+    "theme": "dark",
+    "fg": "text",
+    "bg": "surface",
+    "ratio": 14.79
+  },
+  {
+    "theme": "light",
+    "fg": "text-muted",
+    "bg": "bg",
+    "ratio": 7.24
+  },
+  {
+    "theme": "dark",
+    "fg": "text-muted",
+    "bg": "bg",
+    "ratio": 7.77
+  },
+  {
+    "theme": "light",
+    "fg": "text-muted",
+    "bg": "surface",
+    "ratio": 7.58
+  },
+  {
+    "theme": "dark",
+    "fg": "text-muted",
+    "bg": "surface",
+    "ratio": 7.23
+  },
+  {
+    "theme": "light",
+    "fg": "accent",
+    "bg": "bg",
+    "ratio": 4.84
+  },
+  {
+    "theme": "dark",
+    "fg": "accent",
+    "bg": "bg",
+    "ratio": 10.56
+  },
+  {
+    "theme": "light",
+    "fg": "accent",
+    "bg": "surface",
+    "ratio": 5.06
+  },
+  {
+    "theme": "dark",
+    "fg": "accent",
+    "bg": "surface",
+    "ratio": 9.83
+  },
+  {
+    "theme": "light",
+    "fg": "on-accent",
+    "bg": "accent",
+    "ratio": 5.06
+  },
+  {
+    "theme": "dark",
+    "fg": "on-accent",
+    "bg": "accent",
+    "ratio": 8.04
+  },
+  {
+    "theme": "light",
+    "fg": "data",
+    "bg": "surface",
+    "ratio": 5.27
+  },
+  {
+    "theme": "dark",
+    "fg": "data",
+    "bg": "surface",
+    "ratio": 8.29
+  },
+  {
+    "theme": "light",
+    "fg": "signal",
+    "bg": "surface",
+    "ratio": 5.02
+  },
+  {
+    "theme": "dark",
+    "fg": "signal",
+    "bg": "surface",
+    "ratio": 10.46
+  },
+  {
+    "theme": "light",
+    "fg": "success",
+    "bg": "surface",
+    "ratio": 5.22
+  },
+  {
+    "theme": "dark",
+    "fg": "success",
+    "bg": "surface",
+    "ratio": 9.58
+  },
+  {
+    "theme": "light",
+    "fg": "danger",
+    "bg": "surface",
+    "ratio": 5.47
+  },
+  {
+    "theme": "dark",
+    "fg": "danger",
+    "bg": "surface",
+    "ratio": 8.55
+  },
+  {
+    "theme": "light",
+    "fg": "border-input",
+    "bg": "surface",
+    "ratio": 4.76
+  },
+  {
+    "theme": "dark",
+    "fg": "border-input",
+    "bg": "surface",
+    "ratio": 4.02
+  }
+]

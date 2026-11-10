@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>ivmanto package detail</title>
+{{HEAD}}
+<style>
+.pkg { display: grid; gap: var(--space-12); padding: var(--space-12) 0 var(--space-24); }
+@media (min-width: 1000px) { .pkg { grid-template-columns: 1fr 380px; align-items: start; } .buybox { position: sticky; top: 92px; } }
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--space-4); margin: var(--space-8) 0; }
+.fact { border-top: 2px solid var(--border); padding-top: var(--space-3); }
+.fact dt { font-size: var(--text-xs); text-transform: uppercase; letter-spacing: .08em; color: var(--text-muted); }
+.fact dd { margin: 4px 0 0; font-weight: 600; }
+.timeline { list-style: none; padding: 0; margin: 0; }
+.timeline li { display: grid; grid-template-columns: 80px 1fr; gap: var(--space-4); padding: var(--space-4) 0; border-top: 1px solid var(--border); }
+.timeline .wk { font: 500 var(--text-sm) var(--font-mono); color: var(--accent); }
+.notin li::before { border: 0; border-top: 2px solid var(--text-muted); width: 8px; height: 0; transform: none; top: .8em; }
+.crumbs { font-size: var(--text-sm); color: var(--text-muted); padding-top: var(--space-8); }
+.crumbs a { color: var(--text-muted); }
+</style>
+</head>
+<body>
+{{HEADER}}
+<main class="container">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="home.html">Home</a> / <a href="#">Packages</a> / EU AI Act readiness</nav>
+  <div class="pkg">
+    <article>
+      <div class="row"><span class="tag tag--pillar">Compliance</span><span class="tag tag--framework">EU AI Act</span></div>
+      <h1 style="margin-top:var(--space-4)">EU AI Act readiness</h1>
+      <p class="lead">Find out which of your AI systems the EU AI Act covers, what you must do, and by when. You get a gap report and a 12-month roadmap your leadership can sign off.</p>
+      <dl class="facts">
+        <div class="fact"><dt>Duration</dt><dd>4 weeks</dd></div>
+        <div class="fact"><dt>Your effort</dt><dd>≈ 6 hours</dd></div>
+        <div class="fact"><dt>Format</dt><dd>Remote · EN / DE</dd></div>
+        <div class="fact"><dt>For</dt><dd>10–250 employees</dd></div>
+      </dl>
+      <h2>What you get</h2>
+      <ul class="ticks" style="font-size:var(--text-md)"><li>Inventory and risk classification of your AI systems (prohibited, high-risk, limited, minimal)</li><li>Your role per system: provider or deployer</li><li>Gap analysis against the obligations that apply</li><li>A prioritised 12-month roadmap with owners</li><li>A 60-minute read-out for your leadership team</li></ul>
+      <h2 style="margin-top:var(--space-12)">How the four weeks run</h2>
+      <ol class="timeline"><li><span class="wk">Week 1</span><span><strong>Kickoff and discovery.</strong> 90-minute workshop, questionnaire to system owners.</span></li><li><span class="wk">Week 2</span><span><strong>Classification.</strong> Each system mapped to the AI Act risk classes and roles.</span></li><li><span class="wk">Week 3</span><span><strong>Gap analysis.</strong> Obligations versus current practice.</span></li><li><span class="wk">Week 4</span><span><strong>Roadmap and read-out.</strong> Delivered documents, leadership session.</span></li></ol>
+      <h2 style="margin-top:var(--space-12)">Not included</h2>
+      <ul class="ticks notin"><li>Legal opinions (we coordinate with your lawyer)</li><li>Implementing technical controls</li><li>Conformity assessment or certification</li></ul>
+      <div class="faq" style="margin-top:var(--space-12)"><h2>Questions</h2><details><summary>What do you need from us?</summary><p>[Placeholder]</p></details><details><summary>Can we upgrade to ISO/IEC 42001 later?</summary><p>[Placeholder]</p></details></div>
+    </article>
+    <aside class="buybox">
+      <div class="card package package--recommended">
+        <div class="package__top"><span class="small muted">Fixed price</span><span class="badge-recommended">Recommended start</span></div>
+        <div class="package__price">€ —<small>excl. VAT</small></div>
+        <ul class="ticks"><li>Fixed scope, no surprises</li><li>Start within [2] weeks</li><li>Invoice after kickoff</li></ul>
+        <a class="btn btn--primary btn--block" href="order.html">Order this package</a>
+        <a class="btn btn--secondary btn--block" href="#">Book a call first</a>
+        <p class="small muted" style="margin:0">Questions? Ask the advisor or <a href="#">leave your contact</a>.</p>
+      </div>
+      <div class="credential" style="margin-top:var(--space-4)"><div class="credential__seal">MIT<br>PE</div><div><strong>Delivered by Nikolay Tonev</strong><p>MIT Professional Education · <a href="#">credential</a></p></div></div>
+    </aside>
+  </div>
+</main>
+{{FOOTER}}
+{{THEME_JS}}
+</body>
+</html>

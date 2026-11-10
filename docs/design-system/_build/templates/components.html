@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>ivmanto components</title>
+{{HEAD}}
+</head>
+<body>
+{{HEADER}}
+<main class="container" style="padding:var(--space-16) 20px">
+  <p class="overline">Components v0.1</p>
+  <h1>Component library</h1>
+  <p class="lead">Every element the relaunch needs, in both themes (toggle in the header). Specs: <span class="mono">components/*.md</span>. Styles: <span class="mono">components/ivmanto.css</span>.</p>
+
+  <h2 style="margin-top:var(--space-16)">Buttons</h2>
+  <div class="ds-label">primary · secondary · ghost · small · disabled</div>
+  <div class="ds-box row">
+    <a class="btn btn--primary" href="#">Find the right service {{ICON:chev}}</a>
+    <a class="btn btn--secondary" href="#">See packages</a>
+    <a class="btn btn--ghost" href="#">How it works {{ICON:chev}}</a>
+    <a class="btn btn--primary btn--sm" href="#">Book a call</a>
+    <button class="btn btn--primary" disabled>Sending…</button>
+  </div>
+
+  <h2 style="margin-top:var(--space-16)">Tags and badges</h2>
+  <div class="ds-box row">
+    <span class="tag tag--risk tag--low">Low risk</span><span class="tag tag--risk tag--medium">Limited risk</span><span class="tag tag--risk tag--high">High risk</span>
+    <span class="tag tag--framework">ISO/IEC 42001</span><span class="tag tag--framework">EU AI Act</span><span class="tag tag--framework">NIST AI RMF</span>
+    <span class="tag tag--pillar">Governance</span><span class="badge-recommended">Recommended</span>
+  </div>
+
+  <h2 style="margin-top:var(--space-16)">AI service advisor</h2>
+  <p class="muted">The home-page funnel (epic #112). The order of the states below matches the visitor's journey.</p>
+
+  <div class="grid grid-2" style="align-items:start">
+    <div>
+      <div class="ds-label">1 · idle, before first send (privacy notice shown)</div>
+      <div class="advisor">
+        <div class="advisor__head">{{AVATAR}}<strong>ivmanto advisor</strong><span class="ai-label">AI</span></div>
+        <div class="advisor__log advisor__log--static">
+          <div class="msg msg--ai">{{AVATAR}}<div><p>Describe in a sentence or two what you're working on or worried about. I'll suggest which of our governance, risk or compliance services fit.</p></div></div>
+        </div>
+        <div class="prompt-chips"><button class="chip">We're rolling out an internal AI assistant</button><button class="chip">Does the EU AI Act apply to us?</button><button class="chip">We need ISO 42001 readiness</button></div>
+        <form class="advisor__form" onsubmit="return false">
+          <div class="notice" style="margin-bottom:12px"><p><strong>Before you send:</strong> your message is processed by an AI model (Mistral) on our behalf to answer you. Don't include personal or confidential data. Messages are deleted after [N] days. <a href="#">Privacy notice</a></p></div>
+          <div class="advisor__input"><label class="sr-only" for="q1">Your question</label><textarea id="q1" rows="2" maxlength="600" placeholder="e.g. We use ChatGPT in sales and want to know what we must document"></textarea><button class="btn btn--primary" aria-label="Send">{{ICON:send}}</button></div>
+          <div class="advisor__meta"><span>You're talking to an AI. Answers are guidance, not legal advice.</span><span>0 / 600</span></div>
+        </form>
+      </div>
+    </div>
+
+    <div>
+      <div class="ds-label">2 · thinking</div>
+      <div class="advisor">
+        <div class="advisor__head">{{AVATAR}}<strong>ivmanto advisor</strong><span class="ai-label">AI</span></div>
+        <div class="advisor__log advisor__log--static">
+          <div class="msg msg--user">We're a 60-person logistics firm. Our dispatchers started using an AI tool to plan routes and nobody approved it.</div>
+          <div class="msg msg--ai">{{AVATAR}}<div><span class="typing" role="status" aria-label="Advisor is answering"><i></i><i></i><i></i></span></div></div>
+        </div>
+      </div>
+      <div class="ds-label">5 · error / fallback (timeout, model down)</div>
+      <div class="notice notice--error"><p><strong>The advisor can't answer right now.</strong> Your question wasn't lost. You can still talk to a person:</p><div class="row"><a class="btn btn--secondary btn--sm" href="#">Book a call</a><a class="btn btn--ghost btn--sm" href="#">Browse packages</a></div></div>
+      <div class="ds-label">6 · limit reached (rate limit or 4 turns)</div>
+      <div class="notice"><p>That's as far as I can help in a chat. The next step works best with a person.</p><div class="row"><a class="btn btn--primary btn--sm" href="#">Book a 30-min call</a><a class="btn btn--ghost btn--sm" href="#">Leave your contact</a></div></div>
+    </div>
+  </div>
+
+  <div class="ds-label">3 · answer with recommendations and CTA set</div>
+  <div class="advisor" style="max-width:760px">
+    <div class="advisor__head">{{AVATAR}}<strong>ivmanto advisor</strong><span class="ai-label">AI</span></div>
+    <div class="advisor__log advisor__log--static">
+      <div class="msg msg--user">We're a 60-person logistics firm. Our dispatchers started using an AI tool to plan routes and nobody approved it.</div>
+      <div class="msg msg--ai">{{AVATAR}}<div>
+        <p>That's a common starting point: the AI is already in use and governance has to catch up. Two things matter first: know what's running (an inventory), and decide who owns approving AI tools. Route planning is unlikely to be "high-risk" under the EU AI Act, but you still carry GDPR and contract obligations for the data you feed it.</p>
+        <p class="small muted">Services that fit:</p>
+        <div class="rec">{{PILLAR:G}}<div><div class="rec__title">AI inventory &amp; ownership</div></div><div class="rec__price">€ —</div><p class="rec__why">Lists every AI tool in use, its owner and its risk class, so approvals have a baseline.</p></div>
+        <div class="rec">{{PILLAR:R}}<div><div class="rec__title">AI risk assessment</div></div><div class="rec__price">€ —</div><p class="rec__why">Checks the route-planning tool for data, vendor and decision risks.</p></div>
+        <div class="cta-set">
+          <a class="cta cta--primary" href="#">{{ICON:cart}}<strong>Order package</strong><span>Fixed scope and price</span></a>
+          <a class="cta" href="#">{{ICON:phone}}<strong>Book a call</strong><span>[30 min, free]</span></a>
+          <a class="cta" href="#">{{ICON:calendar}}<strong>Schedule later</strong><span>Pick a time</span></a>
+          <a class="cta" href="#">{{ICON:mail}}<strong>Leave contact</strong><span>[Reply within 1 working day]</span></a>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="ds-label">4 · lead form (opens from "Leave contact")</div>
+  <div class="card" style="max-width:560px">
+    <h3>Leave your contact</h3>
+    <p class="small muted">Nick replies personally [within one working day].</p>
+    <div class="field"><label for="n">Name</label><input class="input" id="n" autocomplete="name"></div>
+    <div class="field"><label for="e">Work email</label><input class="input" id="e" type="email" autocomplete="email"></div>
+    <div class="field field--error"><label for="c">Company</label><input class="input" id="c" autocomplete="organization" aria-invalid="true" aria-describedby="c-h"><span class="hint" id="c-h">Please enter your company name.</span></div>
+    <label class="consent"><input type="checkbox"><span>I agree that ivmanto may use my details and my advisor conversation to answer this request. Withdraw any time. <a href="#">Privacy notice</a></span></label>
+    <label class="consent"><input type="checkbox"><span>Optional: send me occasional insights on AI governance (max. monthly, unsubscribe any time).</span></label>
+    <button class="btn btn--primary btn--block">Send</button>
+  </div>
+
+  <h2 style="margin-top:var(--space-16)">Cards</h2>
+  <div class="ds-label">pillar card</div>
+  <div class="grid grid-3">
+    <div class="card card--link pillar">{{PILLAR:G}}<h3><a class="card__link" href="#" style="color:inherit;text-decoration:none">Governance</a></h3><p class="muted small">Roles, decision rights and policies for how your company uses AI.</p><ul><li>AI policy &amp; acceptable use</li><li>AI inventory &amp; ownership</li></ul></div>
+  </div>
+  <div class="ds-label">package cards (default · recommended)</div>
+  <div class="grid grid-3">
+    <div class="card package"><div class="package__top"><span class="tag tag--pillar">Risk</span></div><h3>AI risk assessment</h3><div class="package__price">€ —<small>fixed, excl. VAT</small></div><div class="package__meta"><span>{{ICON:clock}} 3 weeks</span><span>{{ICON:doc}} Risk register + report</span></div><ul class="ticks"><li>Scope workshop (2 h)</li><li>Risk register for up to 5 AI systems</li><li>Prioritised mitigation plan</li></ul><a class="btn btn--secondary" href="#">View package</a></div>
+    <div class="card package package--recommended"><div class="package__top"><span class="tag tag--pillar">Compliance</span><span class="badge-recommended">Recommended</span></div><h3>EU AI Act readiness</h3><div class="package__price">€ —<small>fixed, excl. VAT</small></div><div class="package__meta"><span>{{ICON:clock}} 4 weeks</span><span>{{ICON:doc}} Gap report + roadmap</span></div><ul class="ticks"><li>Classification of your AI systems</li><li>Gap analysis against obligations</li><li>12-month roadmap</li></ul><a class="btn btn--primary" href="#">View package</a></div>
+  </div>
+  <p class="small muted">Package names, scope and prices are placeholders until Nick defines the catalogue.</p>
+
+  <h2 style="margin-top:var(--space-16)">Order stepper</h2>
+  <div class="ds-box"><ol class="stepper"><li class="done"><span>Package</span></li><li aria-current="step"><span>Your details</span></li><li><span>Review</span></li><li><span>Confirmation</span></li></ol></div>
+
+  <h2 style="margin-top:var(--space-16)">Credential and frameworks</h2>
+  <div class="ds-box row" style="gap:var(--space-8)">
+    <div class="credential"><div class="credential__seal">MIT<br>PE</div><div><strong>MIT Professional Education</strong><p>Certificate · verified on Accredible <a href="#">View credential</a></p></div></div>
+    <div class="frameworks"><span class="tag tag--framework">EU AI Act</span><span class="tag tag--framework">ISO/IEC 42001</span><span class="tag tag--framework">ISO/IEC 27001</span><span class="tag tag--framework">NIST AI RMF</span><span class="tag tag--framework">GDPR</span></div>
+  </div>
+  <p class="small muted">The seal is a placeholder. The live site uses the official Accredible badge image and link. Frameworks are listed as "we work with", never as certified or partnered.</p>
+
+  <h2 style="margin-top:var(--space-16)">How it works</h2>
+  <ol class="flow"><li><h4>Describe</h4><p class="small muted">Tell the advisor or book a call.</p></li><li><h4>Choose</h4><p class="small muted">A fixed-scope package with a price.</p></li><li><h4>Deliver</h4><p class="small muted">Workshops, documents, a clear owner.</p></li><li><h4>Hand over</h4><p class="small muted">You keep everything; no lock-in.</p></li></ol>
+
+  <h2 style="margin-top:var(--space-16)">FAQ</h2>
+  <div class="faq" style="max-width:760px"><details open><summary>Is this legal advice?</summary><p>No. We provide governance, risk and compliance consulting. Where legal interpretation is needed, we work alongside your lawyer.</p></details><details><summary>Can you work in German?</summary><p>Placeholder answer.</p></details></div>
+
+  <h2 style="margin-top:var(--space-16)">Cookie banner</h2>
+  <div class="cookie inline"><h4>Cookies</h4><p>We use analytics cookies only if you agree. Essential cookies keep the site working. <a href="#">Details</a></p><div class="row"><button class="btn btn--secondary">Reject</button><button class="btn btn--secondary">Settings</button><button class="btn btn--primary">Accept</button></div></div>
+  <p class="small muted">Accept and Reject are the same size and on the first layer (TTDSG §25 / GDPR; the German authorities' guidance).</p>
+</main>
+{{FOOTER}}
+{{THEME_JS}}
+</body>
+</html>
