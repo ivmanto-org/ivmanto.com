@@ -23,9 +23,9 @@ variable "lb_service_users" {
 }
 
 variable "enable_cloud_build_triggers" {
-  description = "Create the repository link and build triggers. Set true only after the GitHub connection exists and is authorised (#105)."
+  description = "Create the repository link and build triggers. Requires the authorised GitHub connection (#105); live since 2026-11-10."
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "github_connection_name" {
