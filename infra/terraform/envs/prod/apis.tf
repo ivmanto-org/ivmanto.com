@@ -1,6 +1,7 @@
 locals {
   required_apis = [
     "aiplatform.googleapis.com",       # ideas generation (Vertex AI / Gemini)
+    "apikeys.googleapis.com",          # API key on the frontend-rebuild webhook URL (#105)
     "artifactregistry.googleapis.com", # container images
     "calendar-json.googleapis.com",    # booking (Google Calendar via DWD)
     "cloudbuild.googleapis.com",       # CI/CD (cloudbuild*.yaml)

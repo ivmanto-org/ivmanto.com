@@ -21,3 +21,15 @@ variable "lb_service_users" {
   type        = list(string)
   default     = ["user:nick-ops@nestbalm.com"]
 }
+
+variable "enable_cloud_build_triggers" {
+  description = "Create the repository link and build triggers. Set true only after the GitHub connection exists and is authorised (#105)."
+  type        = bool
+  default     = false
+}
+
+variable "github_connection_name" {
+  description = "Cloud Build 2nd-gen GitHub connection, created and authorised once by an operator (#105)."
+  type        = string
+  default     = "ivmanto-github"
+}

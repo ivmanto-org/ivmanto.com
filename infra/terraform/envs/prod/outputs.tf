@@ -30,3 +30,12 @@ output "lb_backend_services" {
   description = "Backend service self-links for Nestbalm's URL map host rules (#104)."
   value       = { for k, v in google_compute_backend_service.this : k => v.self_link }
 }
+
+output "cloud_build_sa_email" {
+  value = google_service_account.cloud_build.email
+}
+
+output "frontend_rebuild_trigger_id" {
+  description = "Webhook trigger id for the frontend-rebuild URL (#105); null until triggers are enabled."
+  value       = one(google_cloudbuild_trigger.frontend_rebuild[*].trigger_id)
+}
