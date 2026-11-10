@@ -13,4 +13,7 @@ type Service interface {
 	SendBookingCancellationToClient(toName, toEmail string, startTime time.Time, visitorLoc *time.Location, visitorTZLabel string) error
 	SendBookingCancellationToAdmin(clientName, clientEmail string, startTime time.Time) error
 	SendGeneratedIdeas(toEmail, topic string, ideasBody string) error
+	// SendLeadNotification emails the advisor lead to the configured lead
+	// recipient (LEADS_TO). No storage happens in the handler.
+	SendLeadNotification(lead LeadInfo) error
 }

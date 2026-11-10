@@ -31,6 +31,7 @@ type EmailConfig struct {
 	SendFrom      string
 	SendFromAlias string
 	SmtpPass      string // Loaded from Secret Manager
+	LeadTo        string // Recipient of advisor leads (LEADS_TO); default SendFrom
 }
 
 // GCalConfig holds configuration for the Google Calendar service.
@@ -93,6 +94,8 @@ func Load() (*Config, error) {
 	if smtpPass == "" {
 		missingVars = append(missingVars, "SMTP_PASS")
 	}
+	// LEADS_TO is optional: when unset, advisor leads go to SEND_FROM.
+	leadTo := os.Getenv("LEADS_TO")
 
 	calendarID := os.Getenv("CALENDAR_ID")
 	if calendarID == "" {
@@ -157,7 +160,7 @@ func Load() (*Config, error) {
 
 	return &Config{
 		Service: ServiceConfig{Port: port},
-		Email:   EmailConfig{SmtpHost: smtpHost, SmtpPort: smtpPort, SendFrom: sendFrom, SendFromAlias: sendFromAlias, SmtpPass: smtpPass},
+		Email:   EmailConfig{SmtpHost: smtpHost, SmtpPort: smtpPort, SendFrom: sendFrom, SendFromAlias: sendFromAlias, SmtpPass: smtpPass, LeadTo: leadTo},
 		GCal: GCalConfig{
 			CalendarID:           calendarID,
 			AvailableSlotSummary: availableSlotSummary,

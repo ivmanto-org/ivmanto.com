@@ -286,6 +286,54 @@ func (s *SmtpService) SendContactMessage(msg ContactMessage) error {
 	return s.send([]string{adminEmail}, ccList, subject, body, nil)
 }
 
+// SendLeadNotification emails an advisor lead (epic #112) to the configured
+// lead recipient (LEADS_TO, default SendFrom). The recipient uses the
+// +lead username alias for Gmail inbox delivery, mirroring SendContactMessage.
+func (s *SmtpService) SendLeadNotification(lead LeadInfo) error {
+	toEmail := s.cfg.LeadTo
+	if toEmail == "" {
+		toEmail = s.cfg.SendFrom
+	}
+	parts := strings.Split(toEmail, "@")
+	var leadRecipient string
+	if len(parts) == 2 {
+		leadRecipient = fmt.Sprintf("%s+lead@%s", parts[0], parts[1])
+	} else {
+		leadRecipient = toEmail
+	}
+
+	subject := fmt.Sprintf("New advisor lead: %s (%s)", lead.Company, lead.Name)
+	return s.send([]string{leadRecipient}, nil, subject, buildLeadNotificationHTML(lead), nil)
+}
+
+// buildLeadNotificationHTML renders the advisor-lead email body. Consent is
+// already checked true by the handler before this is called.
+func buildLeadNotificationHTML(lead LeadInfo) string {
+	return fmt.Sprintf(`<p><strong>New lead from the AI service advisor.</strong></p>
+<ul>
+<li><strong>Name:</strong> %s</li>
+<li><strong>Email:</strong> <a href="mailto:%s">%s</a></li>
+<li><strong>Company:</strong> %s</li>
+</ul>
+<p><strong>Request / conversation summary:</strong></p>
+<p>%s</p>
+<p><em>Consent given (Art. 6(1)(a)): yes.</em></p>`,
+		htmlEscape(lead.Name),
+		htmlEscape(lead.Email), htmlEscape(lead.Email),
+		htmlEscape(lead.Company),
+		htmlEscape(lead.Message))
+}
+
+var htmlEscaper = strings.NewReplacer(
+	"&", "&amp;",
+	"<", "&lt;",
+	">", "&gt;",
+	`"`, "&#34;",
+	"'", "&#39;",
+)
+
+func htmlEscape(s string) string { return htmlEscaper.Replace(s) }
+
 // SendBookingCancellationToClient sends a cancellation confirmation to the user.
 // The visitor's IANA zone and a display label are forwarded from the booking
 // handler (read off the calendar event's private properties) so the slot

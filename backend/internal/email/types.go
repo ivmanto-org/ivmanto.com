@@ -35,3 +35,15 @@ type GeneratedIdea struct {
 	Title   string
 	Summary string
 }
+
+// LeadInfo holds the data from the advisor lead-capture form (epic #112,
+// spec: LeadForm). Name, Email, Company and Message are required; Consent
+// documents the Art. 6(1)(a) conversation-sharing consent and must be true
+// for the email to be sent. The lead is emailed to Nick and NOT stored.
+type LeadInfo struct {
+	Name    string
+	Email   string
+	Company string
+	Message string
+	Consent bool
+}

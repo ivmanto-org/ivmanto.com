@@ -18,6 +18,7 @@ import (
 	"ivmanto.com/backend/internal/email"
 	"ivmanto.com/backend/internal/gcal"
 	"ivmanto.com/backend/internal/ideas"
+	"ivmanto.com/backend/internal/leads"
 	"ivmanto.com/backend/internal/middleware"
 )
 
@@ -95,6 +96,7 @@ func main() {
 
 	// 4. Initialize handlers, passing dependencies
 	contactHandler := contact.NewHandler(logger, emailService)
+	leadsHandler := leads.NewHandler(logger, emailService)
 	bookingHandler := booking.NewHandler(logger, gcalSvc, emailService, trackerSvc)
 	ideasHandler := ideas.NewHandler(logger, genaiClient, emailService, cfg.Ideas.GenerateIdeasPromptTemplate)
 	articlesHandler := articles.NewHandler(logger)
@@ -115,6 +117,7 @@ func main() {
 	mux := http.NewServeMux()
 	contactHandler.RegisterRoutes(mux)
 	bookingHandler.RegisterRoutes(mux)
+	leadsHandler.RegisterRoutes(mux)
 	ideasHandler.RegisterRoutes(mux)
 	articlesHandler.RegisterRoutes(mux)
 	blogHandler.RegisterRoutes(mux)
