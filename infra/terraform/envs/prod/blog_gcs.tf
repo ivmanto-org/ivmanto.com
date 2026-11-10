@@ -15,19 +15,30 @@
 # LB URL itself passes is verified empirically on first apply; the push_config
 # below is the mechanism regardless.)
 #
-# Push auth: because Cloud Run has invoker_iam_disabled, the OIDC token a push
-# subscription normally carries is NOT validated by the environment. The
-# backend is therefore the ONLY gate: it requires a shared token in the query
-# string (?token=<PUBSUB_PUSH_TOKEN>, constant-time compare, no token echo).
-# Following the IV-INFRA-03 secrets convention, the token VALUE never appears
-# in Terraform: Terraform creates the subscription with the base endpoint and
-# ignores the push endpoint, and the operator appends the token out-of-band:
+# Push auth (#115): because Cloud Run has invoker_iam_disabled, the environment
+# does NOT validate the OIDC token a push subscription normally carries - the
+# backend is the ONLY gate. The subscription's oidc_token block attaches a
+# Google-signed OIDC JWT for google_service_account.blog_push
+# (Authorization: Bearer header, audience = the push endpoint). The backend
+# verifies signature, issuer, audience and expiry, and checks the token's
+# email claim equals the expected signer SA (PUBSUB_PUSH_SA_EMAIL). No secret
+# value exists in the URL or in Terraform, so LB request logging of this
+# backend is enabled (lb_backends.tf). The token value is never logged or
+# echoed by the backend.
 #
-#   gcloud pubsub subscriptions update ivmanto-blog-refresh-push \
-#     --push-endpoint="https://ivmanto.com/api/_internal/pubsub/blog-refresh?token=<val>"
+# One-time operator step BEFORE the first apply that adds oidc_token: grant the
+# identity creating/updating the subscription (the Terraform applier) the
+# Service Account Token Creator role on the push SA:
 #
-# Until that patch lands the endpoint carries no token and the backend returns
-# 403 (fail-closed) - no notifications are dropped silently during the window.
+#   gcloud iam service-accounts add-iam-policy-binding \
+#     ivmanto-blog-push-sa@ivmanto-com-prod-514215.iam.gserviceaccount.com \
+#     --member="user:<applier-identity>" \
+#     --role="roles/iam.serviceAccountTokenCreator"
+#
+# The articles status endpoint (/api/_internal/articles/status) is operator-
+# only and uses a separate shared bearer token (ARTICLES_STATUS_TOKEN, read
+# from the pubsub-push-token Secret Manager secret; constant-time compare,
+# Authorization header, never the URL).
 #
 # Acceptance: plan shows 0 import / +N add / 0 change / 0 destroy (all new).
 
@@ -107,16 +118,16 @@ resource "google_pubsub_subscription" "blog_push" {
   message_retention_duration = "86400s"
 
   push_config {
-    # OIDC token intentionally not configured: invoker_iam_disabled means it is
-    # not validated; the ?token= query guard is the auth (see header comment).
+    # OIDC push auth (#115): Pub/Sub attaches the blog_push SA's Google-signed
+    # JWT as an Authorization: Bearer header (audience = push endpoint). Cloud
+    # Run does not validate it (invoker_iam_disabled); the backend does - see
+    # the header comment. No secret in the URL or in Terraform.
     push_endpoint = local.blog_push_endpoint
-  }
 
-  # Operator appends ?token=<secret> out-of-band (never in Terraform).
-  lifecycle {
-    ignore_changes = [
-      push_config[0].push_endpoint,
-    ]
+    oidc_token {
+      service_account_email = google_service_account.blog_push.email
+      audience              = local.blog_push_endpoint
+    }
   }
 
   depends_on = [google_project_service.this]

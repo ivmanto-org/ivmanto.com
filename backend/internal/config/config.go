@@ -54,9 +54,11 @@ type IdeasConfig struct {
 
 // BlogConfig holds configuration for the GCS-backed blog system.
 type BlogConfig struct {
-	GCSBucket                  string
-	PubSubPushToken            string // Optional shared secret for Pub/Sub push validation
-	FrontendRebuildWebhookURL  string // Optional Cloud Build webhook URL to trigger frontend rebuilds
+	GCSBucket                 string
+	ArticlesStatusToken       string // Optional shared secret for the operator-only status endpoint (Bearer header)
+	PubSubPushSAEmail         string // Optional expected OIDC signer email for Pub/Sub pushes (empty = skip in local dev)
+	PubSubPushAudience        string // Expected OIDC audience for Pub/Sub pushes (empty = prod default)
+	FrontendRebuildWebhookURL string // Optional Cloud Build webhook URL to trigger frontend rebuilds
 }
 
 // AnalyticsConfig holds configuration for Google Analytics.
@@ -130,8 +132,14 @@ func Load() (*Config, error) {
 		missingVars = append(missingVars, "GCS_BLOG_BUCKET")
 	}
 
-	// Load optional Pub/Sub push token (empty = skip token validation in local dev)
-	pubsubPushToken := os.Getenv("PUBSUB_PUSH_TOKEN")
+	// Load optional blog push auth (empty = skip validation in local dev).
+	// ARTICLES_STATUS_TOKEN: shared secret for the operator-only status
+	// endpoint (Bearer header). PUBSUB_PUSH_SA_EMAIL: expected OIDC signer
+	// for Pub/Sub pushes. PUBSUB_PUSH_AUDIENCE: OIDC audience (defaults to
+	// the prod push endpoint URL in the blog handler).
+	articlesStatusToken := os.Getenv("ARTICLES_STATUS_TOKEN")
+	pubsubPushSAEmail := os.Getenv("PUBSUB_PUSH_SA_EMAIL")
+	pubsubPushAudience := os.Getenv("PUBSUB_PUSH_AUDIENCE")
 
 	// Load Analytics config
 	gaApiSecret := os.Getenv("GA_API_SECRET")
@@ -156,12 +164,18 @@ func Load() (*Config, error) {
 			ServiceAccountEmail:  gcalSAEmail,
 			ImpersonateUser:      gcalImpersonateUser,
 		},
-		GCP:     GCPConfig{ProjectID: projectID, Location: location},
-		Ideas:   IdeasConfig{GenerateIdeasPromptTemplate: generateIdeasPromptTemplate},
+		GCP:   GCPConfig{ProjectID: projectID, Location: location},
+		Ideas: IdeasConfig{GenerateIdeasPromptTemplate: generateIdeasPromptTemplate},
 		Analytics: AnalyticsConfig{
 			ApiSecret:     gaApiSecret,
 			MeasurementID: gaMeasurementID,
 		},
-		Blog: BlogConfig{GCSBucket: gcsBlogBucket, PubSubPushToken: pubsubPushToken, FrontendRebuildWebhookURL: os.Getenv("FRONTEND_REBUILD_WEBHOOK_URL")},
+		Blog: BlogConfig{
+			GCSBucket:                 gcsBlogBucket,
+			ArticlesStatusToken:       articlesStatusToken,
+			PubSubPushSAEmail:         pubsubPushSAEmail,
+			PubSubPushAudience:        pubsubPushAudience,
+			FrontendRebuildWebhookURL: os.Getenv("FRONTEND_REBUILD_WEBHOOK_URL"),
+		},
 	}, nil
 }

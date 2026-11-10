@@ -2,6 +2,9 @@ package blog
 
 import (
 	"bytes"
+	"context"
+	"crypto/sha256"
+	"crypto/subtle"
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
@@ -9,23 +12,70 @@ import (
 	"net/http"
 	"strings"
 	"time"
+
+	"google.golang.org/api/idtoken"
 )
+
+// DefaultPushAudience is the OIDC audience the Pub/Sub push subscription's
+// oidc_token is configured with (infra/terraform/envs/prod/blog_gcs.tf,
+// local.blog_push_endpoint). Overridable via PUBSUB_PUSH_AUDIENCE for
+// non-prod environments.
+const DefaultPushAudience = "https://ivmanto.com/api/_internal/pubsub/blog-refresh"
+
+// oidcTokenValidator validates a Google-signed OIDC JWT (the Bearer token a
+// Pub/Sub push subscription sends) against an audience. Implementations must
+// verify signature, issuer, audience and expiry, and return the token's
+// email claim. An interface so tests can stub the network fetch.
+type oidcTokenValidator func(ctx context.Context, rawToken, audience string) (email string, err error)
+
+// googleOIDCValidator is the production validator: it verifies the JWT
+// signature against Google's public certs plus iss/aud/exp, using
+// google.golang.org/api/idtoken.
+func googleOIDCValidator(ctx context.Context, rawToken, audience string) (string, error) {
+	payload, err := idtoken.Validate(ctx, rawToken, audience)
+	if err != nil {
+		return "", err
+	}
+	email, _ := payload.Claims["email"].(string)
+	return email, nil
+}
+
+// bearerToken extracts the token from an "Authorization: Bearer <token>"
+// header. Returns "" when the header is absent or malformed. Never logs the
+// token value.
+func bearerToken(r *http.Request) string {
+	const prefix = "Bearer "
+	auth := r.Header.Get("Authorization")
+	if len(auth) > len(prefix) && strings.EqualFold(auth[:len(prefix)], prefix) {
+		return strings.TrimSpace(auth[len(prefix):])
+	}
+	return ""
+}
 
 // Handler serves blog article endpoints.
 type Handler struct {
-	logger     *slog.Logger
-	cache      *Cache
-	pushToken  string // optional shared secret for Pub/Sub push validation
-	webhookURL string // optional Cloud Build webhook URL for frontend rebuilds
+	logger       *slog.Logger
+	cache        *Cache
+	statusToken  string // optional shared secret for the operator-only status endpoint (Bearer header)
+	pushSAEmail  string // optional expected OIDC signer email for Pub/Sub pushes (empty = skip in local dev)
+	pushAudience string // expected OIDC audience for Pub/Sub pushes
+	oidcValidate oidcTokenValidator
+	webhookURL   string // optional Cloud Build webhook URL for frontend rebuilds
 }
 
 // NewHandler creates a new blog handler.
-func NewHandler(logger *slog.Logger, cache *Cache, pushToken string, webhookURL string) *Handler {
+func NewHandler(logger *slog.Logger, cache *Cache, statusToken, pushSAEmail, pushAudience string, webhookURL string) *Handler {
+	if pushAudience == "" {
+		pushAudience = DefaultPushAudience
+	}
 	return &Handler{
-		logger:     logger,
-		cache:      cache,
-		pushToken:  pushToken,
-		webhookURL: webhookURL,
+		logger:       logger,
+		cache:        cache,
+		statusToken:  statusToken,
+		pushSAEmail:  pushSAEmail,
+		pushAudience: pushAudience,
+		oidcValidate: googleOIDCValidator,
+		webhookURL:   webhookURL,
 	}
 }
 
@@ -74,11 +124,20 @@ type pubSubMessage struct {
 // It validates the shared token, filters non-.md files, and schedules a
 // debounced cache refresh.
 func (h *Handler) handlePubSubPush(w http.ResponseWriter, r *http.Request) {
-	// 1. Validate the push token if configured.
-	if h.pushToken != "" {
-		token := r.URL.Query().Get("token")
-		if token != h.pushToken {
-			h.logger.Warn("pubsub push rejected: invalid token")
+	// 1. Validate the push identity if configured: Pub/Sub sends the
+	// subscription's OIDC token as a Bearer token; verify it is signed by
+	// Google, aimed at our audience, and issued to the expected service
+	// account. The token value is never logged.
+	if h.pushSAEmail != "" {
+		raw := bearerToken(r)
+		if raw == "" {
+			h.logger.Warn("pubsub push rejected: missing bearer token")
+			w.WriteHeader(http.StatusForbidden)
+			return
+		}
+		email, err := h.oidcValidate(r.Context(), raw, h.pushAudience)
+		if err != nil || email != h.pushSAEmail {
+			h.logger.Warn("pubsub push rejected: invalid push token")
 			w.WriteHeader(http.StatusForbidden)
 			return
 		}
@@ -144,11 +203,17 @@ func (h *Handler) triggerFrontendRebuild(objectID string) {
 }
 
 // handleArticlesStatus returns diagnostic information about all articles
-// including skipped ones. Protected by the push token.
+// including skipped ones. Protected by a shared bearer token (Authorization
+// header, never the URL) compared in constant time.
 func (h *Handler) handleArticlesStatus(w http.ResponseWriter, r *http.Request) {
-	if h.pushToken != "" {
-		token := r.URL.Query().Get("token")
-		if token != h.pushToken {
+	if h.statusToken != "" {
+		got := bearerToken(r)
+		// Hash both sides first: ConstantTimeCompare alone leaks whether
+		// the lengths match; comparing fixed-size digests hides the token
+		// length too. Neither value is ever logged.
+		gotSum := sha256.Sum256([]byte(got))
+		wantSum := sha256.Sum256([]byte(h.statusToken))
+		if subtle.ConstantTimeCompare(gotSum[:], wantSum[:]) != 1 {
 			h.logger.Warn("articles status rejected: invalid token")
 			w.WriteHeader(http.StatusForbidden)
 			return
