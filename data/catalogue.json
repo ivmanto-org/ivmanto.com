@@ -131,7 +131,7 @@
       "id": "comp-incident-audit",
       "pillar": "compliance",
       "name": "Incident & audit workflows",
-      "outcome": "Workflows to report AI incidents and produce audit evidence on request.",
+      "outcome": "Workflows to handle AI incidents, check whether one is reportable, and produce audit evidence on request.",
       "duration_weeks": 3,
       "deliverable": "Workflows + templates",
       "includes": ["Incident workflow", "Evidence checklist", "Audit-request playbook"],
