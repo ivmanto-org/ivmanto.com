@@ -10,7 +10,7 @@ const ogImage = `${siteUrl}/og-image.png`
 useHead({
   titleTemplate: (titleChunk) => {
     if (!titleChunk) return siteTitle;
-    return titleChunk.includes('ivmanto.com') ? titleChunk : `${titleChunk} | ivmanto.com`;
+    return titleChunk.toLowerCase().includes('ivmanto') ? titleChunk : `${titleChunk} | ivmanto.com`;
   },
   link: [
     {

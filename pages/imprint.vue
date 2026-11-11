@@ -1,5 +1,5 @@
 <script setup lang="ts">
-// Impressum (§ 5 DDG). PLACEHOLDER: Nick provides the legal details.
+// Impressum (§ 5 DDG). Details from Nick, 2026-11-11.
 useSeoMeta({ title: 'Imprint', robots: 'noindex' })
 </script>
 
@@ -7,7 +7,12 @@ useSeoMeta({ title: 'Imprint', robots: 'noindex' })
   <section class="section">
     <div class="container" style="max-width: 760px">
       <h1>Imprint</h1>
-      <p>[Name, address, contact, VAT ID: to be provided by Nick.]</p>
+      <h2>Information according to § 5 DDG</h2>
+      <p>Nikolay Tonev<br />Jaegerstrasse 18<br />82008 Unterhaching<br />Germany</p>
+      <h2>Contact</h2>
+      <p>Use the <NuxtLink to="/contact">contact form</NuxtLink>.</p>
+      <h2>VAT ID</h2>
+      <p>VAT identification number according to § 27a UStG: DE457386314</p>
     </div>
   </section>
 </template>

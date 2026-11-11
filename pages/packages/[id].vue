@@ -37,7 +37,7 @@ useSeoMeta({ title: current.name, description: current.outcome })
           <div class="fact"><dt>Duration</dt><dd>{{ current.duration_weeks }} weeks</dd></div>
           <div class="fact"><dt>You get</dt><dd>{{ current.deliverable }}</dd></div>
           <div class="fact"><dt>Your effort</dt><dd>[~N hours]</dd></div>
-          <div class="fact"><dt>Format</dt><dd>[Remote, workshops]</dd></div>
+          <div class="fact"><dt>Format</dt><dd>Remote or on site, agreed with you</dd></div>
         </dl>
 
         <h2>What you get</h2>

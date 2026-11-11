@@ -48,7 +48,7 @@ useSeoMeta({ title: current.name, description: current.summary })
           <p class="lead">Fixed scope and fixed price. Start with the one closest to your deadline.</p>
         </div>
         <div class="grid grid-3">
-          <SitePackageCard v-for="pk in packages" :key="pk.id" :pkg="pk" />
+          <SitePackageCard v-for="pk in packages" :key="pk.id" :pkg="pk" badge="pillar" />
         </div>
       </div>
     </section>

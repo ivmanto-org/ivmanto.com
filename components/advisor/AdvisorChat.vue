@@ -101,7 +101,7 @@ const ctas = computed(() => {
     { key: 'buy' as const, label: 'Order package', sub: 'Fixed scope and price', to: ctaTarget('buy', firstRec) },
     { key: 'call' as const, label: 'Book a call', sub: '[30 min, free]', to: ctaTarget('call') },
     { key: 'schedule' as const, label: 'Schedule later', sub: 'Pick a time', to: ctaTarget('schedule') },
-    { key: 'contact' as const, label: 'Leave contact', sub: '[Reply within 1 working day]', to: '' },
+    { key: 'contact' as const, label: 'Leave contact', sub: 'Reply within 1 working day', to: '' },
   ].map((c) => ({ ...c, primary: c.key === primary }))
 })
 
@@ -199,8 +199,9 @@ function ctaClick(key: NextAction) {
     <form class="advisor__form" @submit.prevent="send">
       <div v-if="turns.length === 0" class="notice" style="margin-bottom: var(--space-3)">
         <p>
-          Your message is processed by an AI service ([Mistral], EU) to suggest a service, and kept for [N days].
-          Please don’t include personal or confidential data. <NuxtLink to="/ai-use">How we handle your message</NuxtLink>
+          You’re talking to an AI assistant, not a person. It suggests which of our services fit. It is guidance, not
+          legal advice. Your message is sent to our AI provider (Mistral AI, EU) to generate the answer. We don’t store
+          the conversation. Please don’t include personal or confidential information. <NuxtLink to="/ai-use">How we handle your message</NuxtLink>
         </p>
       </div>
       <div class="advisor__input">

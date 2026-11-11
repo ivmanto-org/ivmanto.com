@@ -1,10 +1,15 @@
 <script setup lang="ts">
 import type { Package } from '~/composables/useCatalogue'
 
-const props = defineProps<{ pkg: Package; showRecommended?: boolean }>()
+// badge: 'site' marks the one overall recommended start, 'pillar' marks each pillar's start (one amber badge per page).
+const props = withDefaults(defineProps<{ pkg: Package; badge?: 'site' | 'pillar' | 'none' }>(), { badge: 'site' })
 const { pillar } = useCatalogue()
 const pillarName = computed(() => pillar(props.pkg.pillar)?.name ?? '')
-const recommended = computed(() => props.showRecommended !== false && props.pkg.recommended)
+const recommended = computed(() => {
+  if (props.badge === 'site') return Boolean(props.pkg.recommended)
+  if (props.badge === 'pillar') return Boolean(props.pkg.pillar_recommended)
+  return false
+})
 </script>
 
 <template>

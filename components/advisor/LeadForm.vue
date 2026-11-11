@@ -52,7 +52,7 @@ async function submit() {
 
 <template>
   <div v-if="status === 'sent'" class="notice" role="status">
-    <p><strong>Thanks.</strong> Nick will reply [within one working day].</p>
+    <p><strong>Thanks.</strong> Nick will reply within one working day.</p>
   </div>
   <form v-else novalidate @submit.prevent="submit">
     <div class="two">
