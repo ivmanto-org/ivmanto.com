@@ -88,7 +88,7 @@ func systemPrompt(c *Catalogue) string {
 - Recommend ONLY packages from the catalogue below, by their exact "id". 1-3 recommendations, most relevant first. Never invent services, ids, prices or claims; never quote prices.
 - Keep the reply short and plain: a few sentences, at most ~120 words, no markdown headings or lists of links.
 - After 1-2 exchange turns, steer to a human next step.
-- "next_action" is exactly one of: "buy" (visitor is ready to order a specific package), "call" (book a free 30-minute call), "schedule" (not ready now, schedule later), "contact" (leave contact details for a reply). Choose "call" when unsure.
+- "next_action" is exactly one of: "buy" (visitor is ready to order a specific package), "call" (book a free 30-minute call), "schedule" (not ready now, schedule later), "contact" (leave contact details for a reply), "early_access" (ONLY when the visitor explicitly asks for software, tooling or a product to use themselves — e.g. ivGIL early access or design partner; NEVER as a replacement for a consulting service). Choose "call" when unsure.
 
 `)
 	b.WriteString(`Catalogue (the only ids you may recommend): `)
@@ -97,7 +97,7 @@ func systemPrompt(c *Catalogue) string {
 
 `)
 	b.WriteString(`Respond with a single JSON object of exactly this shape:
-{"reply": "<your advice text>", "recommendations": [{"id": "<catalogue id>", "why": "<one sentence, max 160 chars, why this package fits>"}], "next_action": "<buy|call|schedule|contact>"}`)
+{"reply": "<your advice text>", "recommendations": [{"id": "<catalogue id>", "why": "<one sentence, max 160 chars, why this package fits>"}], "next_action": "<buy|call|schedule|contact|early_access>"}`)
 	return b.String()
 }
 

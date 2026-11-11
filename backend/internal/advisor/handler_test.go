@@ -32,9 +32,12 @@ func testCatalogue() *Catalogue {
 		Version:  0,
 		Currency: "EUR",
 		Packages: []Package{
-			{ID: "gov-ai-policy", Pillar: "governance", Name: "AI policy & acceptable use"},
-			{ID: "gov-ai-inventory", Pillar: "governance", Name: "AI inventory & ownership"},
-			{ID: "risk-vendor-review", Pillar: "risk", Name: "Vendor risk review"},
+			// Real catalogue v1 ids/names (data/catalogue.json on
+			// dev-v0.2.0, #112 2026-11-11) so the suite validates
+			// against the live contract, not placeholders.
+			{ID: "gov-quick-check", Pillar: "governance", Line: "governance", Name: "AI governance quick check"},
+			{ID: "gov-policy-literacy", Pillar: "governance", Line: "governance", Name: "AI policy & literacy"},
+			{ID: "eng-architecture-review", Pillar: "engineering", Line: "engineering", Name: "Data & AI architecture review"},
 		},
 	}
 }
@@ -95,11 +98,32 @@ func TestAdvisorAcceptsSessionID(t *testing.T) {
 	}
 }
 
+func TestAdvisorEarlyAccessNextAction(t *testing.T) {
+	// Catalogue v1 / #112 (Nick 2026-11-11): next_action may be
+	// "early_access" — the ivGIL product funnel. It must pass validation
+	// unchanged; an unknown action still falls back to "call".
+	valid := &fakeProvider{resp: Response{Reply: "ivGIL early access suits you.", NextAction: "early_access"}}
+	srv := newServer(valid)
+	defer srv.Close()
+	_, body := post(t, srv, `{"messages":[{"role":"user","content":"do you have software for this?"}]}`)
+	if body["next_action"] != "early_access" {
+		t.Fatalf("early_access must pass through, got %v", body["next_action"])
+	}
+
+	invalid := &fakeProvider{resp: Response{Reply: "x", NextAction: "download"}}
+	srv2 := newServer(invalid)
+	defer srv2.Close()
+	_, body2 := post(t, srv2, `{"messages":[{"role":"user","content":"x"}]}`)
+	if body2["next_action"] != "call" {
+		t.Fatalf("unknown next_action must fall back to call, got %v", body2["next_action"])
+	}
+}
+
 func TestAdvisorHappyPath(t *testing.T) {
 	fake := &fakeProvider{resp: Response{
 		Reply: "Here is my advice.",
 		Recommendations: []Recommendation{
-			{ID: "gov-ai-policy", Why: "Fits your need for a written policy."},
+			{ID: "gov-quick-check", Why: "Fits your need for a written policy."},
 		},
 		NextAction: "call",
 	}}
@@ -120,7 +144,7 @@ func TestAdvisorHappyPath(t *testing.T) {
 		t.Fatalf("recommendations mismatch: %v", body["recommendations"])
 	}
 	rec := recs[0].(map[string]any)
-	if rec["id"] != "gov-ai-policy" || rec["why"] == "" {
+	if rec["id"] != "gov-quick-check" || rec["why"] == "" {
 		t.Fatalf("recommendation mismatch: %v", rec)
 	}
 	if fake.called != 1 {
@@ -149,12 +173,12 @@ func TestAdvisorDropsUnknownIDsAndCapsAtThree(t *testing.T) {
 	fake := &fakeProvider{resp: Response{
 		Reply: "advice",
 		Recommendations: []Recommendation{
-			{ID: "gov-ai-policy", Why: "one"},
+			{ID: "gov-quick-check", Why: "one"},
 			{ID: "made-up-package", Why: "unknown"},
-			{ID: "gov-ai-inventory", Why: "two"},
-			{ID: "gov-ai-policy", Why: "duplicate"},
-			{ID: "risk-vendor-review", Why: "three"},
-			{ID: "gov-ai-inventory", Why: "four"},
+			{ID: "gov-policy-literacy", Why: "two"},
+			{ID: "gov-quick-check", Why: "duplicate"},
+			{ID: "eng-architecture-review", Why: "three"},
+			{ID: "gov-policy-literacy", Why: "four"},
 		},
 		NextAction: "buy",
 	}}
@@ -165,7 +189,7 @@ func TestAdvisorDropsUnknownIDsAndCapsAtThree(t *testing.T) {
 	if len(recs) != 3 {
 		t.Fatalf("want 3 recommendations after filtering, got %d: %v", len(recs), recs)
 	}
-	wantIDs := []string{"gov-ai-policy", "gov-ai-inventory", "risk-vendor-review"}
+	wantIDs := []string{"gov-quick-check", "gov-policy-literacy", "eng-architecture-review"}
 	for i, want := range wantIDs {
 		got := recs[i].(map[string]any)["id"]
 		if got != want {

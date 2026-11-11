@@ -8,7 +8,7 @@ import "context"
 // The HTTP response shape is fixed and consumed verbatim by the frontend
 // (PR #126):
 //
-//	{"reply": "...", "recommendations": [{"id": "...", "why": "..."}], "next_action": "buy|call|schedule|contact"}
+//	{"reply": "...", "recommendations": [{"id": "...", "why": "..."}], "next_action": "buy|call|schedule|contact|early_access"}
 //
 // recommendation ids are validated against data/catalogue.json — the model
 // never invents ids; unknown ids are dropped server-side and logged.
@@ -37,16 +37,17 @@ type Response struct {
 // NextAction values (spec: CtaSet). Invalid model output falls back to
 // Call — steering to a human is the safe default.
 const (
-	NextActionBuy      = "buy"
-	NextActionCall     = "call"
-	NextActionSchedule = "schedule"
-	NextActionContact  = "contact"
+	NextActionBuy         = "buy"
+	NextActionCall        = "call"
+	NextActionSchedule    = "schedule"
+	NextActionContact     = "contact"
+	NextActionEarlyAccess = "early_access"
 )
 
-// ValidNextAction reports whether s is one of the four CtaSet actions.
+// ValidNextAction reports whether s is one of the five CtaSet actions.
 func ValidNextAction(s string) bool {
 	switch s {
-	case NextActionBuy, NextActionCall, NextActionSchedule, NextActionContact:
+	case NextActionBuy, NextActionCall, NextActionSchedule, NextActionContact, NextActionEarlyAccess:
 		return true
 	}
 	return false

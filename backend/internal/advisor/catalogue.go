@@ -25,11 +25,25 @@ type Pillar struct {
 
 // Package is one bookable service package.
 type Package struct {
-	ID       string `json:"id"`
-	Pillar   string `json:"pillar"`
+	ID     string `json:"id"`
+	Pillar string `json:"pillar"`
+	// Line is catalogue v1's service line (governance | engineering) —
+	// ivmanto sells governance-led with a Data & AI engineering entry
+	// (#112, Nick 2026-11-11). Decoded deliberately so the contract lives
+	// in code; the advisor uses it only as prompt context.
+	Line     string `json:"line"`
 	Name     string `json:"name"`
 	Outcome  string `json:"outcome"`
 	PriceEur *int64 `json:"price_eur"`
+	// PriceUnit ("month" on the retainer) and PriceNote (e.g. the ISO gap
+	// price with/without 27001 note) are display facts for the site;
+	// deliberately decoded, never acted on by the advisor — it must never
+	// quote prices.
+	PriceUnit string `json:"price_unit"`
+	PriceNote string `json:"price_note"`
+	// DurationLabel is the human-facing duration ("1 day", "Monthly,
+	// 3-month minimum"); display only.
+	DurationLabel string `json:"duration_label"`
 	// PillarRecommended is Brio's optional per-package flag (set on a few
 	// packages once #126's catalogue corrections land). Ignored by the
 	// advisor logic today; captured so the embedded-copy test tolerates it
@@ -70,19 +84,20 @@ func (c *Catalogue) ValidID(id string) bool {
 }
 
 // promptContext is the compact, model-facing view of the catalogue embedded
-// in the system prompt: id, pillar, name and outcome only. Prices are
+// in the system prompt: id, line, pillar, name and outcome only. Prices are
 // deliberately excluded — the model must never quote prices (the catalogue
 // is a placeholder and prices render from catalogue data by id).
 func (c *Catalogue) promptContext() string {
 	type entry struct {
 		ID      string `json:"id"`
+		Line    string `json:"line,omitempty"`
 		Pillar  string `json:"pillar"`
 		Name    string `json:"name"`
 		Outcome string `json:"outcome"`
 	}
 	entries := make([]entry, 0, len(c.Packages))
 	for _, p := range c.Packages {
-		entries = append(entries, entry{ID: p.ID, Pillar: p.Pillar, Name: p.Name, Outcome: p.Outcome})
+		entries = append(entries, entry{ID: p.ID, Line: p.Line, Pillar: p.Pillar, Name: p.Name, Outcome: p.Outcome})
 	}
 	b, err := json.Marshal(entries)
 	if err != nil {

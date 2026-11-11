@@ -31,7 +31,7 @@ func TestMistralReplyRoundTrip(t *testing.T) {
 		gotAuth = r.Header.Get("Authorization")
 		json.NewDecoder(r.Body).Decode(&gotBody)
 		w.Header().Set("Content-Type", "application/json")
-		w.Write([]byte(`{"choices":[{"message":{"content":"{\"reply\":\"r\",\"recommendations\":[{\"id\":\"gov-ai-policy\",\"why\":\"w\"}],\"next_action\":\"buy\"}"}}]}`))
+		w.Write([]byte(`{"choices":[{"message":{"content":"{\"reply\":\"r\",\"recommendations\":[{\"id\":\"gov-quick-check\",\"why\":\"w\"}],\"next_action\":\"buy\"}"}}]}`))
 	}))
 	defer srv.Close()
 
@@ -62,7 +62,7 @@ func TestMistralReplyRoundTrip(t *testing.T) {
 	if gotBody.ResponseFormat.Type != "json_object" {
 		t.Errorf("response_format: %+v", gotBody.ResponseFormat)
 	}
-	if resp.Reply != "r" || len(resp.Recommendations) != 1 || resp.Recommendations[0].ID != "gov-ai-policy" || resp.NextAction != "buy" {
+	if resp.Reply != "r" || len(resp.Recommendations) != 1 || resp.Recommendations[0].ID != "gov-quick-check" || resp.NextAction != "buy" {
 		t.Errorf("resp: %+v", resp)
 	}
 }
@@ -91,11 +91,14 @@ func TestMistralRejectsEmptyKeyAndNilCatalogue(t *testing.T) {
 func TestLoadCatalogueAndValidID(t *testing.T) {
 	dir := t.TempDir()
 	path := filepath.Join(dir, "catalogue.json")
-	// One real catalogue field set, one placeholder for the file.
+	// One real catalogue v1 package with the new optional fields
+	// (line, price_unit, price_note, duration_label) — LoadCatalogue
+	// must decode them and ValidID must work against the new ids.
 	if err := os.WriteFile(path, []byte(`{
-		"version": 0, "currency": "EUR",
+		"version": 1, "currency": "EUR",
 		"pillars": [{"id":"governance","name":"Governance","summary":"s"}],
-		"packages": [{"id":"gov-ai-policy","pillar":"governance","name":"AI policy","outcome":"o","price_eur":null,"pillar_recommended":true}]
+		"packages": [{"id":"gov-quick-check","pillar":"governance","line":"governance","name":"AI governance quick check","outcome":"o","price_eur":1900,"price_note":"credited later","duration_label":"1 day","pillar_recommended":true},
+		             {"id":"gov-retainer","pillar":"governance","line":"governance","name":"AI governance retainer","outcome":"o","price_eur":1500,"price_unit":"month"}]
 	}`), 0o644); err != nil {
 		t.Fatal(err)
 	}
@@ -103,8 +106,16 @@ func TestLoadCatalogueAndValidID(t *testing.T) {
 	if err != nil {
 		t.Fatalf("LoadCatalogue: %v", err)
 	}
-	if !c.ValidID("gov-ai-policy") {
-		t.Error("gov-ai-policy must be valid")
+	if !c.ValidID("gov-quick-check") {
+		t.Error("gov-quick-check must be valid")
+	}
+	if !c.ValidID("gov-retainer") {
+		t.Error("gov-retainer must be valid")
+	}
+	for _, p := range c.Packages {
+		if p.Line != "governance" {
+			t.Errorf("package %s: line not decoded: %q", p.ID, p.Line)
+		}
 	}
 	if c.ValidID("nope") {
 		t.Error("unknown id must be invalid")
