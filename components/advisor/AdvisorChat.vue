@@ -230,6 +230,7 @@ function ctaClick(key: NextAction) {
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M5 12h14M13 6l6 6-6 6" />
           </svg>
+          <span class="send-label">Send</span>
         </button>
       </div>
       <div class="advisor__meta">
@@ -251,4 +252,12 @@ function ctaClick(key: NextAction) {
 /* Make the input the obvious place to type. */
 .advisor__input textarea { border-width: 2px; border-color: var(--data); min-height: 3.5rem; }
 .advisor__input textarea:focus { outline: 2px solid var(--focus); outline-offset: 1px; }
+.send-label { display: none; }
+/* Small screens: full-width input, send button on its own row below. */
+@media (max-width: 560px) {
+  .advisor__input { flex-direction: column; align-items: stretch; }
+  .advisor__input textarea { width: 100%; }
+  .advisor__input .btn { width: 100%; justify-content: center; gap: var(--space-2); }
+  .send-label { display: inline; }
+}
 </style>
