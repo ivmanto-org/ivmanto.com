@@ -160,7 +160,7 @@ function formatDate(iso: string): string {
             I’m Nikolay Tonev. [Two to three sentences on background: cloud and data architecture, years in enterprise
             IT, why AI governance.] You work with me directly, from the first call to the handover.
           </p>
-          <p class="small muted">AI governance (MIT Professional Education) and Google Cloud data &amp; AI architecture (Google Cloud Professional Cloud Architect, certified 2019, recertified 2022).</p>
+          <p class="small muted">AI governance (MIT Professional Education) and Google Cloud data &amp; AI architecture (Google Cloud Professional Cloud Architect, certified three times: 2019, 2022 and 2024).</p>
           <SiteCredentialBadge />
         </div>
       </div>
