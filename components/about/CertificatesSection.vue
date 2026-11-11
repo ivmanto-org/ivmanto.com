@@ -61,6 +61,18 @@ const certificates = [
         </a>
       </div>
 
+      <p class="text-center text-muted mt-12">
+        Also: DATAVERSITY Data Architecture Workshop: Practical Exercises in Architecture Design
+        (October 2021, 24 CEUs).
+        <a
+          href="/pdfs/dataversity-data-architecture-workshop-2021.pdf"
+          class="text-primary underline"
+          target="_blank"
+          rel="noopener"
+          >View certificate (PDF)</a
+        >
+      </p>
+
       <div class="text-center mt-16">
         <a
           href="https://www.credly.com/users/nikolay-tonev.a60be769/badges#credly"
