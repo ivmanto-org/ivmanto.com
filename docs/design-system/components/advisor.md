@@ -46,7 +46,8 @@ Fields: name, work email, company (required); message prefilled with the chat su
 ## Legal and trust (non-negotiable)
 - EU AI Act Art. 50: the visitor must know it's an AI. Hence the `AI` label in the header and the meta line, every state.
 - "Not legal advice" is visible next to the input, not only in the terms.
-- Privacy notice before the first send: processor (Mistral), purpose, retention `[N days]`, "don't include personal or confidential data". Text to be checked by Ivgil.
+- Privacy notice before the first send: processor, purpose, retention, "don't include personal or confidential data". Draft text: Brio's `advisor-privacy-and-ai-use-DRAFT` (Ivgil reviews, Nick approves; not final). The meta-line link goes to `/ai#advisor`; the privacy section is `/privacy-policy#advisor`.
+- Backend facts the notice relies on (Ivmo, #123/#124): no chat text stored; random `session_id`; logs carry no message content (the request logger does record IP, URL and status); rate-limit counters kept 24 h; leads go by email to Nick only, with no hidden fields.
 - Funnel analytics events only after cookie consent (existing GTM gating).
 
 ## Accessibility

@@ -1,7 +1,9 @@
 # ivmanto design system
 
 Owner: Brio (design). Implementation: Clauco (Nuxt 3 + Tailwind). Review: Ivmo. Sign-off: Nick.
-Status: **v1.0, approved by Nick** (2026-11-10). Handed to Clauco for the new site.
+Status: **v1.0, approved by Nick** (2026-11-10); v1.0.1 records later decisions. Handed to Clauco for the new site.
+
+**What is decided, what is a placeholder, and what was rejected: see [`DECISIONS.md`](DECISIONS.md).** It wins over any other file or chat.
 
 ## Start here
 | Open | What |
@@ -11,6 +13,7 @@ Status: **v1.0, approved by Nick** (2026-11-10). Handed to Clauco for the new si
 | `components.html` | Component library, including all advisor states |
 | `pages/home.html` | The home page with the AI advisor hero |
 | `pages/pillar.html`, `pages/package.html`, `pages/order.html` | Remaining page templates |
+| `DECISIONS.md` | **Every decision**: approved, placeholder, rejected |
 | `assets/` | **Ready-to-use files**: logo (SVG/PNG/JPG), favicon set, OG image. See `assets/README.md` |
 
 Every preview has a light/dark toggle. Specs: `components/*.md`, `pages/README.md`.
@@ -18,7 +21,7 @@ Every preview has a light/dark toggle. Specs: `components/*.md`, `pages/README.m
 ## Folder structure
 ```
 design-system/
-├── README.md, CHANGELOG.md
+├── README.md, DECISIONS.md, CHANGELOG.md
 ├── brand.html, foundations.html, components.html   previews (generated)
 ├── pages/          page templates (generated) + README with page specs
 ├── tokens/         design tokens: JSON (source of truth) + CSS
@@ -51,7 +54,9 @@ they are wary of hype, and they want to know what they get, from whom, by when, 
 - Avoid the category clichés: agentic, AI-ready, one platform, unlock, supercharge, fear copy.
 - Name the frameworks exactly: ISO/IEC 42001, EU AI Act, NIST AI RMF, GDPR. No claims of
   certification, partnership or results we can't prove (UWG). No vendor comparisons.
-- The site sells **services** delivered by Nick. ivGIL (the product) is not sold here yet.
+- Scope (Nick, 2026-11-10 late): the site sells AI governance **services** delivered by Nick, is a selling point for
+  **ivGIL**, and has a section for Nick's **GCP Data & AI Architect / Data Management** work. The information
+  architecture for the three is being proposed (see `DECISIONS.md`, section 2).
 
 ## Tokens
 | File | Contents |
@@ -75,23 +80,8 @@ never primitives or hex values. Then the dark theme comes for free.
 - **Amber demoted** from accent to rare signal.
 - **Removed:** the glow, glass and gradient tokens from the old site.
 
-## Decisions
-- 2026-11-09 Nick: light default theme.
-- 2026-11-10 Nick: **Montserrat** for headlines (`--font-headline` → `--font-display`); Inter for UI and body. Replaces the serif chosen on 2026-11-09.
-- 2026-11-10 Nick: **logo approved**, four parts:
-  - wordmark: the tick-v by Tally, Instrument Sans 650 (SIL OFL), outlined, with a custom v as a teal tick;
-  - symbol: the hexagon with two rising chevrons, the upper (teal) one wider (concept C, revision 2);
-  - lockup: symbol + wordmark;
-  - short form "iv" + tick: favicon and social avatar. The advisor avatar is the tick on a teal disc.
-- 2026-11-10 Nick: design system v1.0 approved for the new site; Clauco builds it.
-
-## Open (Nick)
-- Logo polish by Tally (optional): tighter gap after the v. Replace `assets/source/ivmanto-tickv_w650_light.svg` and rebuild; every file follows.
-- Trademark: attorney to confirm the OFL position; file wordmark + tick as one figurative mark; clearance search for the symbol.
-- Service catalogue: package names, scope, prices (all placeholders now).
-- Order flow: order request + invoice, or Stripe checkout (#112).
-- Advisor: chat retention period, and a reply-time promise for leads.
-- Credential: Accredible URL and programme name; portrait photo.
+## Decisions and open items
+All in [`DECISIONS.md`](DECISIONS.md): approved, changed, team rules, placeholders, open, rejected.
 
 ## Build
 Everything except the specs is generated:

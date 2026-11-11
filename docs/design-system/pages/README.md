@@ -1,6 +1,6 @@
 # Pages
 
-Self-contained HTML previews (open in Claude Desktop or any browser; the header toggle switches the theme). Content in `[brackets]` and `€ —` prices are placeholders.
+Self-contained HTML previews (open in Claude Desktop or any browser; the header toggle switches the theme). Content in `[brackets]` and `€ [price]` are placeholders. **Package names, outcomes, durations and includes come from `data/catalogue.json` in the site repo (the single source); the previews here only illustrate the layout.**
 
 | File | Page | Purpose |
 |---|---|---|

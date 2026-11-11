@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.0.1 · 2026-11-11
+- `DECISIONS.md` added: one log of every decision (approved, changed, team rules, placeholders, open, rejected).
+- Price placeholder is now `€ [price]` (the repo's dash check bans em dashes in site copy).
+- Governance pillar preview matches the catalogue: "AI policy & acceptable use" (3 weeks), "Governance operating model" (6 weeks).
+- `pages/README.md`: `data/catalogue.json` in the site repo is the single source for package content.
+- `components/advisor.md`: privacy-notice status (draft with Ivgil) and the backend facts it relies on.
+- README: site scope widened by Nick (services + ivGIL + GCP Data & AI section); the decisions section moved to `DECISIONS.md`.
+
 ## v1.0 · 2026-11-10 (approved by Nick)
 - Header shows the lockup (symbol + wordmark, 30px); footer the wordmark.
 - Logo approved: tick-v wordmark (Tally), hexagon symbol with the wider upper chevron, lockup, short form "iv" + tick.
