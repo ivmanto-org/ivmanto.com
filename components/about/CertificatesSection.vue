@@ -27,6 +27,25 @@ const certificates = [
   },
   // You can add more certificates here by duplicating the object above
 ]
+
+// Certificates shown as PDFs (public/pdfs). Opens in the browser's PDF viewer.
+const pdfs = [
+  {
+    name: 'MIT Professional Education: Applied Agentic AI for Organizational Transformation',
+    meta: 'September to October 2026, 70 hours',
+    href: '/pdfs/mit-pe-applied-agentic-ai-2026.pdf',
+  },
+  {
+    name: 'Google Cloud Certified Professional Cloud Architect',
+    meta: 'issued May 2022, recertified 2024, valid until September 2026',
+    href: '/pdfs/google-cloud-professional-cloud-architect-2022.pdf',
+  },
+  {
+    name: 'DATAVERSITY Data Architecture Workshop: Practical Exercises in Architecture Design',
+    meta: 'October 2021, 24 CEUs',
+    href: '/pdfs/dataversity-data-architecture-workshop-2021.pdf',
+  },
+]
 </script>
 
 <template>
@@ -61,17 +80,15 @@ const certificates = [
         </a>
       </div>
 
-      <p class="text-center text-muted mt-12">
-        Also: DATAVERSITY Data Architecture Workshop: Practical Exercises in Architecture Design
-        (October 2021, 24 CEUs).
-        <a
-          href="/pdfs/dataversity-data-architecture-workshop-2021.pdf"
-          class="text-primary underline"
-          target="_blank"
-          rel="noopener"
-          >View certificate (PDF)</a
-        >
-      </p>
+      <div class="text-center mt-12">
+        <h3 class="text-xl font-bold text-dark-slate">Certificates (PDF)</h3>
+        <ul class="mt-4 space-y-2 text-muted">
+          <li v-for="pdf in pdfs" :key="pdf.href">
+            <a :href="pdf.href" class="text-primary underline" target="_blank" rel="noopener">{{ pdf.name }}</a>
+            <span>, {{ pdf.meta }}</span>
+          </li>
+        </ul>
+      </div>
 
       <div class="text-center mt-16">
         <a
