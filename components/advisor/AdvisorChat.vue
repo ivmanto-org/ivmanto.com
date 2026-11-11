@@ -5,7 +5,7 @@
 import { trackEvent } from '~/services/analytics'
 
 type Role = 'user' | 'assistant'
-type NextAction = 'buy' | 'call' | 'schedule' | 'contact'
+type NextAction = 'buy' | 'call' | 'schedule' | 'contact' | 'early_access'
 interface ChatMessage { role: Role; content: string }
 interface Recommendation { id: string; why: string }
 interface AdvisorReply { reply: string; recommendations: Recommendation[]; next_action: NextAction }
@@ -45,6 +45,7 @@ function ctaTarget(action: NextAction, rec?: Recommendation): string {
   if (action === 'buy') return rec ? `/packages/${rec.id}` : '/packages'
   if (action === 'call') return '/booking'
   if (action === 'schedule') return '/booking'
+  if (action === 'early_access') return '/ivgil#early-access'
   return ''
 }
 
@@ -97,12 +98,17 @@ const ctas = computed(() => {
   const answer = lastAnswer.value
   const primary: NextAction = answer?.next_action ?? 'call'
   const firstRec = answer?.recommendations?.[0]
+  // The ivGIL early-access CTA appears only when the advisor proposes it (IA proposal §6).
+  const platform = primary === 'early_access'
+    ? [{ key: 'early_access' as const, label: 'Request early access', sub: 'ivGIL, in development', to: ctaTarget('early_access') }]
+    : []
   return [
+    ...platform,
     { key: 'buy' as const, label: 'Order package', sub: 'Fixed scope and price', to: ctaTarget('buy', firstRec) },
     { key: 'call' as const, label: 'Book a call', sub: '[30 min, free]', to: ctaTarget('call') },
     { key: 'schedule' as const, label: 'Schedule later', sub: 'Pick a time', to: ctaTarget('schedule') },
     { key: 'contact' as const, label: 'Leave contact', sub: 'Reply within 1 working day', to: '' },
-  ].map((c) => ({ ...c, primary: c.key === primary }))
+  ].slice(0, 4).map((c) => ({ ...c, primary: c.key === primary }))
 })
 
 function ctaClick(key: NextAction) {

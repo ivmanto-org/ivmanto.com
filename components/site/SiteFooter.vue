@@ -18,10 +18,18 @@ function openCookieSettings() {
           </p>
         </div>
         <div>
-          <h4>Services</h4>
+          <h4>Governance</h4>
           <ul>
             <li v-for="p in pillars" :key="p.id"><NuxtLink :to="`/services/${p.id}`">{{ p.name }}</NuxtLink></li>
             <li><NuxtLink to="/packages">All packages</NuxtLink></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Engineering &amp; platform</h4>
+          <ul>
+            <li><NuxtLink to="/data-ai">Data &amp; AI engineering</NuxtLink></li>
+            <li><NuxtLink to="/packages/eng-architecture-review">Architecture review</NuxtLink></li>
+            <li><NuxtLink to="/ivgil">ivGIL</NuxtLink></li>
           </ul>
         </div>
         <div>
@@ -30,7 +38,7 @@ function openCookieSettings() {
             <li><NuxtLink to="/about">About</NuxtLink></li>
             <li><NuxtLink to="/blog">Insights</NuxtLink></li>
             <li><NuxtLink to="/booking">Book a call</NuxtLink></li>
-            <li><NuxtLink to="/#contact">Contact</NuxtLink></li>
+            <li><NuxtLink to="/contact">Contact</NuxtLink></li>
           </ul>
         </div>
         <div>

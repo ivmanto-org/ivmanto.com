@@ -6,7 +6,7 @@ const { pkg, pillar } = useCatalogue()
 
 const current = pkg(String(route.params.id))
 if (!current) throw createError({ statusCode: 404, statusMessage: 'Package not found', fatal: true })
-const pl = pillar(current.pillar)!
+const plName = pillar(current.pillar)?.name ?? LINE_NAMES[current.line]
 
 useSeoMeta({ title: `Order: ${current.name}`, robots: 'noindex' })
 </script>
@@ -30,10 +30,10 @@ useSeoMeta({ title: `Order: ${current.name}`, robots: 'noindex' })
       <aside class="card summary" aria-label="Summary">
         <h3>{{ current.name }}</h3>
         <dl>
-          <dt>Pillar</dt><dd>{{ pl.name }}</dd>
-          <dt>Duration</dt><dd>{{ current.duration_weeks }} weeks</dd>
+          <dt>Service</dt><dd>{{ plName }}</dd>
+          <dt>Duration</dt><dd>{{ formatDuration(current) }}</dd>
           <dt>Deliverable</dt><dd>{{ current.deliverable }}</dd>
-          <dt class="total">Price (excl. VAT)</dt><dd class="total">{{ formatPrice(current) }}</dd>
+          <dt class="total">Price ({{ priceTerms(current) }})</dt><dd class="total">{{ formatPrice(current) }}</dd>
         </dl>
         <NuxtLink :to="`/packages/${current.id}`" class="btn btn--ghost" style="margin-top: var(--space-4)">← Back to package</NuxtLink>
       </aside>

@@ -22,8 +22,9 @@ const faqs = [
     a: 'No. We provide governance, risk and compliance consulting. Where legal interpretation is needed, we work alongside your lawyer.',
   },
   { q: 'We’re small. Does the EU AI Act even apply to us?', a: '[Short, accurate answer, checked by Ivgil.]' },
-  { q: 'What happens after I order a package?', a: '[Order flow: confirmation, kickoff call scheduled, invoice terms.]' },
-  { q: 'What does the AI advisor do with my message?', a: '[Processor, retention, no training on your data; link to privacy notice.]' },
+  { q: 'What happens after I order a package?', a: 'You send an order request. Nick replies within one working day to confirm the scope and start date, schedules the kickoff call and sends the invoice.' },
+  { q: 'What does the AI advisor do with my message?', a: 'It sends your message to our AI provider, Mistral AI (EU), only to generate the answer. We don’t store the conversation. Details are on the AI use page and in the privacy policy.' },
+  { q: 'Do you also build data platforms?', a: 'Yes. Data platforms, AI agents and private knowledge assistants on Google Cloud are the other half of our work. Start with the Data & AI architecture review, or book a call.' },
 ]
 
 useSeoMeta({
@@ -103,12 +104,32 @@ function formatDate(iso: string): string {
         <div class="section-head">
           <p class="overline">Packages</p>
           <h2>Fixed scope. Fixed price. Order directly.</h2>
-          <p class="lead">No open-ended retainers. Each package states what you get, how long it takes and what it costs.</p>
+          <p class="lead">Each package states what you get, how long it takes and what it costs.</p>
         </div>
         <div class="grid grid-3">
           <SitePackageCard v-for="pk in featured()" :key="pk.id" :pkg="pk" />
         </div>
         <p style="margin-top: var(--space-8)"><NuxtLink to="/packages" class="btn btn--ghost">All packages →</NuxtLink></p>
+      </div>
+    </section>
+
+    <!-- 4b · Built on real engineering (quiet band: no amber, no prices) -->
+    <section class="section section--sunken">
+      <div class="container">
+        <div class="section-head">
+          <p class="overline">Built on real engineering</p>
+          <h2>We build what we govern</h2>
+        </div>
+        <div class="grid grid-2">
+          <article class="card card--link">
+            <h3><NuxtLink to="/data-ai" class="card__link" style="color: inherit; text-decoration: none">Data &amp; AI engineering on Google Cloud</NuxtLink></h3>
+            <p class="muted">Data platforms, AI agents and private knowledge assistants, built in your own Google Cloud project.</p>
+          </article>
+          <article class="card card--link">
+            <h3><NuxtLink to="/ivgil" class="card__link" style="color: inherit; text-decoration: none">ivGIL</NuxtLink></h3>
+            <p class="muted">The AI governance platform we are building. Early access and design partner places are open.</p>
+          </article>
+        </div>
       </div>
     </section>
 
@@ -139,6 +160,7 @@ function formatDate(iso: string): string {
             I’m Nikolay Tonev. [Two to three sentences on background: cloud and data architecture, years in enterprise
             IT, why AI governance.] You work with me directly, from the first call to the handover.
           </p>
+          <p class="small muted">AI governance (MIT Professional Education) and Google Cloud data &amp; AI architecture ([Google Cloud certification wording: confirm with Nick]).</p>
           <SiteCredentialBadge />
         </div>
       </div>

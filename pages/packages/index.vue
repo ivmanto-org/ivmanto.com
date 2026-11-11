@@ -10,7 +10,7 @@ useSeoMeta({ title: 'Packages and prices', description: 'Fixed-scope, fixed-pric
         <div class="section-head">
           <p class="overline">Packages</p>
           <h1>Fixed scope. Fixed price. Order directly.</h1>
-          <p class="lead">No open-ended retainers. Each package states what you get, how long it takes and what it costs.</p>
+          <p class="lead">Each package states what you get, how long it takes and what it costs.</p>
         </div>
       </div>
     </section>
