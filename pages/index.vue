@@ -131,7 +131,7 @@ function formatDate(iso: string): string {
     <!-- 6 · About Nick -->
     <section class="section">
       <div class="container about">
-        <div class="portrait">[Portrait photo (Nick)]</div>
+        <img class="portrait" src="/images/nick-portrait.jpg" alt="Nikolay Tonev" width="240" height="307" loading="lazy" style="object-fit: cover; width: 100%; height: auto" />
         <div>
           <p class="overline">Who you work with</p>
           <h2>One accountable expert, not an account team</h2>
