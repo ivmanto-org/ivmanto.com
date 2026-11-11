@@ -2,26 +2,31 @@
 const certificates = [
   {
     name: 'Professional Cloud Architect',
+    years: '2019, 2022, 2024',
     imgSrc: '/certs/cert_ca.webp',
     credlyUrl: 'https://www.credly.com/users/nikolay-tonev.a60be769/badges',
   },
   {
     name: 'Professional Data Engineer',
+    years: '2023',
     imgSrc: '/certs/cert_de.webp',
     credlyUrl: 'https://www.credly.com/users/nikolay-tonev.a60be769/badges',
   },
   {
     name: 'Professional Developer',
+    years: '2023',
     imgSrc: '/certs/cert_dev.webp',
     credlyUrl: 'https://www.credly.com/users/nikolay-tonev.a60be769/badges',
   },
   {
     name: 'Extend Google Agentspace assistant capabilities',
+    years: '2025',
     imgSrc: '/certs/badge.webp',
     credlyUrl: 'https://www.credly.com/users/nikolay-tonev.a60be769/badges',
   },
   {
     name: 'Develop Advanced Enterprise Search and Conversation Applications Skill Badge',
+    years: '2024',
     imgSrc: '/certs/badge2.webp',
     credlyUrl: 'https://www.credly.com/users/nikolay-tonev.a60be769/badges',
   },
@@ -77,6 +82,7 @@ const pdfs = [
             format="webp"
             loading="lazy"
           />
+          <span class="block text-center text-sm text-muted mt-2">{{ cert.years }}</span>
         </a>
       </div>
 
