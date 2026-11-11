@@ -203,13 +203,17 @@ function ctaClick(key: NextAction) {
     </div>
 
     <form class="advisor__form" @submit.prevent="send">
-      <div v-if="turns.length === 0" class="notice" style="margin-bottom: var(--space-3)">
+      <details v-if="turns.length === 0" class="notice ai-notice" style="margin-bottom: var(--space-3)">
+        <summary>
+          <span><strong>AI assistant, not a person.</strong> Please don’t include personal or confidential information.</span>
+          <span class="ai-notice__more">Details</span>
+        </summary>
         <p>
-          You’re talking to an AI assistant, not a person. It suggests which of our services fit. It is guidance, not
-          legal advice. Your message is sent to our AI provider (Mistral AI, EU) to generate the answer. We don’t store
-          the conversation. Please don’t include personal or confidential information. <NuxtLink to="/ai-use">How we handle your message</NuxtLink>
+          It suggests which of our services fit. It is guidance, not legal advice. Your message is sent to our AI
+          provider (Mistral AI, EU) to generate the answer. We don’t store the conversation.
+          <NuxtLink to="/ai-use">How we handle your message</NuxtLink>
         </p>
-      </div>
+      </details>
       <div class="advisor__input">
         <label class="sr-only" for="advisor-q">Describe your situation</label>
         <textarea
@@ -235,3 +239,16 @@ function ctaClick(key: NextAction) {
     </form>
   </section>
 </template>
+
+<style scoped>
+.ai-notice summary { display: flex; gap: var(--space-3); justify-content: space-between; align-items: baseline; cursor: pointer; list-style: none; }
+.ai-notice summary::-webkit-details-marker { display: none; }
+.ai-notice__more { flex: none; color: var(--accent); text-decoration: underline; text-underline-offset: 3px; white-space: nowrap; }
+.ai-notice__more::after { content: ' ▾'; text-decoration: none; display: inline-block; margin-left: 2px; }
+.ai-notice[open] .ai-notice__more::after { transform: rotate(180deg); }
+.ai-notice[open] summary { margin-bottom: var(--space-2); }
+.ai-notice p { margin: 0; }
+/* Make the input the obvious place to type. */
+.advisor__input textarea { border-width: 2px; border-color: var(--data); min-height: 3.5rem; }
+.advisor__input textarea:focus { outline: 2px solid var(--focus); outline-offset: 1px; }
+</style>
