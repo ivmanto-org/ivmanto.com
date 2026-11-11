@@ -50,6 +50,44 @@ func validBody() string {
 	return `{"source":"advisor","name":"Ada Lovelace","email":"ada@example.com","company":"Analytical Engines","message":"We need an AI governance framework.","consent":true,"insights_optin":true}`
 }
 
+func TestLeadIvgilSourceContract(t *testing.T) {
+	// ivGIL launch contract (#112, Nick 2026-11-11): source 'ivgil' plus
+	// optional role (free string) and interest (early_access |
+	// design_partner). Standalone per the suite convention: each
+	// contract point asserted independently.
+	m := &fakeMailer{}
+	srv := newServer(m)
+	defer srv.Close()
+
+	// ivgil with role + interest is accepted and forwarded to Nick.
+	resp, body := post(t, srv, `{"source":"ivgil","role":"Head of Data","interest":"early_access","name":"Ada","email":"ada@example.com","company":"Analytical Engines","message":"We want early access to ivGIL.","consent":true}`)
+	if resp.StatusCode != http.StatusOK {
+		t.Fatalf("want 200 for ivgil lead, got %d (%v)", resp.StatusCode, body)
+	}
+	if m.calls != 1 || len(m.sent) != 1 {
+		t.Fatalf("mailer must be called once, got %d", m.calls)
+	}
+	got := m.sent[0]
+	if got.Source != "ivgil" || got.Role != "Head of Data" || got.Interest != "early_access" {
+		t.Fatalf("ivgil lead not forwarded verbatim: %+v", got)
+	}
+
+	// ivgil without role/interest is fine — both are optional.
+	resp, _ = post(t, srv, `{"source":"ivgil","name":"Ada","email":"ada@example.com","company":"Analytical Engines","message":"Design partner, please.","consent":true}`)
+	if resp.StatusCode != http.StatusOK {
+		t.Fatalf("want 200 for ivgil lead without optional fields, got %d", resp.StatusCode)
+	}
+
+	// Invalid interest is rejected, not silently dropped.
+	resp, body = post(t, srv, `{"source":"ivgil","interest":"newsletter","name":"Ada","email":"ada@example.com","company":"Analytical Engines","message":"x","consent":true}`)
+	if resp.StatusCode != http.StatusBadRequest || body["code"] != "bad_interest" {
+		t.Fatalf("invalid interest must 400 bad_interest, got %d (%v)", resp.StatusCode, body)
+	}
+	if m.calls != 2 {
+		t.Fatalf("mailer must not fire for the rejected lead, got %d calls", m.calls)
+	}
+}
+
 func TestLeadHappyPath(t *testing.T) {
 	m := &fakeMailer{}
 	srv := newServer(m)

@@ -307,13 +307,21 @@ func (s *SmtpService) SendLeadNotification(lead LeadInfo) error {
 }
 
 // buildLeadNotificationHTML renders the lead email body. Consent is already
-// checked true by the handler before this is called. Source, package and
-// insights opt-in are rendered so Nick knows which surface produced the
-// lead and what future consent the visitor gave.
+// checked true by the handler before this is called. Source, package, role,
+// interest and insights opt-in are rendered so Nick knows which surface
+// produced the lead and what future consent the visitor gave.
 func buildLeadNotificationHTML(lead LeadInfo) string {
 	packageLine := ""
 	if lead.PackageID != "" {
 		packageLine = fmt.Sprintf("<li><strong>Package:</strong> %s</li>\n", htmlEscape(lead.PackageID))
+	}
+	roleLine := ""
+	if lead.Role != "" {
+		roleLine = fmt.Sprintf("<li><strong>Role:</strong> %s</li>\n", htmlEscape(lead.Role))
+	}
+	interestLine := ""
+	if lead.Interest != "" {
+		interestLine = fmt.Sprintf("<li><strong>Interest:</strong> %s</li>\n", htmlEscape(lead.Interest))
 	}
 	insights := "no"
 	if lead.InsightsOptIn {
@@ -324,7 +332,7 @@ func buildLeadNotificationHTML(lead LeadInfo) string {
 <li><strong>Name:</strong> %s</li>
 <li><strong>Email:</strong> <a href="mailto:%s">%s</a></li>
 <li><strong>Company:</strong> %s</li>
-%s</ul>
+%s%s%s</ul>
 <p><strong>Request / conversation summary:</strong></p>
 <p>%s</p>
 <p><em>Consent given (Art. 6(1)(a)): yes. Insights opt-in: %s.</em></p>`,
@@ -333,6 +341,8 @@ func buildLeadNotificationHTML(lead LeadInfo) string {
 		htmlEscape(lead.Email), htmlEscape(lead.Email),
 		htmlEscape(lead.Company),
 		packageLine,
+		roleLine,
+		interestLine,
 		htmlEscape(lead.Message),
 		insights)
 }

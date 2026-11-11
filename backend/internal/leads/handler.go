@@ -37,18 +37,23 @@ func (h *Handler) RegisterRoutes(mux *http.ServeMux) {
 }
 
 // leadRequest is the frontend LeadForm payload (contract per PR #129/#126,
-// Clauco 2026-11-10 21:36Z): {source:'advisor'|'order'|'contact',
-// package_id?, name, email, company, message, consent:true,
+// Clauco 2026-11-10 21:36Z, extended for the ivGIL launch 2026-11-11 #112):
+// {source:'advisor'|'order'|'contact'|'ivgil', package_id?, role?,
+// interest?, name, email, company, message, consent:true,
 // insights_optin:bool}. Source tells Nick which surface produced the lead;
 // package_id is set only on the advisor order flow; insights_optin is the
 // double-opt-in flag for future insights emails (Brio's privacy draft: the
-// opt-in is captured now, the actual double opt-in comes later).
+// opt-in is captured now, the actual double opt-in comes later). Role and
+// interest are the ivGIL form's optional fields: the visitor's role (free
+// string) and whether they want early access or to become a design partner.
 // Consent is a required, explicitly-ticked checkbox (Art. 6(1)(a)); the
 // handler refuses to send without it. Message is the editable prefill of
 // the conversation summary.
 type leadRequest struct {
 	Source        string `json:"source"`
 	PackageID     string `json:"package_id"`
+	Role          string `json:"role"`
+	Interest      string `json:"interest"`
 	Name          string `json:"name"`
 	Email         string `json:"email"`
 	Company       string `json:"company"`
@@ -57,11 +62,19 @@ type leadRequest struct {
 	InsightsOptIn bool   `json:"insights_optin"`
 }
 
-// validLeadSources are the three surfaces that submit to /api/leads.
+// validLeadSources are the four surfaces that submit to /api/leads
+// ('ivgil' added with the ivGIL launch, #112 2026-11-11).
 var validLeadSources = map[string]bool{
 	"advisor": true,
 	"order":   true,
 	"contact": true,
+	"ivgil":   true,
+}
+
+// validLeadInterests are the ivGIL form's interest choices.
+var validLeadInterests = map[string]bool{
+	"early_access":   true,
+	"design_partner": true,
 }
 
 const (
@@ -71,6 +84,8 @@ const (
 	// per-message cap; the form textarea already limits to 600 chars but a
 	// crafty client can bypass the textarea).
 	maxMessageLength = 4000
+	// maxRoleLength caps the ivGIL form's free-string role field.
+	maxRoleLength = 200
 )
 
 func (h *Handler) handleLead(w http.ResponseWriter, r *http.Request) {
@@ -87,9 +102,24 @@ func (h *Handler) handleLead(w http.ResponseWriter, r *http.Request) {
 	req.Company = strings.TrimSpace(req.Company)
 	req.Message = strings.TrimSpace(req.Message)
 	req.PackageID = strings.TrimSpace(req.PackageID)
+	req.Role = strings.TrimSpace(req.Role)
+	req.Interest = strings.TrimSpace(req.Interest)
 
 	if !validLeadSources[req.Source] {
-		writeError(w, http.StatusBadRequest, `source must be "advisor", "order" or "contact"`, "bad_source")
+		writeError(w, http.StatusBadRequest, `source must be "advisor", "order", "contact" or "ivgil"`, "bad_source")
+		return
+	}
+	// Interest is optional, but when present it must be one of the two
+	// ivGIL choices — a garbage value means the contract changed again,
+	// and silently dropping it would mislabel the lead for Nick.
+	if req.Interest != "" && !validLeadInterests[req.Interest] {
+		writeError(w, http.StatusBadRequest, `interest must be "early_access" or "design_partner"`, "bad_interest")
+		return
+	}
+	// Defence in depth for the free-string role (the form limits it, a
+	// crafty client can bypass the input).
+	if len([]rune(req.Role)) > maxRoleLength {
+		writeError(w, http.StatusBadRequest, "role is too long", "bad_request")
 		return
 	}
 
@@ -121,6 +151,8 @@ func (h *Handler) handleLead(w http.ResponseWriter, r *http.Request) {
 	if err := h.emailer.SendLeadNotification(email.LeadInfo{
 		Source:        req.Source,
 		PackageID:     req.PackageID,
+		Role:          req.Role,
+		Interest:      req.Interest,
 		Name:          req.Name,
 		Email:         req.Email,
 		Company:       req.Company,
