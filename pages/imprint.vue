@@ -10,7 +10,7 @@ useSeoMeta({ title: 'Imprint', robots: 'noindex' })
       <h2>Information according to § 5 DDG</h2>
       <p>Nikolay Tonev<br />Jaegerstrasse 18<br />82008 Unterhaching<br />Germany</p>
       <h2>Contact</h2>
-      <p>Use the <NuxtLink to="/contact">contact form</NuxtLink>.</p>
+      <p>Email: <a href="mailto:admin@ivmanto.com">admin@ivmanto.com</a><br />Or use the <NuxtLink to="/contact">contact form</NuxtLink>.</p>
       <h2>VAT ID</h2>
       <p>VAT identification number according to § 27a UStG: DE457386314</p>
     </div>

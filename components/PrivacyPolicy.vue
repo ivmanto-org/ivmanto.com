@@ -2,7 +2,12 @@
   <div class="privacy-policy-container">
     <h1>Privacy Policy</h1>
 
-    <p>Last updated: September 6, 2025</p>
+    <p>Last updated: November 11, 2026</p>
+
+    <p>
+      Controller: Nikolay Tonev, Jaegerstrasse 18, 82008 Unterhaching, Germany.
+      Email: <a href="mailto:admin@ivmanto.com">admin@ivmanto.com</a>.
+    </p>
 
     <p>
       This Privacy Policy describes Our policies and procedures on the collection, use and
@@ -379,6 +384,54 @@
       </li>
     </ul>
 
+    <h2>AI Service Advisor and Contact Requests</h2>
+
+    <h3>AI service advisor</h3>
+    <p>
+      The service advisor on our website is an AI assistant. When You send it a message, the
+      message is sent to our AI provider, Mistral AI SAS (Paris, France), only to generate the
+      answer. Mistral AI processes it on our behalf as a processor under its Data Processing
+      Addendum. By default, Mistral AI hosts the data in the European Union.
+    </p>
+    <p>
+      <strong>We do not store the conversation.</strong> The text of Your messages and of the
+      answers is not saved in our systems and is not written to our logs. Each conversation uses a
+      random session ID that is not linked to You.
+    </p>
+    <p>
+      To prevent misuse, we count requests per IP address. These counters are deleted after 24
+      hours. Our server logs keep the IP address, the requested URL and the status code, but no
+      message content. They are deleted after 30 days.
+    </p>
+    <p>
+      <strong>Retention by Mistral AI.</strong> Under its own terms, Mistral AI may also process
+      API requests as an independent controller, for example for automated abuse monitoring. How
+      long Mistral AI keeps such data is decided by Mistral AI, not by us, and is described in its
+      <a href="https://legal.mistral.ai/terms/privacy-policy" target="_blank" rel="noopener">privacy policy</a>
+      and
+      <a href="https://legal.mistral.ai/terms/data-processing-addendum" target="_blank" rel="noopener">Data Processing Addendum</a>.
+      [Our settings with Mistral AI (training opt-out, zero data retention): to be confirmed.]
+    </p>
+    <p>
+      Legal basis: Art. 6(1)(f) GDPR, our legitimate interest in answering questions about our
+      services. [Balancing test: Ivgil.] Please do not include personal or confidential information
+      in Your messages.
+    </p>
+
+    <h3>Contact and order requests</h3>
+    <p>
+      If You send the contact form, the order request form or the contact form in the advisor,
+      Nick receives Your name, email address, company, Your message and, from the advisor, a short
+      summary of the chat. We use this data to answer Your request and to prepare an offer or
+      contract. Legal basis: Art. 6(1)(b) GDPR. If You also opt in to receive insights, the legal
+      basis for that is Your consent, Art. 6(1)(a) GDPR, which You can withdraw at any time.
+    </p>
+    <p>
+      If Your request does not lead to a contract, we delete Your data 12 months after our last
+      contact. If it leads to a contract, we keep the data required by commercial and tax law for
+      the statutory periods.
+    </p>
+
     <h2>GDPR Privacy</h2>
     <h3>Legal Basis for Processing Personal Data under GDPR</h3>
     <p>We may process Personal Data under the following conditions:</p>
@@ -566,10 +619,10 @@
     <h2>Contact Us</h2>
     <p>If you have any questions about this Privacy Policy, You can contact us:</p>
     <ul>
-      <li>By email: nikolay.tonev@ivmanto.com</li>
+      <li>By email: <a href="mailto:admin@ivmanto.com">admin@ivmanto.com</a></li>
       <li>
         By visiting this page on our website:
-        <a href="https://ivmanto.com/#contact">Contact Us</a>
+        <NuxtLink to="/contact">Contact Us</NuxtLink>
       </li>
     </ul>
   </div>

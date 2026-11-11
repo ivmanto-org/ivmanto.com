@@ -12,7 +12,7 @@ useSeoMeta({ title: 'AI use on this site', description: 'How the AI service advi
       <h2>What happens to your message</h2>
       <ul class="ticks">
         <li>Your message is sent to our AI provider, Mistral AI (EU), only to generate the answer.</li>
-        <li>We don’t store the conversation. [Provider retention and no-training terms: from the DPA check.]</li>
+        <li>We don’t store the conversation. How long Mistral AI itself keeps data is decided by Mistral AI under its own terms; see our <NuxtLink to="/privacy-policy">privacy policy</NuxtLink>.</li>
         <li>Please don’t include personal or confidential information.</li>
         <li>If you send the contact form, Nick receives your details and a short summary of the chat to answer your request.</li>
       </ul>
