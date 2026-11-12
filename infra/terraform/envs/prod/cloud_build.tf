@@ -12,7 +12,7 @@
 #   2. Nick creates and authorises the connection (README "Cloud Build"):
 #        gcloud builds connections create github ivmanto-github \
 #          --region=europe-west3 --project=ivmanto-com-prod-514215
-#   (2) Nick opens the printed link and installs the Cloud Build GitHub App
+#   2a. Nick opens the printed link and installs the Cloud Build GitHub App
 #       on ivmanto-org/ivmanto.com. This happened on 2026-11-10 (app
 #       installation 180646944) — see
 #       infra/terraform/manual-grants-2026-11-10.md (#125).

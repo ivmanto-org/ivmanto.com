@@ -18,7 +18,10 @@
 # Nick created out-of-band on 2026-11-10 to authorise the Cloud Build GitHub
 # connection (#105). See infra/terraform/manual-grants-2026-11-10.md.
 #
-# Acceptance: terraform plan = 7 to import, 0 to add, 0 to change, 0 to destroy.
+# Acceptance: terraform plan = 1 to import, 0 to add, 1 to change
+# (labels: managed-by/workload, in place), 0 to destroy. The six older
+# secrets are already in state; only ivmanto-github-oauth imports, and the
+# live secret has no labels while the resource sets them (review #130).
 
 locals {
   secrets = {
