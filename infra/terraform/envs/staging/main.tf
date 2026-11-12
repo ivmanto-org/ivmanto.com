@@ -11,6 +11,11 @@
 # the container itself demands HTTP Basic auth (one user per group of viewers,
 # from the staging-users secret) and refuses to start without credentials.
 #
+# Ingress: the org allows only internal-and-cloud-load-balancing. Nick set a
+# project-level override of constraints/run.allowedIngress to "all" on
+# ivmanto-com-sta (2026-11-12, by hand in Cloud Shell, not in Terraform). If the
+# org policies are managed as code elsewhere, the override belongs there too.
+#
 # No backend here yet: /api/* answers 404 until the content phase adds it.
 
 locals {
