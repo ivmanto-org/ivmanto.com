@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>ivmanto logo</title>
+{{HEAD}}
+<style>
+.panel { border-radius: var(--radius-lg); padding: 56px 32px; display: flex; align-items: center; justify-content: center; gap: 40px; flex-wrap: wrap; border: 1px solid var(--border); }
+.panel--light { --text: #0f172a; --brand: #00a896; --accent: #027a89; --on-accent: #ffffff; background: #ffffff; }
+.panel--dark { --text: #e6edf5; --brand: #2fd0b8; --accent: #2fd0b8; --on-accent: #062f38; background: #0a1220; border-color: #233149; }
+.panel--low { padding: 32px; }
+.panel svg.wordmark, .panel svg.lockup { max-width: 100%; height: auto; }
+.two { display: grid; gap: var(--space-4); grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); margin: var(--space-4) 0; }
+.sizes { display: flex; align-items: flex-end; gap: 28px; flex-wrap: wrap; }
+.sizes figure { margin: 0; display: grid; gap: 8px; justify-items: start; }
+.sizes svg.avatar { width: 28px; height: 28px; }
+.av40 svg.avatar { width: 44px; height: 44px; }
+.sizes figcaption, .cap { font-size: var(--text-sm); color: var(--text-muted); }
+.panel .sizes figcaption { color: #64748b; }
+.sec { padding-top: var(--space-12); border-top: 1px solid var(--border); margin-top: var(--space-12); }
+.rules { display: grid; gap: var(--space-4); grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); }
+.rules .card h3 { font-size: var(--text-lg); margin-bottom: var(--space-2); }
+.rules ul { margin: 0; padding-left: 1.1em; }
+.rules li { margin: 4px 0; }
+.clear { position: relative; display: inline-block; padding: 22px; outline: 1px dashed #94a3b8; }
+.clear::after { content: "clear space = height of the i dot × 2"; position: absolute; left: 0; bottom: -24px; font-size: 12px; color: #64748b; white-space: nowrap; }
+.files { width: 100%; border-collapse: collapse; font-size: var(--text-sm); }
+.files th, .files td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+.files th { color: var(--text-muted); font-weight: 500; }
+.files code { font-size: 0.85em; word-break: break-all; }
+.tablewrap { overflow-x: auto; }
+</style>
+</head>
+<body>
+{{HEADER}}
+<main class="container" style="padding-top:var(--space-16);padding-bottom:var(--space-16)">
+  <p class="overline">Brand · logo</p>
+  <h1>The ivmanto logo</h1>
+  <p class="lead">Four approved parts (Nick, 2026-11-10): the tick-v wordmark, the hexagon symbol with the wider upper chevron, the lockup of both, and the short form "iv" + tick for the favicon. All files ready to use are in <code>assets/</code>.</p>
+
+  <section class="sec">
+    <h2>Wordmark</h2>
+    <p>The v is drawn as a teal tick: approved, checked, compliant. Instrument Sans at weight 650 (SIL OFL), outlined, with a custom v. Design: Tally. Use it alone in the site footer, documents, slides and the email signature.</p>
+    <div class="two">
+      <div class="panel panel--light">{{WORDMARK:120}}</div>
+      <div class="panel panel--dark">{{WORDMARK:120}}</div>
+    </div>
+    <div class="two">
+      <div class="panel panel--light panel--low"><div class="sizes">
+        <figure>{{WORDMARK:12}}<figcaption>12 px, the minimum</figcaption></figure>
+        <figure>{{WORDMARK:16}}<figcaption>16</figcaption></figure>
+        <figure>{{WORDMARK:22}}<figcaption>22, footer</figcaption></figure>
+        <figure>{{WORDMARK:40}}<figcaption>40</figcaption></figure>
+      </div></div>
+      <div class="panel panel--dark panel--low"><div class="sizes">
+        <figure>{{WORDMARK:12}}<figcaption>12</figcaption></figure>
+        <figure>{{WORDMARK:16}}<figcaption>16</figcaption></figure>
+        <figure>{{WORDMARK:22}}<figcaption>22</figcaption></figure>
+        <figure>{{WORDMARK:40}}<figcaption>40</figcaption></figure>
+      </div></div>
+    </div>
+    <p class="cap">Height is measured from the top of the tick to the baseline. Colours come from the theme: <code>--text</code> for the letters, <code>--brand</code> for the tick.</p>
+  </section>
+
+  <section class="sec">
+    <h2>Symbol and lockup</h2>
+    <p>The symbol is a hexagon cell holding two rising chevrons; the upper, teal one is wider, so the centre reads as moving upward. It goes with the wordmark in the lockup (the website header, 30 px), or alone where the name is already present (a document cover, a slide corner, signage).</p>
+    <div class="two">
+      <div class="panel panel--light">{{SYMBOL:120}}</div>
+      <div class="panel panel--dark">{{SYMBOL:120}}</div>
+    </div>
+    <div class="two">
+      <div class="panel panel--light">{{LOCKUP:72}}</div>
+      <div class="panel panel--dark">{{LOCKUP:72}}</div>
+    </div>
+    <div class="two">
+      <div class="panel panel--light panel--low"><div class="sizes">
+        <figure>{{SYMBOL:16}}<figcaption>16</figcaption></figure>
+        <figure>{{SYMBOL:24}}<figcaption>24</figcaption></figure>
+        <figure>{{SYMBOL:40}}<figcaption>40</figcaption></figure>
+        <figure>{{LOCKUP:24}}<figcaption>lockup 24, the minimum</figcaption></figure>
+      </div></div>
+      <div class="panel panel--dark panel--low"><div class="sizes">
+        <figure>{{SYMBOL:16}}<figcaption>16</figcaption></figure>
+        <figure>{{SYMBOL:24}}<figcaption>24</figcaption></figure>
+        <figure>{{SYMBOL:40}}<figcaption>40</figcaption></figure>
+        <figure>{{LOCKUP:24}}<figcaption>lockup 24</figcaption></figure>
+      </div></div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <h2>Short form, favicon and avatar</h2>
+    <p>For small square spaces the short form "iv" + tick is used (Tally's design): browser tab, app icon, social profile picture. The tick on a teal disc is the advisor's avatar on the site.</p>
+    <div class="two">
+      <div class="panel panel--light panel--low"><div class="sizes">
+        <figure>{{SHORT:16}}<figcaption>16, favicon</figcaption></figure>
+        <figure>{{SHORT:32}}<figcaption>32</figcaption></figure>
+        <figure>{{SHORT:64}}<figcaption>64</figcaption></figure>
+        <figure><span style="display:inline-flex;gap:12px;align-items:center">{{AVATAR}}<span class="av40">{{AVATAR}}</span></span><figcaption>advisor avatar</figcaption></figure>
+      </div></div>
+      <div class="panel panel--dark panel--low"><div class="sizes">
+        <figure>{{SHORT:16}}<figcaption>16</figcaption></figure>
+        <figure>{{SHORT:32}}<figcaption>32</figcaption></figure>
+        <figure>{{SHORT:64}}<figcaption>64</figcaption></figure>
+        <figure><span style="display:inline-flex;gap:12px;align-items:center">{{AVATAR}}<span class="av40">{{AVATAR}}</span></span><figcaption>advisor avatar</figcaption></figure>
+      </div></div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <h2>Rules</h2>
+    <div class="panel panel--light panel--low" style="margin-bottom:var(--space-8)"><span class="clear">{{WORDMARK:40}}</span></div>
+    <div class="rules">
+      <div class="card"><h3>Do</h3><ul>
+        <li>Use the files in <code>assets/logo/</code>; never retype the word or redraw the symbol.</li>
+        <li><code>on-light</code> files on white or light backgrounds, <code>on-dark</code> files on navy or dark ones.</li>
+        <li><code>mono-black</code> / <code>mono-white</code> only where colour is not possible: fax, embossing, single-colour print.</li>
+      </ul></div>
+      <div class="card"><h3>Don't</h3><ul>
+        <li>Don't recolour the tick or the upper chevron in any colour other than the brand teal.</li>
+        <li>Don't stretch, outline, add shadows, or put the logo on photos without a solid panel.</li>
+        <li>Don't use the tick alone as the logo. Alone it is only the advisor's avatar.</li>
+      </ul></div>
+      <div class="card"><h3>Trademark</h3><ul>
+        <li>File the wordmark and the tick together as one figurative mark; the symbol is a candidate for a second filing after a clearance search.</li>
+        <li>Font: Instrument Sans, SIL OFL 1.1, with no Reserved Font Name. The logo is outlined artwork, so no font file ships with it. The trademark attorney should confirm this.</li>
+        <li>™ next to the logo is fine now. ® only after registration.</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <h2>Files</h2>
+    <p>Every part comes in four colourways: <code>on-light</code>, <code>on-dark</code>, <code>mono-black</code>, <code>mono-white</code>. PNGs have a transparent background; JPGs have a solid one (white for <code>on-light</code>, navy <code>#0a1220</code> for <code>on-dark</code>).</p>
+    <div class="tablewrap"><table class="files">
+      <thead><tr><th>Use</th><th>Folder</th><th>Formats</th></tr></thead>
+      <tbody>
+        <tr><td>Website header, documents, slides</td><td><code>assets/logo/wordmark/</code></td><td>SVG · PNG 600 / 1200 / 2400 px wide · JPG 2400</td></tr>
+        <tr><td>Symbol alone</td><td><code>assets/logo/symbol/</code></td><td>SVG · PNG 256 / 512 / 1024 · JPG 1024</td></tr>
+        <tr><td>Symbol + wordmark</td><td><code>assets/logo/lockup/</code></td><td>SVG · PNG 1200 / 2400 wide · JPG 2400</td></tr>
+        <tr><td>Social avatar, app icon</td><td><code>assets/logo/short/</code></td><td>SVG · PNG 512 / 1024 · JPG 1024</td></tr>
+        <tr><td>Browser tab, home screen</td><td><code>assets/favicon/</code></td><td><code>favicon.svg</code> (follows the OS theme), <code>favicon.ico</code> (16/32/48), PNG 16/32/48, <code>apple-touch-icon.png</code> 180, <code>icon-192.png</code>, <code>icon-512.png</code>, <code>icon-maskable-512.png</code>, <code>favicon-512.jpg</code>, <code>site.webmanifest</code></td></tr>
+        <tr><td>Link previews (LinkedIn, Slack)</td><td><code>assets/social/</code></td><td><code>og-image.png</code> / <code>.jpg</code> 1200 × 630</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+</main>
+{{FOOTER}}
+{{THEME_JS}}
+</body>
+</html>

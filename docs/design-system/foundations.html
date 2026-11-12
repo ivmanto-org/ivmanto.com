@@ -1,0 +1,1128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ivmanto foundations</title>
+<!-- Preview only. The live site self-hosts these fonts (no Google Fonts CDN, GDPR). -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+/* Generated from color.tokens.json. Do not edit by hand. */
+:root {
+  --color-teal-50: #ecfbf8;
+  --color-teal-100: #cff4ec;
+  --color-teal-200: #a0e8db;
+  --color-teal-300: #62d5c3;
+  --color-teal-400: #02c39a;
+  --color-teal-500: #00a896;
+  --color-teal-600: #01948f;
+  --color-teal-700: #027a89;
+  --color-teal-800: #05636f;
+  --color-teal-900: #0a4a55;
+  --color-teal-950: #062f38;
+  --color-slate-50: #f8fafc;
+  --color-slate-100: #f1f5f9;
+  --color-slate-200: #e2e8f0;
+  --color-slate-300: #cbd5e1;
+  --color-slate-400: #94a3b8;
+  --color-slate-500: #64748b;
+  --color-slate-600: #475569;
+  --color-slate-700: #334155;
+  --color-slate-800: #1e293b;
+  --color-slate-900: #0f172a;
+  --color-slate-950: #020617;
+  --color-navy-700: #152238;
+  --color-navy-800: #0f1a2b;
+  --color-navy-900: #0a1220;
+  --color-dusk-100: #e3eaf5;
+  --color-dusk-300: #9fb4d6;
+  --color-dusk-500: #4f6d9a;
+  --color-dusk-700: #33496b;
+  --color-amber-100: #fef3c7;
+  --color-amber-400: #fbbf24;
+  --color-amber-500: #f59e0b;
+  --color-amber-700: #b45309;
+  --color-green-100: #e3f4ea;
+  --color-green-300: #7fd1a0;
+  --color-green-700: #2f7a52;
+  --color-red-100: #fbe9e8;
+  --color-red-300: #f0a19c;
+  --color-red-700: #b4443f;
+
+  --bg: #f8fafc;
+  --surface: #ffffff;
+  --surface-sunken: #f1f5f9;
+  --border: #e2e8f0;
+  --border-input: #64748b;
+  --text: #0f172a;
+  --text-muted: #475569;
+  --accent: #027a89;
+  --accent-hover: #05636f;
+  --on-accent: #ffffff;
+  --accent-subtle: #ecfbf8;
+  --brand: #00a896;
+  --data: #4f6d9a;
+  --signal: #b45309;
+  --signal-subtle: #fef3c7;
+  --success: #2f7a52;
+  --success-subtle: #e3f4ea;
+  --warning: #b45309;
+  --danger: #b4443f;
+  --danger-subtle: #fbe9e8;
+  --focus: #00a896;
+  --band-bg: #0a1220;
+  --band-surface: #0f1a2b;
+  --band-border: #233149;
+  --band-border-input: #6b7a93;
+  --band-text: #e6edf5;
+  --band-text-muted: #9aa8bc;
+  --band-accent: #62d5c3;
+  --band-accent-subtle: #0d2b33;
+  --band-on-accent: #062f38;
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --bg: #0a1220;
+  --surface: #0f1a2b;
+  --surface-sunken: #152238;
+  --border: #233149;
+  --border-input: #6b7a93;
+  --text: #e6edf5;
+  --text-muted: #9aa8bc;
+  --accent: #62d5c3;
+  --accent-hover: #a0e8db;
+  --on-accent: #062f38;
+  --accent-subtle: #0d2b33;
+  --brand: #02c39a;
+  --data: #9fb4d6;
+  --signal: #fbbf24;
+  --signal-subtle: #2e2410;
+  --success: #7fd1a0;
+  --success-subtle: #12291f;
+  --warning: #fbbf24;
+  --danger: #f0a19c;
+  --danger-subtle: #2e1615;
+  --focus: #62d5c3;
+  --band-bg: #062f38;
+  --band-surface: #0a3f4a;
+  --band-border: #14606b;
+  --band-border-input: #4f8f98;
+  --band-text: #e6edf5;
+  --band-text-muted: #a9c4c8;
+  --band-accent: #a0e8db;
+  --band-accent-subtle: #05636f;
+  --band-on-accent: #062f38;
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0a1220;
+    --surface: #0f1a2b;
+    --surface-sunken: #152238;
+    --border: #233149;
+    --border-input: #6b7a93;
+    --text: #e6edf5;
+    --text-muted: #9aa8bc;
+    --accent: #62d5c3;
+    --accent-hover: #a0e8db;
+    --on-accent: #062f38;
+    --accent-subtle: #0d2b33;
+    --brand: #02c39a;
+    --data: #9fb4d6;
+    --signal: #fbbf24;
+    --signal-subtle: #2e2410;
+    --success: #7fd1a0;
+    --success-subtle: #12291f;
+    --warning: #fbbf24;
+    --danger: #f0a19c;
+    --danger-subtle: #2e1615;
+    --focus: #62d5c3;
+    --band-bg: #062f38;
+    --band-surface: #0a3f4a;
+    --band-border: #14606b;
+    --band-border-input: #4f8f98;
+    --band-text: #e6edf5;
+    --band-text-muted: #a9c4c8;
+    --band-accent: #a0e8db;
+    --band-accent-subtle: #05636f;
+    --band-on-accent: #062f38;
+    color-scheme: dark;
+  }
+}
+
+/* Mirrors foundation.tokens.json. Keep the two in sync. */
+:root {
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --font-display: "Montserrat", "Inter", system-ui, sans-serif;
+  --font-headline: var(--font-display); /* Montserrat, approved by Nick 2026-11-10 */
+
+  --text-xs: 0.75rem; --text-sm: 0.875rem; --text-md: 1rem; --text-lg: 1.125rem;
+  --text-xl: 1.25rem; --text-2xl: 1.5rem; --text-3xl: 2rem; --text-4xl: 2.5rem; --text-5xl: 3.25rem;
+  --lh-tight: 1.15; --lh-snug: 1.35; --lh-body: 1.65;
+  --tracking-headline: -0.015em; --tracking-overline: 0.12em;
+  --measure: 68ch;
+
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-6: 24px;
+  --space-8: 32px; --space-12: 48px; --space-16: 64px; --space-24: 96px; --space-32: 128px;
+  --container: 1200px;
+
+  --radius-sm: 4px; --radius-md: 8px; --radius-lg: 12px; --radius-full: 9999px;
+  --shadow-sm: 0 1px 2px #0f172a14;
+  --shadow-md: 0 4px 16px -4px #0f172a1f;
+
+  --dur-fast: 150ms; --dur-base: 250ms; --dur-slow: 400ms;
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition-duration: 0ms !important; scroll-behavior: auto !important; }
+}
+
+body { margin: 0; background: var(--bg); color: var(--text); font: 400 var(--text-md)/var(--lh-body) var(--font-sans); }
+.wrap { max-width: var(--container); margin: 0 auto; padding: 0 20px; }
+header.bar { position: sticky; top: 0; z-index: 2; background: var(--surface); border-bottom: 1px solid var(--border); }
+header.bar .wrap { display: flex; align-items: center; gap: var(--space-4); height: 64px; flex-wrap: wrap; }
+.mark { display: flex; align-items: center; gap: 10px; font-weight: 600; letter-spacing: var(--tracking-overline); font-size: var(--text-sm); }
+.spacer { flex: 1; }
+.toggle { display: inline-flex; border: 1px solid var(--border-input); border-radius: var(--radius-md); overflow: hidden; }
+.toggle button { font: 500 var(--text-sm) var(--font-sans); background: transparent; color: var(--text-muted); border: 0; padding: 6px 12px; cursor: pointer; }
+.toggle button[aria-pressed="true"] { background: var(--accent-subtle); color: var(--accent); }
+button:focus-visible, a:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+section { padding: var(--space-16) 0; border-bottom: 1px solid var(--border); }
+section:nth-of-type(even) { background: var(--surface-sunken); }
+.overline { font-size: var(--text-xs); font-weight: 600; letter-spacing: var(--tracking-overline); text-transform: uppercase; color: var(--accent); margin: 0 0 var(--space-3); }
+h1, h2, h3 { font-family: var(--font-headline); font-weight: 600; letter-spacing: var(--tracking-headline); line-height: var(--lh-tight); margin: 0 0 var(--space-4); text-wrap: balance; }
+h1 { font-size: clamp(var(--text-4xl), 5vw, var(--text-5xl)); }
+h2 { font-size: var(--text-3xl); }
+h3 { font-size: var(--text-xl); line-height: var(--lh-snug); }
+p { margin: 0 0 var(--space-4); max-width: var(--measure); }
+.lead { font-size: var(--text-xl); color: var(--text-muted); line-height: 1.5; }
+.muted { color: var(--text-muted); }
+.small { font-size: var(--text-sm); }
+.mono { font-family: var(--font-mono); font-size: 0.9em; }
+.grid { display: grid; gap: var(--space-6); }
+.g3 { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: var(--space-6); transition: box-shadow var(--dur-base) var(--ease), border-color var(--dur-base) var(--ease); }
+.card:hover { box-shadow: var(--shadow-md); border-color: var(--border-input); }
+.btn { display: inline-flex; align-items: center; gap: 8px; font: 500 var(--text-md) var(--font-sans); padding: 12px 20px; border-radius: var(--radius-md); border: 1px solid transparent; cursor: pointer; text-decoration: none; transition: background var(--dur-fast) var(--ease); }
+.btn-primary { background: var(--accent); color: var(--on-accent); }
+.btn-primary:hover { background: var(--accent-hover); }
+.btn-secondary { background: transparent; color: var(--text); border-color: var(--border-input); }
+.btn-secondary:hover { background: var(--surface-sunken); }
+.btn-link { color: var(--accent); padding: 12px 4px; background: none; }
+.row { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; }
+.tag { display: inline-flex; align-items: center; gap: 6px; font-size: var(--text-sm); font-weight: 500; padding: 2px 10px; border-radius: var(--radius-sm); }
+.tag::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+.t-low { color: var(--success); background: var(--success-subtle); }
+.t-med { color: var(--warning); background: var(--signal-subtle); }
+.t-high { color: var(--danger); background: var(--danger-subtle); }
+.t-fw { color: var(--data); background: transparent; border: 1px solid var(--border); font-family: var(--font-mono); }
+.t-fw::before { display: none; }
+.scale { display: grid; grid-template-columns: repeat(11, 1fr); gap: 4px; margin-bottom: var(--space-6); }
+.scale.short { grid-template-columns: repeat(11, 1fr); }
+.sw { height: 56px; border-radius: var(--radius-sm); border: 1px solid var(--border); }
+.swl { font: 400 11px/1.3 var(--font-mono); color: var(--text-muted); margin-top: 4px; word-break: break-all; }
+table { width: 100%; border-collapse: collapse; font-size: var(--text-sm); }
+th, td { text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+th { color: var(--text-muted); font-weight: 500; }
+.chip { display: inline-block; width: 18px; height: 18px; border-radius: 4px; border: 1px solid var(--border); vertical-align: middle; margin-right: 8px; }
+.ok { color: var(--success); font-weight: 600; }
+.hexrow { display: flex; gap: var(--space-8); flex-wrap: wrap; align-items: center; }
+.signal-card { border-color: var(--signal); position: relative; }
+.badge-signal { position: absolute; top: -11px; left: var(--space-6); background: var(--signal-subtle); color: var(--signal); font-size: var(--text-xs); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 8px; border-radius: var(--radius-sm); border: 1px solid var(--signal); }
+.price { font-family: var(--font-headline); font-size: var(--text-3xl); font-weight: 600; }
+ul.ticks { list-style: none; padding: 0; margin: var(--space-4) 0; }
+ul.ticks li { padding-left: 24px; position: relative; margin-bottom: 6px; }
+ul.ticks li::before { content: ""; position: absolute; left: 2px; top: 0.55em; width: 8px; height: 8px; border-right: 2px solid var(--accent); border-top: 2px solid var(--accent); transform: rotate(45deg); }
+.note { border-left: 3px solid var(--data); padding: var(--space-3) var(--space-4); background: var(--surface); font-size: var(--text-sm); }
+@media (max-width: 640px) { .scale { grid-template-columns: repeat(6, 1fr); } .hide-sm { display: none; } }
+</style>
+</head>
+<body>
+<header class="bar"><div class="wrap">
+  <div class="mark">
+    <svg class="wordmark" viewBox="50.0 -808.0 3974.8 827.0" width="106" height="22" role="img" aria-label="ivmanto"><path fill="var(--text)" d="M63 0V-510H202V0ZM58 -586V-737H207V-586Z M931.84 0V-510H1066.84V-390H1070.84V0ZM1275.84 0V-326Q1275.84 -369 1254.34 -388.5Q1232.84 -408 1193.84 -408Q1158.84 -408 1130.84 -392.5Q1102.84 -377 1086.84 -348.5Q1070.84 -320 1070.84 -281L1057.84 -397Q1082.84 -453 1130.84 -486.5Q1178.84 -520 1244.84 -520Q1323.84 -520 1368.84 -475.5Q1413.84 -431 1413.84 -361V0ZM1618.84 0V-326Q1618.84 -369 1597.34 -388.5Q1575.84 -408 1536.84 -408Q1501.84 -408 1473.84 -392.5Q1445.84 -377 1429.84 -348.5Q1413.84 -320 1413.84 -281L1390.84 -397Q1415.84 -453 1466.34 -486.5Q1516.84 -520 1585.84 -520Q1666.84 -520 1711.84 -474Q1756.84 -428 1756.84 -353V0Z M2205.84 0Q2199.84 -21 2197.84 -45.5Q2195.84 -70 2195.84 -103H2191.84V-345Q2191.84 -380 2170.34 -399.5Q2148.84 -419 2104.84 -419Q2063.84 -419 2039.34 -404Q2014.84 -389 2007.84 -361H1876.84Q1885.84 -431 1945.84 -475.5Q2005.84 -520 2109.84 -520Q2216.84 -520 2272.84 -471.5Q2328.84 -423 2328.84 -332V-103Q2328.84 -79 2332.34 -53.5Q2335.84 -28 2343.84 0ZM2028.84 10Q1951.84 10 1906.84 -28.5Q1861.84 -67 1861.84 -132Q1861.84 -202 1913.84 -244.5Q1965.84 -287 2060.84 -300L2214.84 -322V-239L2082.84 -219Q2040.84 -212 2019.84 -195.5Q1998.84 -179 1998.84 -149Q1998.84 -121 2018.34 -107Q2037.84 -93 2071.84 -93Q2121.84 -93 2156.84 -119.5Q2191.84 -146 2191.84 -182L2204.84 -104Q2183.84 -48 2138.84 -19Q2093.84 10 2028.84 10Z M2470.84 0V-510H2605.84V-390H2609.84V0ZM2827.84 0V-319Q2827.84 -364 2805.34 -386Q2782.84 -408 2738.84 -408Q2700.84 -408 2671.84 -391Q2642.84 -374 2626.34 -344.5Q2609.84 -315 2609.84 -274L2596.84 -397Q2621.84 -453 2670.84 -486.5Q2719.84 -520 2790.84 -520Q2874.84 -520 2920.34 -473Q2965.84 -426 2965.84 -347V0Z M3321.84 11Q3225.84 11 3179.84 -35Q3133.84 -81 3133.84 -174V-625L3271.84 -676V-170Q3271.84 -135 3291.34 -117.5Q3310.84 -100 3352.84 -100Q3368.84 -100 3381.84 -103Q3394.84 -106 3407.84 -110V-3Q3394.84 3 3372.34 7Q3349.84 11 3321.84 11ZM3037.84 -404V-510H3407.84V-404Z M3739.84 10Q3657.84 10 3595.34 -24Q3532.84 -58 3497.84 -118.5Q3462.84 -179 3462.84 -257Q3462.84 -336 3497.84 -395Q3532.84 -454 3595.34 -487Q3657.84 -520 3739.84 -520Q3823.84 -520 3885.84 -487Q3947.84 -454 3982.34 -395Q4016.84 -336 4016.84 -257Q4016.84 -179 3982.34 -118.5Q3947.84 -58 3885.34 -24Q3822.84 10 3739.84 10ZM3739.84 -100Q3777.84 -100 3807.84 -119Q3837.84 -138 3855.84 -173.5Q3873.84 -209 3873.84 -258Q3873.84 -330 3835.34 -370Q3796.84 -410 3739.84 -410Q3682.84 -410 3644.84 -369.5Q3606.84 -329 3606.84 -258Q3606.84 -209 3624.34 -173.5Q3641.84 -138 3672.34 -119Q3702.84 -100 3739.84 -100Z"/><path fill="var(--brand)" d="M292 -510H438.21L579.87 -180.55L993.51 -800L657.51 0H511.3Z"/></svg> <span class="muted small" style="letter-spacing:0;font-weight:400">foundations v1.0</span>
+  </div>
+  <div class="spacer"></div>
+  <div class="toggle" role="group" aria-label="Theme">
+    <button data-theme-btn="light">Light</button><button data-theme-btn="dark">Dark</button>
+  </div>
+</div></header>
+
+<section><div class="wrap">
+  <p class="overline">Specimen · placeholder copy</p>
+  <h1>AI governance your leadership team can sign off.</h1>
+  <p class="lead">Fixed-scope services for Governance, Risk and Compliance under the EU AI Act and ISO/IEC 42001. Clear deliverables, fixed price, delivered by one accountable expert.</p>
+  <div class="row" style="margin-top:var(--space-6)">
+    <a class="btn btn-primary" href="#">Find the right service</a>
+    <a class="btn btn-secondary" href="#">See packages and prices</a>
+    <a class="btn btn-link" href="#">How it works →</a>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <p class="overline">Three pillars</p>
+  <h2>Pillar cards</h2>
+  <div class="grid g3">
+    <div class="card"><svg class="card__icon" viewBox="0 0 44 44" width="44" height="44" aria-hidden="true"><rect x="3" y="3" width="38" height="38" rx="9" fill="var(--accent-subtle)" stroke="var(--accent)" stroke-width="1.5"/><text x="22" y="27.5" text-anchor="middle" font-family="Montserrat, Inter, sans-serif" font-size="15" font-weight="600" fill="var(--accent)">G</text></svg>
+      <h3 style="margin-top:var(--space-4)">Governance</h3><p class="muted">Clear roles, owned decisions and enforced policies for how your organisation uses AI.</p><a class="btn-link small" href="#" style="padding:0;text-decoration:none">Governance services →</a></div>
+    <div class="card"><svg class="card__icon" viewBox="0 0 44 44" width="44" height="44" aria-hidden="true"><rect x="3" y="3" width="38" height="38" rx="9" fill="var(--accent-subtle)" stroke="var(--accent)" stroke-width="1.5"/><text x="22" y="27.5" text-anchor="middle" font-family="Montserrat, Inter, sans-serif" font-size="15" font-weight="600" fill="var(--accent)">R</text></svg>
+      <h3 style="margin-top:var(--space-4)">Risk Management</h3><p class="muted">Identify, assess and mitigate AI and data risks, with documented countermeasures.</p><a class="btn-link small" href="#" style="padding:0;text-decoration:none">Risk services →</a></div>
+    <div class="card"><svg class="card__icon" viewBox="0 0 44 44" width="44" height="44" aria-hidden="true"><rect x="3" y="3" width="38" height="38" rx="9" fill="var(--accent-subtle)" stroke="var(--accent)" stroke-width="1.5"/><text x="22" y="27.5" text-anchor="middle" font-family="Montserrat, Inter, sans-serif" font-size="15" font-weight="600" fill="var(--accent)">C</text></svg>
+      <h3 style="margin-top:var(--space-4)">Compliance</h3><p class="muted">Audit-proof documentation and readiness assessments against the frameworks that apply to you.</p><a class="btn-link small" href="#" style="padding:0;text-decoration:none">Compliance services →</a></div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <p class="overline">Status, data and signal colours</p>
+  <h2>Risk levels, frameworks, "recommended"</h2>
+  <div class="row" style="margin-bottom:var(--space-8)">
+    <span class="tag t-low">Low risk</span><span class="tag t-med">Medium risk</span><span class="tag t-high">High risk</span>
+    <span class="tag t-fw">ISO/IEC 42001</span><span class="tag t-fw">EU AI Act</span><span class="tag t-fw">NIST AI RMF</span><span class="tag t-fw">GDPR</span>
+  </div>
+  <div class="grid g3">
+    <div class="card"><h3>Package A</h3><p class="muted small">Placeholder scope</p><div class="price">€ [price]</div><ul class="ticks"><li>Deliverable one</li><li>Deliverable two</li></ul><a class="btn btn-secondary" href="#">View package</a></div>
+    <div class="card signal-card"><span class="badge-signal">Recommended</span><h3>Package B</h3><p class="muted small">Placeholder scope</p><div class="price">€ [price]</div><ul class="ticks"><li>Deliverable one</li><li>Deliverable two</li></ul><a class="btn btn-primary" href="#">View package</a></div>
+    <div class="card"><h3>Package C</h3><p class="muted small">Placeholder scope</p><div class="price">€ [price]</div><ul class="ticks"><li>Deliverable one</li><li>Deliverable two</li></ul><a class="btn btn-secondary" href="#">View package</a></div>
+  </div>
+  <p class="note" style="margin-top:var(--space-8)">Amber appears in exactly one place per page, the "recommended" marker. Status colours appear only where a risk level is actually shown. Teal does all the other work.</p>
+</div></section>
+
+<section><div class="wrap">
+  <p class="overline">Palette · primitives</p>
+  <h2>Colour scales</h2>
+  <div id="scales"></div>
+</div></section>
+
+<section><div class="wrap">
+  <p class="overline">Palette · semantic roles</p>
+  <h2>Light and dark values, contrast checked</h2>
+  <p class="muted small">WCAG 2.2 AA: text needs 4.5:1; UI parts and graphics need 3:1. The ratios are computed from the token values, not estimated.</p>
+  <div style="overflow-x:auto"><table id="roles"><thead><tr><th>Role</th><th>Light</th><th>Dark</th><th class="hide-sm">Use</th></tr></thead><tbody></tbody></table></div>
+  <h3 style="margin-top:var(--space-12)">Contrast pairs</h3>
+  <div style="overflow-x:auto"><table id="contrast"><thead><tr><th>Theme</th><th>Foreground</th><th>on</th><th>Ratio</th><th>AA</th></tr></thead><tbody></tbody></table></div>
+</div></section>
+
+<section><div class="wrap">
+  <p class="overline">Type scale</p>
+  <h2>Inter for text. Headlines: compare A and B in the top bar.</h2>
+  <div id="typescale"></div>
+</div></section>
+
+<script>
+const TOKENS = {
+  "$description": "ivmanto colour tokens. Primitives under color.*, semantic roles under theme.light / theme.dark. Use semantic roles in UI code.",
+  "color": {
+    "teal": {
+      "50": {
+        "$type": "color",
+        "$value": "#ecfbf8"
+      },
+      "100": {
+        "$type": "color",
+        "$value": "#cff4ec"
+      },
+      "200": {
+        "$type": "color",
+        "$value": "#a0e8db"
+      },
+      "300": {
+        "$type": "color",
+        "$value": "#62d5c3"
+      },
+      "400": {
+        "$type": "color",
+        "$value": "#02c39a"
+      },
+      "500": {
+        "$type": "color",
+        "$value": "#00a896"
+      },
+      "600": {
+        "$type": "color",
+        "$value": "#01948f"
+      },
+      "700": {
+        "$type": "color",
+        "$value": "#027a89"
+      },
+      "800": {
+        "$type": "color",
+        "$value": "#05636f"
+      },
+      "900": {
+        "$type": "color",
+        "$value": "#0a4a55"
+      },
+      "950": {
+        "$type": "color",
+        "$value": "#062f38"
+      }
+    },
+    "slate": {
+      "50": {
+        "$type": "color",
+        "$value": "#f8fafc"
+      },
+      "100": {
+        "$type": "color",
+        "$value": "#f1f5f9"
+      },
+      "200": {
+        "$type": "color",
+        "$value": "#e2e8f0"
+      },
+      "300": {
+        "$type": "color",
+        "$value": "#cbd5e1"
+      },
+      "400": {
+        "$type": "color",
+        "$value": "#94a3b8"
+      },
+      "500": {
+        "$type": "color",
+        "$value": "#64748b"
+      },
+      "600": {
+        "$type": "color",
+        "$value": "#475569"
+      },
+      "700": {
+        "$type": "color",
+        "$value": "#334155"
+      },
+      "800": {
+        "$type": "color",
+        "$value": "#1e293b"
+      },
+      "900": {
+        "$type": "color",
+        "$value": "#0f172a"
+      },
+      "950": {
+        "$type": "color",
+        "$value": "#020617"
+      }
+    },
+    "navy": {
+      "700": {
+        "$type": "color",
+        "$value": "#152238"
+      },
+      "800": {
+        "$type": "color",
+        "$value": "#0f1a2b"
+      },
+      "900": {
+        "$type": "color",
+        "$value": "#0a1220"
+      }
+    },
+    "dusk": {
+      "100": {
+        "$type": "color",
+        "$value": "#e3eaf5"
+      },
+      "300": {
+        "$type": "color",
+        "$value": "#9fb4d6"
+      },
+      "500": {
+        "$type": "color",
+        "$value": "#4f6d9a"
+      },
+      "700": {
+        "$type": "color",
+        "$value": "#33496b"
+      }
+    },
+    "amber": {
+      "100": {
+        "$type": "color",
+        "$value": "#fef3c7"
+      },
+      "400": {
+        "$type": "color",
+        "$value": "#fbbf24"
+      },
+      "500": {
+        "$type": "color",
+        "$value": "#f59e0b"
+      },
+      "700": {
+        "$type": "color",
+        "$value": "#b45309"
+      }
+    },
+    "green": {
+      "100": {
+        "$type": "color",
+        "$value": "#e3f4ea"
+      },
+      "300": {
+        "$type": "color",
+        "$value": "#7fd1a0"
+      },
+      "700": {
+        "$type": "color",
+        "$value": "#2f7a52"
+      }
+    },
+    "red": {
+      "100": {
+        "$type": "color",
+        "$value": "#fbe9e8"
+      },
+      "300": {
+        "$type": "color",
+        "$value": "#f0a19c"
+      },
+      "700": {
+        "$type": "color",
+        "$value": "#b4443f"
+      }
+    }
+  },
+  "theme": {
+    "light": {
+      "bg": {
+        "$type": "color",
+        "$value": "{color.slate.50}",
+        "$description": "Page background"
+      },
+      "surface": {
+        "$type": "color",
+        "$value": "#ffffff",
+        "$description": "Cards, panels"
+      },
+      "surface-sunken": {
+        "$type": "color",
+        "$value": "{color.slate.100}",
+        "$description": "Alternate sections, inputs"
+      },
+      "border": {
+        "$type": "color",
+        "$value": "{color.slate.200}",
+        "$description": "Hairlines, card borders"
+      },
+      "border-input": {
+        "$type": "color",
+        "$value": "{color.slate.500}",
+        "$description": "Form control borders (WCAG 1.4.11, 3:1)"
+      },
+      "text": {
+        "$type": "color",
+        "$value": "{color.slate.900}",
+        "$description": "Headlines and body"
+      },
+      "text-muted": {
+        "$type": "color",
+        "$value": "{color.slate.600}",
+        "$description": "Secondary text, captions"
+      },
+      "accent": {
+        "$type": "color",
+        "$value": "{color.teal.700}",
+        "$description": "Links, primary buttons, focus, brand marks"
+      },
+      "accent-hover": {
+        "$type": "color",
+        "$value": "{color.teal.800}",
+        "$description": "Hover/pressed of accent"
+      },
+      "on-accent": {
+        "$type": "color",
+        "$value": "#ffffff",
+        "$description": "Text on accent fill"
+      },
+      "accent-subtle": {
+        "$type": "color",
+        "$value": "{color.teal.50}",
+        "$description": "Tinted backgrounds, selected states"
+      },
+      "brand": {
+        "$type": "color",
+        "$value": "{color.teal.500}",
+        "$description": "Logo cell, decorative only (not text on light)"
+      },
+      "data": {
+        "$type": "color",
+        "$value": "{color.dusk.500}",
+        "$description": "Diagrams, charts, secondary icons"
+      },
+      "signal": {
+        "$type": "color",
+        "$value": "{color.amber.700}",
+        "$description": "Rare highlight: 'recommended' only"
+      },
+      "signal-subtle": {
+        "$type": "color",
+        "$value": "{color.amber.100}",
+        "$description": "Background behind signal"
+      },
+      "success": {
+        "$type": "color",
+        "$value": "{color.green.700}",
+        "$description": "Low risk, done"
+      },
+      "success-subtle": {
+        "$type": "color",
+        "$value": "{color.green.100}"
+      },
+      "warning": {
+        "$type": "color",
+        "$value": "{color.amber.700}",
+        "$description": "Medium risk"
+      },
+      "danger": {
+        "$type": "color",
+        "$value": "{color.red.700}",
+        "$description": "High risk, errors"
+      },
+      "danger-subtle": {
+        "$type": "color",
+        "$value": "{color.red.100}"
+      },
+      "focus": {
+        "$type": "color",
+        "$value": "{color.teal.500}",
+        "$description": "Focus ring (2px + 2px offset)"
+      },
+      "band-bg": {
+        "$type": "color",
+        "$value": "{color.navy.900}",
+        "$description": "Dark band fill (home sections 4b + 5)"
+      },
+      "band-surface": {
+        "$type": "color",
+        "$value": "{color.navy.800}",
+        "$description": "Cards inside the band"
+      },
+      "band-border": {
+        "$type": "color",
+        "$value": "#233149",
+        "$description": "Hairlines inside the band"
+      },
+      "band-border-input": {
+        "$type": "color",
+        "$value": "#6b7a93",
+        "$description": "Stronger borders inside the band"
+      },
+      "band-text": {
+        "$type": "color",
+        "$value": "#e6edf5",
+        "$description": "Text inside the band"
+      },
+      "band-text-muted": {
+        "$type": "color",
+        "$value": "#9aa8bc",
+        "$description": "Secondary text inside the band"
+      },
+      "band-accent": {
+        "$type": "color",
+        "$value": "{color.teal.300}",
+        "$description": "Accent inside the band"
+      },
+      "band-accent-subtle": {
+        "$type": "color",
+        "$value": "#0d2b33",
+        "$description": "Tinted fills inside the band"
+      },
+      "band-on-accent": {
+        "$type": "color",
+        "$value": "{color.teal.950}",
+        "$description": "Text on accent fill inside the band"
+      }
+    },
+    "dark": {
+      "bg": {
+        "$type": "color",
+        "$value": "{color.navy.900}",
+        "$description": "Page background"
+      },
+      "surface": {
+        "$type": "color",
+        "$value": "{color.navy.800}",
+        "$description": "Cards, panels"
+      },
+      "surface-sunken": {
+        "$type": "color",
+        "$value": "{color.navy.700}",
+        "$description": "Alternate sections, inputs"
+      },
+      "border": {
+        "$type": "color",
+        "$value": "#233149",
+        "$description": "Hairlines, card borders"
+      },
+      "border-input": {
+        "$type": "color",
+        "$value": "#6b7a93",
+        "$description": "Form control borders (WCAG 1.4.11, 3:1)"
+      },
+      "text": {
+        "$type": "color",
+        "$value": "#e6edf5",
+        "$description": "Headlines and body"
+      },
+      "text-muted": {
+        "$type": "color",
+        "$value": "#9aa8bc",
+        "$description": "Secondary text, captions"
+      },
+      "accent": {
+        "$type": "color",
+        "$value": "{color.teal.300}",
+        "$description": "Links, primary buttons, focus, brand marks"
+      },
+      "accent-hover": {
+        "$type": "color",
+        "$value": "{color.teal.200}",
+        "$description": "Hover/pressed of accent"
+      },
+      "on-accent": {
+        "$type": "color",
+        "$value": "{color.teal.950}",
+        "$description": "Text on accent fill"
+      },
+      "accent-subtle": {
+        "$type": "color",
+        "$value": "#0d2b33",
+        "$description": "Tinted backgrounds, selected states"
+      },
+      "brand": {
+        "$type": "color",
+        "$value": "{color.teal.400}",
+        "$description": "Logo cell, decorative only (not text on light)"
+      },
+      "data": {
+        "$type": "color",
+        "$value": "{color.dusk.300}",
+        "$description": "Diagrams, charts, secondary icons"
+      },
+      "signal": {
+        "$type": "color",
+        "$value": "{color.amber.400}",
+        "$description": "Rare highlight: 'recommended' only"
+      },
+      "signal-subtle": {
+        "$type": "color",
+        "$value": "#2e2410",
+        "$description": "Background behind signal"
+      },
+      "success": {
+        "$type": "color",
+        "$value": "{color.green.300}",
+        "$description": "Low risk, done"
+      },
+      "success-subtle": {
+        "$type": "color",
+        "$value": "#12291f"
+      },
+      "warning": {
+        "$type": "color",
+        "$value": "{color.amber.400}",
+        "$description": "Medium risk"
+      },
+      "danger": {
+        "$type": "color",
+        "$value": "{color.red.300}",
+        "$description": "High risk, errors"
+      },
+      "danger-subtle": {
+        "$type": "color",
+        "$value": "#2e1615"
+      },
+      "focus": {
+        "$type": "color",
+        "$value": "{color.teal.300}",
+        "$description": "Focus ring (2px + 2px offset)"
+      },
+      "band-bg": {
+        "$type": "color",
+        "$value": "{color.teal.950}",
+        "$description": "Dark band fill (home sections 4b + 5)"
+      },
+      "band-surface": {
+        "$type": "color",
+        "$value": "#0a3f4a",
+        "$description": "Cards inside the band"
+      },
+      "band-border": {
+        "$type": "color",
+        "$value": "#14606b",
+        "$description": "Hairlines inside the band"
+      },
+      "band-border-input": {
+        "$type": "color",
+        "$value": "#4f8f98",
+        "$description": "Stronger borders inside the band"
+      },
+      "band-text": {
+        "$type": "color",
+        "$value": "#e6edf5",
+        "$description": "Text inside the band"
+      },
+      "band-text-muted": {
+        "$type": "color",
+        "$value": "#a9c4c8",
+        "$description": "Secondary text inside the band"
+      },
+      "band-accent": {
+        "$type": "color",
+        "$value": "{color.teal.200}",
+        "$description": "Accent inside the band"
+      },
+      "band-accent-subtle": {
+        "$type": "color",
+        "$value": "{color.teal.800}",
+        "$description": "Tinted fills inside the band"
+      },
+      "band-on-accent": {
+        "$type": "color",
+        "$value": "{color.teal.950}",
+        "$description": "Text on accent fill inside the band"
+      }
+    }
+  }
+}
+;
+const CONTRAST = [
+  {
+    "theme": "light",
+    "fg": "text",
+    "bg": "bg",
+    "ratio": 17.06
+  },
+  {
+    "theme": "dark",
+    "fg": "text",
+    "bg": "bg",
+    "ratio": 15.89
+  },
+  {
+    "theme": "light",
+    "fg": "text",
+    "bg": "surface",
+    "ratio": 17.85
+  },
+  {
+    "theme": "dark",
+    "fg": "text",
+    "bg": "surface",
+    "ratio": 14.79
+  },
+  {
+    "theme": "light",
+    "fg": "text-muted",
+    "bg": "bg",
+    "ratio": 7.24
+  },
+  {
+    "theme": "dark",
+    "fg": "text-muted",
+    "bg": "bg",
+    "ratio": 7.77
+  },
+  {
+    "theme": "light",
+    "fg": "text-muted",
+    "bg": "surface",
+    "ratio": 7.58
+  },
+  {
+    "theme": "dark",
+    "fg": "text-muted",
+    "bg": "surface",
+    "ratio": 7.23
+  },
+  {
+    "theme": "light",
+    "fg": "accent",
+    "bg": "bg",
+    "ratio": 4.84
+  },
+  {
+    "theme": "dark",
+    "fg": "accent",
+    "bg": "bg",
+    "ratio": 10.56
+  },
+  {
+    "theme": "light",
+    "fg": "accent",
+    "bg": "surface",
+    "ratio": 5.06
+  },
+  {
+    "theme": "dark",
+    "fg": "accent",
+    "bg": "surface",
+    "ratio": 9.83
+  },
+  {
+    "theme": "light",
+    "fg": "on-accent",
+    "bg": "accent",
+    "ratio": 5.06
+  },
+  {
+    "theme": "dark",
+    "fg": "on-accent",
+    "bg": "accent",
+    "ratio": 8.04
+  },
+  {
+    "theme": "light",
+    "fg": "data",
+    "bg": "surface",
+    "ratio": 5.27
+  },
+  {
+    "theme": "dark",
+    "fg": "data",
+    "bg": "surface",
+    "ratio": 8.29
+  },
+  {
+    "theme": "light",
+    "fg": "signal",
+    "bg": "surface",
+    "ratio": 5.02
+  },
+  {
+    "theme": "dark",
+    "fg": "signal",
+    "bg": "surface",
+    "ratio": 10.46
+  },
+  {
+    "theme": "light",
+    "fg": "success",
+    "bg": "surface",
+    "ratio": 5.22
+  },
+  {
+    "theme": "dark",
+    "fg": "success",
+    "bg": "surface",
+    "ratio": 9.58
+  },
+  {
+    "theme": "light",
+    "fg": "danger",
+    "bg": "surface",
+    "ratio": 5.47
+  },
+  {
+    "theme": "dark",
+    "fg": "danger",
+    "bg": "surface",
+    "ratio": 8.55
+  },
+  {
+    "theme": "light",
+    "fg": "border-input",
+    "bg": "surface",
+    "ratio": 4.76
+  },
+  {
+    "theme": "dark",
+    "fg": "border-input",
+    "bg": "surface",
+    "ratio": 4.02
+  },
+  {
+    "theme": "light",
+    "fg": "band-text",
+    "bg": "band-bg",
+    "ratio": 15.89
+  },
+  {
+    "theme": "dark",
+    "fg": "band-text",
+    "bg": "band-bg",
+    "ratio": 12.09
+  },
+  {
+    "theme": "light",
+    "fg": "band-text",
+    "bg": "band-surface",
+    "ratio": 14.79
+  },
+  {
+    "theme": "dark",
+    "fg": "band-text",
+    "bg": "band-surface",
+    "ratio": 9.76
+  },
+  {
+    "theme": "light",
+    "fg": "band-text-muted",
+    "bg": "band-bg",
+    "ratio": 7.77
+  },
+  {
+    "theme": "dark",
+    "fg": "band-text-muted",
+    "bg": "band-bg",
+    "ratio": 7.76
+  },
+  {
+    "theme": "light",
+    "fg": "band-text-muted",
+    "bg": "band-surface",
+    "ratio": 7.23
+  },
+  {
+    "theme": "dark",
+    "fg": "band-text-muted",
+    "bg": "band-surface",
+    "ratio": 6.26
+  },
+  {
+    "theme": "light",
+    "fg": "band-accent",
+    "bg": "band-bg",
+    "ratio": 10.56
+  },
+  {
+    "theme": "dark",
+    "fg": "band-accent",
+    "bg": "band-bg",
+    "ratio": 10.23
+  },
+  {
+    "theme": "light",
+    "fg": "band-accent",
+    "bg": "band-surface",
+    "ratio": 9.83
+  },
+  {
+    "theme": "dark",
+    "fg": "band-accent",
+    "bg": "band-surface",
+    "ratio": 8.26
+  },
+  {
+    "theme": "light",
+    "fg": "band-accent",
+    "bg": "band-accent-subtle",
+    "ratio": 8.38
+  },
+  {
+    "theme": "dark",
+    "fg": "band-accent",
+    "bg": "band-accent-subtle",
+    "ratio": 4.99
+  },
+  {
+    "theme": "light",
+    "fg": "band-on-accent",
+    "bg": "band-accent",
+    "ratio": 8.04
+  },
+  {
+    "theme": "dark",
+    "fg": "band-on-accent",
+    "bg": "band-accent",
+    "ratio": 10.23
+  },
+  {
+    "theme": "light",
+    "fg": "band-border-input",
+    "bg": "band-surface",
+    "ratio": 4.02
+  },
+  {
+    "theme": "dark",
+    "fg": "band-border-input",
+    "bg": "band-surface",
+    "ratio": 3.14
+  },
+  {
+    "theme": "light",
+    "fg": "text",
+    "bg": "accent-subtle",
+    "ratio": 16.77
+  },
+  {
+    "theme": "dark",
+    "fg": "text",
+    "bg": "accent-subtle",
+    "ratio": 12.62
+  },
+  {
+    "theme": "light",
+    "fg": "text-muted",
+    "bg": "accent-subtle",
+    "ratio": 7.12
+  },
+  {
+    "theme": "dark",
+    "fg": "text-muted",
+    "bg": "accent-subtle",
+    "ratio": 6.17
+  }
+]
+;
+const root = document.documentElement;
+const store = { get(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }, set(k,v){ try { localStorage.setItem(k,v); } catch(e){} } };
+function setTheme(t){ root.dataset.theme = t; document.querySelectorAll('[data-theme-btn]').forEach(b => b.setAttribute('aria-pressed', b.dataset.themeBtn === t)); store.set('ivm-theme', t); }
+document.querySelectorAll('[data-theme-btn]').forEach(b => b.onclick = () => setTheme(b.dataset.themeBtn));
+setTheme(store.get('ivm-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+
+const resolve = v => v.startsWith('{') ? v.slice(7, -1).split('.').reduce((o, k) => o[k], TOKENS.color).$value : v;
+const el = (tag, attrs = {}, text) => { const e = document.createElement(tag); Object.assign(e, attrs); if (text !== undefined) e.textContent = text; return e; };
+
+const scales = document.getElementById('scales');
+for (const [hue, steps] of Object.entries(TOKENS.color)) {
+  scales.append(el('h3', {}, hue));
+  const row = el('div', { className: 'scale' });
+  for (const [step, t] of Object.entries(steps)) {
+    const cell = el('div');
+    const sw = el('div', { className: 'sw' }); sw.style.background = t.$value;
+    cell.append(sw, el('div', { className: 'swl' }, `${step}\n${t.$value}`));
+    row.append(cell);
+  }
+  scales.append(row);
+}
+
+const roles = document.querySelector('#roles tbody');
+for (const [name, t] of Object.entries(TOKENS.theme.light)) {
+  const d = TOKENS.theme.dark[name];
+  const tr = el('tr');
+  const cell = v => { const td = el('td'); const c = el('span', { className: 'chip' }); c.style.background = resolve(v); td.append(c, el('span', { className: 'mono' }, resolve(v))); return td; };
+  tr.append(el('td', { className: 'mono' }, '--' + name), cell(t.$value), cell(d.$value), el('td', { className: 'muted hide-sm' }, t.$description || ''));
+  roles.append(tr);
+}
+
+const ct = document.querySelector('#contrast tbody');
+for (const r of CONTRAST) {
+  const need = ['border-input', 'data'].includes(r.fg) ? 3 : 4.5;
+  const tr = el('tr');
+  tr.append(el('td', {}, r.theme), el('td', { className: 'mono' }, r.fg), el('td', { className: 'mono' }, r.bg), el('td', { className: 'mono' }, r.ratio.toFixed(2) + ':1'), el('td', { className: r.ratio >= need ? 'ok' : '' }, r.ratio >= need ? 'Pass' : 'Fail'));
+  ct.append(tr);
+}
+
+const ts = document.getElementById('typescale');
+[['5xl','H1 hero · 52px','Governance you can explain to the board.', 'headline'],
+ ['3xl','H2 · 32px','Which service do you need?', 'headline'],
+ ['2xl','H3 · 24px','AI risk register setup', 'headline'],
+ ['xl','Lead · 20px','A fixed-scope package with a clear deliverable and a fixed price.', 'sans'],
+ ['lg','Body · 18px','We map your AI systems against the EU AI Act risk classes and document owners, controls and evidence so your next audit starts from a clean baseline.', 'sans'],
+ ['sm','Caption · 14px','Delivered remotely · 3 weeks · in English or German', 'sans']].forEach(([size, label, text, fam]) => {
+  const wrap = el('div', {}); wrap.style.cssText = 'padding:16px 0;border-bottom:1px solid var(--border)';
+  const lab = el('div', { className: 'swl' }, label);
+  const p = el('div', {}, text);
+  p.style.cssText = `font-size:var(--text-${size});font-family:${fam === 'headline' ? 'var(--font-headline)' : 'var(--font-sans)'};font-weight:${fam === 'headline' ? 600 : 400};line-height:${fam === 'headline' ? 'var(--lh-tight)' : 'var(--lh-body)'};letter-spacing:${fam === 'headline' ? 'var(--tracking-headline)' : '0'};max-width:var(--measure)`;
+  wrap.append(lab, p); ts.append(wrap);
+});
+</script>
+</body>
+</html>

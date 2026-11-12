@@ -1,0 +1,628 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>ivmanto components</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Preview only: fonts from Google Fonts. The live site self-hosts them (GDPR). -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Generated from color.tokens.json. Do not edit by hand. */
+:root {
+  --color-teal-50: #ecfbf8;
+  --color-teal-100: #cff4ec;
+  --color-teal-200: #a0e8db;
+  --color-teal-300: #62d5c3;
+  --color-teal-400: #02c39a;
+  --color-teal-500: #00a896;
+  --color-teal-600: #01948f;
+  --color-teal-700: #027a89;
+  --color-teal-800: #05636f;
+  --color-teal-900: #0a4a55;
+  --color-teal-950: #062f38;
+  --color-slate-50: #f8fafc;
+  --color-slate-100: #f1f5f9;
+  --color-slate-200: #e2e8f0;
+  --color-slate-300: #cbd5e1;
+  --color-slate-400: #94a3b8;
+  --color-slate-500: #64748b;
+  --color-slate-600: #475569;
+  --color-slate-700: #334155;
+  --color-slate-800: #1e293b;
+  --color-slate-900: #0f172a;
+  --color-slate-950: #020617;
+  --color-navy-700: #152238;
+  --color-navy-800: #0f1a2b;
+  --color-navy-900: #0a1220;
+  --color-dusk-100: #e3eaf5;
+  --color-dusk-300: #9fb4d6;
+  --color-dusk-500: #4f6d9a;
+  --color-dusk-700: #33496b;
+  --color-amber-100: #fef3c7;
+  --color-amber-400: #fbbf24;
+  --color-amber-500: #f59e0b;
+  --color-amber-700: #b45309;
+  --color-green-100: #e3f4ea;
+  --color-green-300: #7fd1a0;
+  --color-green-700: #2f7a52;
+  --color-red-100: #fbe9e8;
+  --color-red-300: #f0a19c;
+  --color-red-700: #b4443f;
+
+  --bg: #f8fafc;
+  --surface: #ffffff;
+  --surface-sunken: #f1f5f9;
+  --border: #e2e8f0;
+  --border-input: #64748b;
+  --text: #0f172a;
+  --text-muted: #475569;
+  --accent: #027a89;
+  --accent-hover: #05636f;
+  --on-accent: #ffffff;
+  --accent-subtle: #ecfbf8;
+  --brand: #00a896;
+  --data: #4f6d9a;
+  --signal: #b45309;
+  --signal-subtle: #fef3c7;
+  --success: #2f7a52;
+  --success-subtle: #e3f4ea;
+  --warning: #b45309;
+  --danger: #b4443f;
+  --danger-subtle: #fbe9e8;
+  --focus: #00a896;
+  --band-bg: #0a1220;
+  --band-surface: #0f1a2b;
+  --band-border: #233149;
+  --band-border-input: #6b7a93;
+  --band-text: #e6edf5;
+  --band-text-muted: #9aa8bc;
+  --band-accent: #62d5c3;
+  --band-accent-subtle: #0d2b33;
+  --band-on-accent: #062f38;
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --bg: #0a1220;
+  --surface: #0f1a2b;
+  --surface-sunken: #152238;
+  --border: #233149;
+  --border-input: #6b7a93;
+  --text: #e6edf5;
+  --text-muted: #9aa8bc;
+  --accent: #62d5c3;
+  --accent-hover: #a0e8db;
+  --on-accent: #062f38;
+  --accent-subtle: #0d2b33;
+  --brand: #02c39a;
+  --data: #9fb4d6;
+  --signal: #fbbf24;
+  --signal-subtle: #2e2410;
+  --success: #7fd1a0;
+  --success-subtle: #12291f;
+  --warning: #fbbf24;
+  --danger: #f0a19c;
+  --danger-subtle: #2e1615;
+  --focus: #62d5c3;
+  --band-bg: #062f38;
+  --band-surface: #0a3f4a;
+  --band-border: #14606b;
+  --band-border-input: #4f8f98;
+  --band-text: #e6edf5;
+  --band-text-muted: #a9c4c8;
+  --band-accent: #a0e8db;
+  --band-accent-subtle: #05636f;
+  --band-on-accent: #062f38;
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0a1220;
+    --surface: #0f1a2b;
+    --surface-sunken: #152238;
+    --border: #233149;
+    --border-input: #6b7a93;
+    --text: #e6edf5;
+    --text-muted: #9aa8bc;
+    --accent: #62d5c3;
+    --accent-hover: #a0e8db;
+    --on-accent: #062f38;
+    --accent-subtle: #0d2b33;
+    --brand: #02c39a;
+    --data: #9fb4d6;
+    --signal: #fbbf24;
+    --signal-subtle: #2e2410;
+    --success: #7fd1a0;
+    --success-subtle: #12291f;
+    --warning: #fbbf24;
+    --danger: #f0a19c;
+    --danger-subtle: #2e1615;
+    --focus: #62d5c3;
+    --band-bg: #062f38;
+    --band-surface: #0a3f4a;
+    --band-border: #14606b;
+    --band-border-input: #4f8f98;
+    --band-text: #e6edf5;
+    --band-text-muted: #a9c4c8;
+    --band-accent: #a0e8db;
+    --band-accent-subtle: #05636f;
+    --band-on-accent: #062f38;
+    color-scheme: dark;
+  }
+}
+
+/* Mirrors foundation.tokens.json. Keep the two in sync. */
+:root {
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --font-display: "Montserrat", "Inter", system-ui, sans-serif;
+  --font-headline: var(--font-display); /* Montserrat, approved by Nick 2026-11-10 */
+
+  --text-xs: 0.75rem; --text-sm: 0.875rem; --text-md: 1rem; --text-lg: 1.125rem;
+  --text-xl: 1.25rem; --text-2xl: 1.5rem; --text-3xl: 2rem; --text-4xl: 2.5rem; --text-5xl: 3.25rem;
+  --lh-tight: 1.15; --lh-snug: 1.35; --lh-body: 1.65;
+  --tracking-headline: -0.015em; --tracking-overline: 0.12em;
+  --measure: 68ch;
+
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-6: 24px;
+  --space-8: 32px; --space-12: 48px; --space-16: 64px; --space-24: 96px; --space-32: 128px;
+  --container: 1200px;
+
+  --radius-sm: 4px; --radius-md: 8px; --radius-lg: 12px; --radius-full: 9999px;
+  --shadow-sm: 0 1px 2px #0f172a14;
+  --shadow-md: 0 4px 16px -4px #0f172a1f;
+
+  --dur-fast: 150ms; --dur-base: 250ms; --dur-slow: 400ms;
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition-duration: 0ms !important; scroll-behavior: auto !important; }
+}
+
+/* ivmanto reference component styles (v1.2).
+   Requires tokens/tokens.css + tokens/foundation.css. Uses semantic roles only.
+   This is a reference for Clauco: port to Tailwind/Vue components, keep names and behaviour. */
+
+/* ---------- Base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 400 var(--text-md)/var(--lh-body) var(--font-sans); -webkit-font-smoothing: antialiased; }
+img, svg { display: block; max-width: 100%; }
+a { color: var(--accent); text-underline-offset: 3px; }
+a:hover { color: var(--accent-hover); }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 2px; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+h1, h2, h3, .h1, .h2, .h3 { font-family: var(--font-headline); font-weight: 600; letter-spacing: var(--tracking-headline); line-height: var(--lh-tight); margin: 0 0 var(--space-4); text-wrap: balance; color: var(--text); }
+h1, .h1 { font-size: clamp(var(--text-4xl), 4.6vw, var(--text-5xl)); }
+h2, .h2 { font-size: clamp(1.75rem, 3vw, var(--text-3xl)); }
+h3, .h3 { font-size: var(--text-xl); line-height: var(--lh-snug); }
+h4 { font: 600 var(--text-md)/var(--lh-snug) var(--font-sans); margin: 0 0 var(--space-2); }
+p { margin: 0 0 var(--space-4); max-width: var(--measure); }
+.lead { font-size: var(--text-xl); line-height: 1.55; color: var(--text-muted); }
+.muted { color: var(--text-muted); }
+.small { font-size: var(--text-sm); }
+.mono { font-family: var(--font-mono); font-size: 0.92em; }
+.overline { font: 600 var(--text-xs)/1.4 var(--font-sans); letter-spacing: var(--tracking-overline); text-transform: uppercase; color: var(--accent); margin: 0 0 var(--space-3); }
+
+/* ---------- Layout ---------- */
+.container { max-width: var(--container); margin: 0 auto; padding: 0 20px; }
+@media (min-width: 768px) { .container { padding: 0 32px; } }
+.section { padding: var(--space-16) 0; }
+@media (min-width: 768px) { .section { padding: var(--space-24) 0; } }
+.section--sunken { background: var(--surface-sunken); }
+.section--line { border-top: 1px solid var(--border); }
+.section-head { max-width: 720px; margin-bottom: var(--space-12); }
+.grid { display: grid; gap: var(--space-6); }
+.grid-2 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+.grid-3 { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+.stack > * + * { margin-top: var(--space-4); }
+.row { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; }
+
+/* Hex grid texture: hero and closing CTA only, never behind body text columns. */
+.hexgrid { position: relative; isolation: isolate; }
+.hexgrid::before { content: ""; position: absolute; inset: 0; z-index: -1; opacity: .5; pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='97' viewBox='0 0 56 97'%3E%3Cpath d='M28 0 56 16v32L28 64 0 48V16zM28 64v33M0 16 0 0M56 16V0' fill='none' stroke='%2394a3b8' stroke-opacity='.18'/%3E%3C/svg%3E");
+  -webkit-mask-image: radial-gradient(ellipse at 70% 30%, #000 0%, transparent 70%); mask-image: radial-gradient(ellipse at 70% 30%, #000 0%, transparent 70%); }
+
+/* ---------- Header / nav ---------- */
+.site-header { position: sticky; top: 0; z-index: 20; background: color-mix(in srgb, var(--surface) 92%, transparent); backdrop-filter: saturate(1.2) blur(8px); border-bottom: 1px solid var(--border); }
+.site-header .container { display: flex; align-items: center; gap: var(--space-6); height: 68px; }
+.brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text); font: 600 var(--text-md) var(--font-sans); letter-spacing: 0.16em; }
+.brand svg.wordmark { width: auto; height: 22px; display: block; }
+.brand svg.lockup { width: auto; height: 30px; display: block; }
+.nav { display: none; gap: var(--space-6); margin-left: var(--space-6); }
+.nav a { color: var(--text-muted); text-decoration: none; font-size: var(--text-sm); font-weight: 500; padding: 6px 0; border-bottom: 2px solid transparent; }
+.nav a:hover, .nav a[aria-current="page"] { color: var(--text); border-bottom-color: var(--accent); }
+.header-actions { margin-left: auto; display: flex; align-items: center; gap: var(--space-3); }
+@media (min-width: 960px) { .nav { display: flex; } .icon-btn.menu-btn { display: none; } }
+.icon-btn { display: inline-grid; place-items: center; width: 40px; height: 40px; border-radius: var(--radius-md); border: 1px solid var(--border); background: transparent; color: var(--text-muted); cursor: pointer; }
+.icon-btn:hover { color: var(--text); background: var(--surface-sunken); }
+
+/* ---------- Buttons ---------- */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 10px 20px; border-radius: var(--radius-md); border: 1px solid transparent; font: 500 var(--text-md)/1.2 var(--font-sans); text-decoration: none; cursor: pointer; transition: background var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease); }
+.btn--primary { background: var(--accent); color: var(--on-accent); }
+.btn--primary:hover { background: var(--accent-hover); color: var(--on-accent); }
+.btn--secondary { background: var(--surface); color: var(--text); border-color: var(--border-input); }
+.btn--secondary:hover { background: var(--surface-sunken); color: var(--text); }
+.btn--ghost { background: transparent; color: var(--accent); padding-inline: 8px; }
+.btn--ghost:hover { background: var(--accent-subtle); }
+.btn--sm { min-height: 36px; padding: 6px 14px; font-size: var(--text-sm); }
+.btn--block { width: 100%; }
+.btn[disabled], .btn[aria-disabled="true"] { opacity: .5; cursor: not-allowed; }
+.btn .chev { width: 14px; height: 14px; transition: transform var(--dur-fast) var(--ease); }
+.btn:hover .chev { transform: translateX(2px); }
+
+/* ---------- Tags & badges ---------- */
+.tag { display: inline-flex; align-items: center; gap: 6px; padding: 2px 10px; border-radius: var(--radius-sm); font: 500 var(--text-sm)/1.6 var(--font-sans); }
+.tag--risk::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+.tag--low { color: var(--success); background: var(--success-subtle); }
+.tag--medium { color: var(--warning); background: var(--signal-subtle); }
+.tag--high { color: var(--danger); background: var(--danger-subtle); }
+.tag--framework { color: var(--text); border: 1px solid var(--border); background: var(--surface); font-family: var(--font-mono); font-size: 0.8125rem; }
+.tag--pillar { color: var(--accent); background: var(--accent-subtle); }
+.badge-recommended { display: inline-block; padding: 2px 8px; border-radius: var(--radius-sm); border: 1px solid var(--signal); background: var(--signal-subtle); color: var(--signal); font: 600 var(--text-xs)/1.5 var(--font-sans); letter-spacing: .06em; text-transform: uppercase; }
+
+/* ---------- Cards ---------- */
+.card { position: relative; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: var(--space-6); transition: box-shadow var(--dur-base) var(--ease), border-color var(--dur-base) var(--ease); }
+.card--link:hover { border-color: var(--border-input); box-shadow: var(--shadow-md); }
+:root[data-theme="dark"] .card--link:hover { box-shadow: none; }
+.card__link::after { content: ""; position: absolute; inset: 0; border-radius: inherit; } /* whole card clickable, one link */
+.card__icon { width: 44px; height: 44px; margin-bottom: var(--space-4); }
+
+/* Pillar card */
+.pillar h3 { margin-bottom: var(--space-2); }
+.pillar ul { margin: var(--space-4) 0 0; padding: 0; list-style: none; font-size: var(--text-sm); color: var(--text-muted); }
+.pillar li { padding: 6px 0; border-top: 1px solid var(--border); }
+
+/* Package card */
+.package { display: flex; flex-direction: column; gap: var(--space-4); }
+.package--recommended { border-color: var(--signal); }
+.package__top { display: flex; justify-content: space-between; align-items: start; gap: var(--space-3); }
+.package__price { font: 600 var(--text-3xl)/1 var(--font-headline); }
+.package__price small { font: 400 var(--text-sm) var(--font-sans); color: var(--text-muted); margin-left: 4px; }
+.package__meta { display: flex; flex-wrap: wrap; gap: var(--space-4); font-size: var(--text-sm); color: var(--text-muted); }
+.package__meta span { display: inline-flex; gap: 6px; align-items: center; }
+.package .btn { margin-top: auto; }
+.ticks { list-style: none; margin: 0; padding: 0; }
+.ticks li { position: relative; padding-left: 22px; margin: 6px 0; font-size: var(--text-sm); }
+.ticks li::before { content: ""; position: absolute; left: 2px; top: .62em; width: 7px; height: 7px; border-right: 2px solid var(--accent); border-top: 2px solid var(--accent); transform: rotate(45deg); }
+
+/* ---------- AI advisor ---------- */
+.advisor { background: var(--surface); border: 1px solid var(--border-input); border-radius: var(--radius-lg); box-shadow: var(--shadow-md); overflow: hidden; }
+:root[data-theme="dark"] .advisor { box-shadow: none; }
+.advisor__head { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3) var(--space-4); border-bottom: 1px solid var(--border); font-size: var(--text-sm); }
+.advisor__head strong { font-weight: 600; }
+.advisor__head .avatar { width: 24px; height: 24px; flex: none; }
+.ai-label { display: inline-flex; align-items: center; gap: 6px; padding: 1px 8px; border-radius: var(--radius-sm); background: var(--accent-subtle); color: var(--accent); font: 600 var(--text-xs)/1.6 var(--font-sans); letter-spacing: .04em; }
+.advisor__log { padding: var(--space-4); display: flex; flex-direction: column; gap: var(--space-4); max-height: 560px; overflow-y: auto; }
+.msg { max-width: 92%; font-size: var(--text-md); }
+.msg--user { align-self: flex-end; background: var(--surface-sunken); border-radius: var(--radius-lg) var(--radius-lg) var(--radius-sm) var(--radius-lg); padding: var(--space-3) var(--space-4); }
+.msg--ai { align-self: flex-start; display: grid; grid-template-columns: 28px 1fr; gap: var(--space-3); }
+.msg--ai .avatar { width: 28px; height: 28px; }
+.msg--ai p { margin-bottom: var(--space-3); }
+.typing { display: inline-flex; gap: 4px; padding: 10px 0; }
+.typing i { width: 6px; height: 6px; border-radius: 50%; background: var(--text-muted); animation: blink 1.2s var(--ease) infinite; }
+.typing i:nth-child(2) { animation-delay: .15s; } .typing i:nth-child(3) { animation-delay: .3s; }
+@keyframes blink { 0%, 80%, 100% { opacity: .25; } 40% { opacity: 1; } }
+.advisor__form { border-top: 1px solid var(--border); padding: var(--space-3) var(--space-4) var(--space-4); }
+.advisor__input { display: flex; gap: var(--space-2); align-items: flex-end; }
+.advisor textarea { flex: 1; min-height: 52px; max-height: 180px; resize: vertical; padding: 14px 16px; border: 1px solid var(--border-input); border-radius: var(--radius-md); background: var(--bg); color: var(--text); font: 400 var(--text-md)/1.5 var(--font-sans); }
+.advisor textarea::placeholder { color: var(--text-muted); }
+.advisor textarea:focus { outline: 2px solid var(--focus); outline-offset: 0; border-color: transparent; }
+.advisor__meta { display: flex; justify-content: space-between; gap: var(--space-3); margin-top: var(--space-2); font-size: var(--text-xs); color: var(--text-muted); flex-wrap: wrap; }
+.prompt-chips { display: flex; flex-wrap: wrap; gap: var(--space-2); padding: 0 var(--space-4) var(--space-4); }
+.chip { border: 1px solid var(--border); background: var(--surface); color: var(--text-muted); border-radius: var(--radius-full); padding: 6px 12px; font: 400 var(--text-sm) var(--font-sans); cursor: pointer; }
+.chip:hover { color: var(--text); border-color: var(--border-input); }
+.notice { border: 1px solid var(--border); border-left: 3px solid var(--data); background: var(--surface-sunken); border-radius: var(--radius-md); padding: var(--space-3) var(--space-4); font-size: var(--text-sm); }
+.notice--error { border-left-color: var(--danger); }
+.notice p { margin: 0 0 var(--space-2); }
+
+/* Recommendation card (rendered from catalogue id, never model free text for name/price) */
+.rec { display: grid; grid-template-columns: 40px 1fr auto; gap: var(--space-3); align-items: center; padding: var(--space-4); border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--surface); }
+.rec + .rec { margin-top: var(--space-2); }
+.rec__why { grid-column: 2 / -1; font-size: var(--text-sm); color: var(--text-muted); margin: 0; }
+.rec__title { font-weight: 600; }
+.rec__price { font: 600 var(--text-md) var(--font-headline); white-space: nowrap; }
+
+/* CTA set */
+.cta-set { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--space-2); margin-top: var(--space-3); }
+.cta { display: flex; flex-direction: column; gap: 4px; padding: var(--space-3); border: 1px solid var(--border); border-radius: var(--radius-md); text-decoration: none; color: var(--text); background: var(--surface); }
+.cta:hover { border-color: var(--accent); color: var(--text); }
+.cta svg { width: 20px; height: 20px; color: var(--accent); }
+.cta strong { font-size: var(--text-sm); }
+.cta span { font-size: var(--text-xs); color: var(--text-muted); }
+.cta--primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.cta--primary svg, .cta--primary span { color: var(--on-accent); }
+.cta--primary:hover { background: var(--accent-hover); color: var(--on-accent); }
+
+/* ---------- Forms ---------- */
+.field { display: flex; flex-direction: column; gap: 6px; margin-bottom: var(--space-4); }
+.field label { font-size: var(--text-sm); font-weight: 500; }
+.field .hint { font-size: var(--text-xs); color: var(--text-muted); }
+.input, .select, .field textarea { min-height: 44px; padding: 10px 12px; border: 1px solid var(--border-input); border-radius: var(--radius-md); background: var(--surface); color: var(--text); font: 400 var(--text-md) var(--font-sans); }
+.input:focus, .select:focus, .field textarea:focus { outline: 2px solid var(--focus); outline-offset: 0; border-color: transparent; }
+.field--error .input { border-color: var(--danger); }
+.field--error .hint { color: var(--danger); }
+.consent { display: grid; grid-template-columns: 20px 1fr; gap: var(--space-3); align-items: start; font-size: var(--text-sm); color: var(--text-muted); margin: var(--space-4) 0; }
+.consent input { width: 18px; height: 18px; margin: 2px 0 0; accent-color: var(--accent); }
+
+/* ---------- Order stepper (chevron steps) ---------- */
+.stepper { display: flex; gap: 0; list-style: none; padding: 0; margin: 0 0 var(--space-8); counter-reset: s; font-size: var(--text-sm); }
+.stepper li { flex: 1; display: flex; align-items: center; gap: 8px; padding: 10px 14px; color: var(--text-muted); border-bottom: 2px solid var(--border); }
+.stepper li::before { counter-increment: s; content: counter(s); display: grid; place-items: center; width: 24px; height: 24px; flex: none; border: 1px solid var(--border-input); border-radius: 6px; font-weight: 600; font-size: var(--text-xs); }
+.stepper li[aria-current="step"] { color: var(--text); border-bottom-color: var(--accent); font-weight: 500; }
+.stepper li[aria-current="step"]::before { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+.stepper li.done { color: var(--text); }
+.stepper li.done::before { content: "✓"; color: var(--accent); border-color: var(--accent); }
+@media (max-width: 640px) { .stepper li span { display: none; } .stepper li[aria-current="step"] span { display: inline; } }
+
+/* ---------- Credential, frameworks, proof ---------- */
+.credential { display: flex; gap: var(--space-4); align-items: center; padding: var(--space-4); border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface); max-width: 460px; }
+.credential__seal { flex: none; width: 56px; height: 56px; display: grid; place-items: center; border-radius: 50%; border: 2px solid var(--data); color: var(--data); font: 600 var(--text-xs) var(--font-sans); text-align: center; line-height: 1.1; }
+.credential p { margin: 0; font-size: var(--text-sm); color: var(--text-muted); }
+.frameworks { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+
+/* ---------- How it works (icon diagram, v1.1) ---------- */
+.flow { display: grid; gap: var(--space-8) var(--space-4); grid-template-columns: repeat(4, minmax(0, 1fr)); list-style: none; padding: 0; margin: 0; }
+.flow li { position: relative; display: grid; gap: var(--space-4); align-content: start; }
+.flow li p { margin: 0; }
+.flow__icon { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 50%; border: 1px solid var(--border-input); background: var(--surface); color: var(--accent); }
+.flow li:first-child .flow__icon { background: var(--accent-subtle); border-color: var(--accent); }
+.flow__icon svg { width: 24px; height: 24px; }
+.flow li:not(:last-child)::after { content: ""; position: absolute; top: 24px; left: 56px; right: -8px; height: 1px; background: var(--border-input); }
+@media (max-width: 767px) {
+  .flow { grid-template-columns: 1fr; gap: var(--space-6); }
+  .flow li { grid-template-columns: 48px 1fr; align-items: start; }
+  .flow li:not(:last-child)::after { top: 56px; bottom: -16px; left: 24px; right: auto; width: 1px; height: auto; }
+}
+
+/* ---------- FAQ ---------- */
+.faq details { border-bottom: 1px solid var(--border); padding: var(--space-4) 0; }
+.faq summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; gap: var(--space-4); font-weight: 600; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: ""; width: 9px; height: 9px; flex: none; margin-top: 7px; border-right: 2px solid var(--text-muted); border-bottom: 2px solid var(--text-muted); transform: rotate(45deg); transition: transform var(--dur-fast) var(--ease); }
+.faq details[open] summary::after { transform: rotate(-135deg); }
+.faq details p { margin: var(--space-3) 0 0; color: var(--text-muted); }
+
+/* ---------- Cookie banner ---------- */
+.cookie { position: fixed; left: 16px; right: 16px; bottom: 16px; z-index: 30; max-width: 560px; margin-left: auto; background: var(--surface); border: 1px solid var(--border-input); border-radius: var(--radius-lg); box-shadow: var(--shadow-md); padding: var(--space-6); }
+.cookie.inline { position: static; margin: 0; }
+.cookie p { font-size: var(--text-sm); color: var(--text-muted); }
+.cookie .row .btn { flex: 1; } /* Accept and Reject equal weight (TTDSG/GDPR) */
+
+/* ---------- Footer ---------- */
+.site-footer { border-top: 1px solid var(--border); padding: var(--space-16) 0 var(--space-8); font-size: var(--text-sm); color: var(--text-muted); }
+.site-footer .cols { display: grid; gap: var(--space-8); grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+.site-footer h4 { color: var(--text); font-size: var(--text-sm); }
+.site-footer ul { list-style: none; margin: 0; padding: 0; }
+.site-footer li { margin: 6px 0; }
+.site-footer a { color: var(--text-muted); text-decoration: none; }
+.site-footer a:hover { color: var(--text); }
+.legal-line { margin-top: var(--space-12); padding-top: var(--space-6); border-top: 1px solid var(--border); display: flex; flex-wrap: wrap; gap: var(--space-4); justify-content: space-between; }
+
+/* ---------- Spec-page helpers (design-system previews only) ---------- */
+.ds-label { font: 400 11px/1.4 var(--font-mono); color: var(--text-muted); margin: var(--space-6) 0 var(--space-2); text-transform: uppercase; letter-spacing: .08em; }
+.ds-box { border: 1px dashed var(--border-input); border-radius: var(--radius-lg); padding: var(--space-6); background: var(--bg); }
+
+/* ---------- Fixes / responsive refinements ---------- */
+.advisor__log { max-height: min(70vh, 640px); }
+.advisor__log--static { max-height: none; } /* spec previews only */
+.rec .card__icon { width: 40px; height: 40px; margin: 0; }
+.site-header .btn { white-space: nowrap; }
+@media (max-width: 479px) { .header-actions .btn--sm { display: none; } } /* "Book a call" moves into the menu */
+
+/* ---------- Hero motion (home hero only, v1.1; spec: hero-motion.md) ---------- */
+:root { --glow-strength: 16%; --wave-fill: 0.07; --wave-line: 0.42; --grid-line: #64748b; }
+:root[data-theme="dark"] { --glow-strength: 20%; --wave-fill: 0.06; --wave-line: 0.5; --grid-line: #94a3b8; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --glow-strength: 20%; --wave-fill: 0.06; --wave-line: 0.5; --grid-line: #94a3b8; } }
+.hero-motion { position: relative; isolation: isolate; overflow: hidden; }
+.hero-motion.has-canvas::before { display: none; } /* the canvas draws the grid; the still texture is the no-script fallback */
+.hero-motion__glow { position: absolute; inset: -20%; z-index: -2; pointer-events: none;
+  background:
+    radial-gradient(38% 42% at 74% 30%, color-mix(in srgb, var(--brand) var(--glow-strength), transparent), transparent 70%),
+    radial-gradient(34% 40% at 16% 82%, color-mix(in srgb, var(--data) var(--glow-strength), transparent), transparent 70%);
+  animation: hero-drift 22s ease-in-out infinite alternate; }
+.hero-motion__grid { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none;
+  -webkit-mask-image: radial-gradient(ellipse 95% 95% at 50% 40%, #000 25%, transparent 78%); mask-image: radial-gradient(ellipse 95% 95% at 50% 40%, #000 25%, transparent 78%); }
+.hero-motion.is-paused .hero-motion__glow { animation-play-state: paused; }
+.hero-motion__pause { position: absolute; right: max(20px, env(safe-area-inset-right, 0px)); bottom: 20px; background: var(--surface); }
+.hero-motion__pause [hidden] { display: none; }
+.hero-motion h1 .line { display: block; overflow: hidden; padding-bottom: 0.14em; margin-bottom: -0.14em; }
+.hero-motion h1 .line > * { display: block; }
+.hero-motion .overline { animation: hero-fade 500ms var(--ease) both; }
+.hero-motion h1 .line > * { animation: hero-rise 750ms var(--ease) both; }
+.hero-motion h1 .line:nth-child(1) > * { animation-delay: 120ms; }
+.hero-motion h1 .line:nth-child(2) > * { animation-delay: 320ms; }
+.hero-motion .advisor { animation: hero-lift 700ms var(--ease) 380ms both; }
+.hero-motion .lead { animation: hero-lift 600ms var(--ease) 640ms both; }
+.hero-motion .hero-more { animation: hero-lift 600ms var(--ease) 800ms both; }
+@keyframes hero-drift { from { transform: translate3d(-2%, -1%, 0) scale(1); } to { transform: translate3d(3%, 2%, 0) scale(1.08); } }
+@keyframes hero-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes hero-rise { from { transform: translateY(108%); } to { transform: none; } }
+@keyframes hero-lift { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+/* ---------- Section backgrounds (home, v1.2; spec: backgrounds.md) ---------- */
+.band { position: relative; isolation: isolate; overflow: hidden;
+  --bg: var(--band-bg); --surface: var(--band-surface); --surface-sunken: var(--band-bg); --border: var(--band-border); --border-input: var(--band-border-input);
+  --text: var(--band-text); --text-muted: var(--band-text-muted); --accent: var(--band-accent); --accent-hover: var(--band-text); --accent-subtle: var(--band-accent-subtle); --on-accent: var(--band-on-accent);
+  background: var(--band-bg); color: var(--band-text); }
+.band::before, .band::after { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; }
+.band::before { background:
+  radial-gradient(40% 55% at 88% 12%, color-mix(in srgb, var(--brand) 26%, transparent), transparent 70%),
+  radial-gradient(36% 50% at 6% 92%, color-mix(in srgb, var(--data) 22%, transparent), transparent 70%); }
+.band::after { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='97' viewBox='0 0 56 97'%3E%3Cpath d='M28 0 56 16v32L28 64 0 48V16zM28 64v33M0 16 0 0M56 16V0' fill='none' stroke='%2394a3b8' stroke-opacity='.3'/%3E%3C/svg%3E");
+  -webkit-mask-image: radial-gradient(ellipse 60% 70% at 85% 20%, #000, transparent 72%); mask-image: radial-gradient(ellipse 60% 70% at 85% 20%, #000, transparent 72%); }
+.band > .section { background: none; }
+.band > .section:not(:last-child) { padding-bottom: 0; }
+.band .card--link:hover { box-shadow: none; }
+.section--tint { position: relative; isolation: isolate; overflow: hidden; background: var(--accent-subtle); }
+.section--tint::after { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: radial-gradient(50% 90% at 50% 0%, color-mix(in srgb, var(--brand) var(--glow-strength), transparent), transparent 70%); }
+
+</style>
+</head>
+<body>
+<header class="site-header"><div class="container">
+  <a class="brand" href="home.html" aria-label="ivmanto home"><svg class="lockup" viewBox="-1319.7 -960.0 5344.5 1160.0" width="138" height="30" role="img" aria-label="ivmanto"><g transform="translate(-1489.93 -1061.10) scale(21.2844)"><polygon points="32.00,7.00 53.65,19.50 53.65,44.50 32.00,57.00 10.35,44.50 10.35,19.50" fill="none" stroke="var(--text)" stroke-width="4.5" stroke-linejoin="round"/><polyline points="19.00,31.95 32,22.5 45.00,31.95" fill="none" stroke="var(--brand)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/><polyline points="22.50,41.41 32,34.5 41.50,41.41" fill="none" stroke="var(--text)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/></g><path fill="var(--text)" d="M63 0V-510H202V0ZM58 -586V-737H207V-586Z M931.84 0V-510H1066.84V-390H1070.84V0ZM1275.84 0V-326Q1275.84 -369 1254.34 -388.5Q1232.84 -408 1193.84 -408Q1158.84 -408 1130.84 -392.5Q1102.84 -377 1086.84 -348.5Q1070.84 -320 1070.84 -281L1057.84 -397Q1082.84 -453 1130.84 -486.5Q1178.84 -520 1244.84 -520Q1323.84 -520 1368.84 -475.5Q1413.84 -431 1413.84 -361V0ZM1618.84 0V-326Q1618.84 -369 1597.34 -388.5Q1575.84 -408 1536.84 -408Q1501.84 -408 1473.84 -392.5Q1445.84 -377 1429.84 -348.5Q1413.84 -320 1413.84 -281L1390.84 -397Q1415.84 -453 1466.34 -486.5Q1516.84 -520 1585.84 -520Q1666.84 -520 1711.84 -474Q1756.84 -428 1756.84 -353V0Z M2205.84 0Q2199.84 -21 2197.84 -45.5Q2195.84 -70 2195.84 -103H2191.84V-345Q2191.84 -380 2170.34 -399.5Q2148.84 -419 2104.84 -419Q2063.84 -419 2039.34 -404Q2014.84 -389 2007.84 -361H1876.84Q1885.84 -431 1945.84 -475.5Q2005.84 -520 2109.84 -520Q2216.84 -520 2272.84 -471.5Q2328.84 -423 2328.84 -332V-103Q2328.84 -79 2332.34 -53.5Q2335.84 -28 2343.84 0ZM2028.84 10Q1951.84 10 1906.84 -28.5Q1861.84 -67 1861.84 -132Q1861.84 -202 1913.84 -244.5Q1965.84 -287 2060.84 -300L2214.84 -322V-239L2082.84 -219Q2040.84 -212 2019.84 -195.5Q1998.84 -179 1998.84 -149Q1998.84 -121 2018.34 -107Q2037.84 -93 2071.84 -93Q2121.84 -93 2156.84 -119.5Q2191.84 -146 2191.84 -182L2204.84 -104Q2183.84 -48 2138.84 -19Q2093.84 10 2028.84 10Z M2470.84 0V-510H2605.84V-390H2609.84V0ZM2827.84 0V-319Q2827.84 -364 2805.34 -386Q2782.84 -408 2738.84 -408Q2700.84 -408 2671.84 -391Q2642.84 -374 2626.34 -344.5Q2609.84 -315 2609.84 -274L2596.84 -397Q2621.84 -453 2670.84 -486.5Q2719.84 -520 2790.84 -520Q2874.84 -520 2920.34 -473Q2965.84 -426 2965.84 -347V0Z M3321.84 11Q3225.84 11 3179.84 -35Q3133.84 -81 3133.84 -174V-625L3271.84 -676V-170Q3271.84 -135 3291.34 -117.5Q3310.84 -100 3352.84 -100Q3368.84 -100 3381.84 -103Q3394.84 -106 3407.84 -110V-3Q3394.84 3 3372.34 7Q3349.84 11 3321.84 11ZM3037.84 -404V-510H3407.84V-404Z M3739.84 10Q3657.84 10 3595.34 -24Q3532.84 -58 3497.84 -118.5Q3462.84 -179 3462.84 -257Q3462.84 -336 3497.84 -395Q3532.84 -454 3595.34 -487Q3657.84 -520 3739.84 -520Q3823.84 -520 3885.84 -487Q3947.84 -454 3982.34 -395Q4016.84 -336 4016.84 -257Q4016.84 -179 3982.34 -118.5Q3947.84 -58 3885.34 -24Q3822.84 10 3739.84 10ZM3739.84 -100Q3777.84 -100 3807.84 -119Q3837.84 -138 3855.84 -173.5Q3873.84 -209 3873.84 -258Q3873.84 -330 3835.34 -370Q3796.84 -410 3739.84 -410Q3682.84 -410 3644.84 -369.5Q3606.84 -329 3606.84 -258Q3606.84 -209 3624.34 -173.5Q3641.84 -138 3672.34 -119Q3702.84 -100 3739.84 -100Z"/><path fill="var(--brand)" d="M292 -510H438.21L579.87 -180.55L993.51 -800L657.51 0H511.3Z"/></svg></a>
+  <nav class="nav" aria-label="Main">
+    <a href="pillar.html">Services</a><a href="package.html">Packages</a><a href="#">Insights</a><a href="#">About</a>
+  </nav>
+  <div class="header-actions">
+    <button class="icon-btn" data-toggle-theme aria-label="Switch light or dark theme"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 0 0 16z" fill="currentColor"/></svg></button>
+    <a class="btn btn--primary btn--sm" href="#">Book a call</a>
+    <button class="icon-btn menu-btn" aria-label="Open menu"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+  </div>
+</div></header>
+
+<main class="container" style="padding:var(--space-16) 20px">
+  <p class="overline">Components v0.1</p>
+  <h1>Component library</h1>
+  <p class="lead">Every element the relaunch needs, in both themes (toggle in the header). Specs: <span class="mono">components/*.md</span>. Styles: <span class="mono">components/ivmanto.css</span>.</p>
+
+  <h2 style="margin-top:var(--space-16)">Buttons</h2>
+  <div class="ds-label">primary · secondary · ghost · small · disabled</div>
+  <div class="ds-box row">
+    <a class="btn btn--primary" href="#">Find the right service <svg class="chev" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></a>
+    <a class="btn btn--secondary" href="#">See packages</a>
+    <a class="btn btn--ghost" href="#">How it works <svg class="chev" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></a>
+    <a class="btn btn--primary btn--sm" href="#">Book a call</a>
+    <button class="btn btn--primary" disabled>Sending…</button>
+  </div>
+
+  <h2 style="margin-top:var(--space-16)">Tags and badges</h2>
+  <div class="ds-box row">
+    <span class="tag tag--risk tag--low">Low risk</span><span class="tag tag--risk tag--medium">Limited risk</span><span class="tag tag--risk tag--high">High risk</span>
+    <span class="tag tag--framework">ISO/IEC 42001</span><span class="tag tag--framework">EU AI Act</span><span class="tag tag--framework">NIST AI RMF</span>
+    <span class="tag tag--pillar">Governance</span><span class="badge-recommended">Recommended</span>
+  </div>
+
+  <h2 style="margin-top:var(--space-16)">AI service advisor</h2>
+  <p class="muted">The home-page funnel (epic #112). The order of the states below matches the visitor's journey.</p>
+
+  <div class="grid grid-2" style="align-items:start">
+    <div>
+      <div class="ds-label">1 · idle, before first send (privacy notice shown)</div>
+      <div class="advisor">
+        <div class="advisor__head"><svg class="avatar" viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="14" fill="var(--accent)"/><path fill="var(--on-accent)" transform="translate(0.84 22.95) scale(0.02187)" d="M292 -510H438.21L579.87 -180.55L993.51 -800L657.51 0H511.3Z"/></svg><strong>ivmanto advisor</strong><span class="ai-label">AI</span></div>
+        <div class="advisor__log advisor__log--static">
+          <div class="msg msg--ai"><svg class="avatar" viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="14" fill="var(--accent)"/><path fill="var(--on-accent)" transform="translate(0.84 22.95) scale(0.02187)" d="M292 -510H438.21L579.87 -180.55L993.51 -800L657.51 0H511.3Z"/></svg><div><p>Describe in a sentence or two what you're working on or worried about. I'll suggest which of our governance, risk or compliance services fit.</p></div></div>
+        </div>
+        <div class="prompt-chips"><button class="chip">We're rolling out an internal AI assistant</button><button class="chip">Does the EU AI Act apply to us?</button><button class="chip">We need ISO 42001 readiness</button></div>
+        <form class="advisor__form" onsubmit="return false">
+          <div class="notice" style="margin-bottom:12px"><p><strong>Before you send:</strong> your message is processed by an AI model (Mistral) on our behalf to answer you. Don't include personal or confidential data. Messages are deleted after [N] days. <a href="#">Privacy notice</a></p></div>
+          <div class="advisor__input"><label class="sr-only" for="q1">Your question</label><textarea id="q1" rows="2" maxlength="600" placeholder="e.g. We use ChatGPT in sales and want to know what we must document"></textarea><button class="btn btn--primary" aria-label="Send"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
+          <div class="advisor__meta"><span>You're talking to an AI. Answers are guidance, not legal advice.</span><span>0 / 600</span></div>
+        </form>
+      </div>
+    </div>
+
+    <div>
+      <div class="ds-label">2 · thinking</div>
+      <div class="advisor">
+        <div class="advisor__head"><svg class="avatar" viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="14" fill="var(--accent)"/><path fill="var(--on-accent)" transform="translate(0.84 22.95) scale(0.02187)" d="M292 -510H438.21L579.87 -180.55L993.51 -800L657.51 0H511.3Z"/></svg><strong>ivmanto advisor</strong><span class="ai-label">AI</span></div>
+        <div class="advisor__log advisor__log--static">
+          <div class="msg msg--user">We're a 60-person logistics firm. Our dispatchers started using an AI tool to plan routes and nobody approved it.</div>
+          <div class="msg msg--ai"><svg class="avatar" viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="14" fill="var(--accent)"/><path fill="var(--on-accent)" transform="translate(0.84 22.95) scale(0.02187)" d="M292 -510H438.21L579.87 -180.55L993.51 -800L657.51 0H511.3Z"/></svg><div><span class="typing" role="status" aria-label="Advisor is answering"><i></i><i></i><i></i></span></div></div>
+        </div>
+      </div>
+      <div class="ds-label">5 · error / fallback (timeout, model down)</div>
+      <div class="notice notice--error"><p><strong>The advisor can't answer right now.</strong> Your question wasn't lost. You can still talk to a person:</p><div class="row"><a class="btn btn--secondary btn--sm" href="#">Book a call</a><a class="btn btn--ghost btn--sm" href="#">Browse packages</a></div></div>
+      <div class="ds-label">6 · limit reached (rate limit or 4 turns)</div>
+      <div class="notice"><p>That's as far as I can help in a chat. The next step works best with a person.</p><div class="row"><a class="btn btn--primary btn--sm" href="#">Book a 30-min call</a><a class="btn btn--ghost btn--sm" href="#">Leave your contact</a></div></div>
+    </div>
+  </div>
+
+  <div class="ds-label">3 · answer with recommendations and CTA set</div>
+  <div class="advisor" style="max-width:760px">
+    <div class="advisor__head"><svg class="avatar" viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="14" fill="var(--accent)"/><path fill="var(--on-accent)" transform="translate(0.84 22.95) scale(0.02187)" d="M292 -510H438.21L579.87 -180.55L993.51 -800L657.51 0H511.3Z"/></svg><strong>ivmanto advisor</strong><span class="ai-label">AI</span></div>
+    <div class="advisor__log advisor__log--static">
+      <div class="msg msg--user">We're a 60-person logistics firm. Our dispatchers started using an AI tool to plan routes and nobody approved it.</div>
+      <div class="msg msg--ai"><svg class="avatar" viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="14" fill="var(--accent)"/><path fill="var(--on-accent)" transform="translate(0.84 22.95) scale(0.02187)" d="M292 -510H438.21L579.87 -180.55L993.51 -800L657.51 0H511.3Z"/></svg><div>
+        <p>That's a common starting point: the AI is already in use and governance has to catch up. Two things matter first: know what's running (an inventory), and decide who owns approving AI tools. Route planning is unlikely to be "high-risk" under the EU AI Act, but you still carry GDPR and contract obligations for the data you feed it.</p>
+        <p class="small muted">Services that fit:</p>
+        <div class="rec"><svg class="card__icon" viewBox="0 0 44 44" width="44" height="44" aria-hidden="true"><rect x="3" y="3" width="38" height="38" rx="9" fill="var(--accent-subtle)" stroke="var(--accent)" stroke-width="1.5"/><text x="22" y="27.5" text-anchor="middle" font-family="Montserrat, Inter, sans-serif" font-size="15" font-weight="600" fill="var(--accent)">G</text></svg><div><div class="rec__title">AI inventory &amp; ownership</div></div><div class="rec__price">€ [price]</div><p class="rec__why">Lists every AI tool in use, its owner and its risk class, so approvals have a baseline.</p></div>
+        <div class="rec"><svg class="card__icon" viewBox="0 0 44 44" width="44" height="44" aria-hidden="true"><rect x="3" y="3" width="38" height="38" rx="9" fill="var(--accent-subtle)" stroke="var(--accent)" stroke-width="1.5"/><text x="22" y="27.5" text-anchor="middle" font-family="Montserrat, Inter, sans-serif" font-size="15" font-weight="600" fill="var(--accent)">R</text></svg><div><div class="rec__title">AI risk assessment</div></div><div class="rec__price">€ [price]</div><p class="rec__why">Checks the route-planning tool for data, vendor and decision risks.</p></div>
+        <div class="cta-set">
+          <a class="cta cta--primary" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2l2.4 11.2a1 1 0 0 0 1 .8h8.8a1 1 0 0 0 1-.8L20 8H6.2"/><circle cx="9" cy="20" r="1.2"/><circle cx="17" cy="20" r="1.2"/></svg><strong>Order package</strong><span>Fixed scope and price</span></a>
+          <a class="cta" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5c0 8.3 6.7 15 15 15l1-4-4-2-2 2a11 11 0 0 1-6-6l2-2-2-4z"/></svg><strong>Book a call</strong><span>[30 min, free]</span></a>
+          <a class="cta" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><strong>Schedule later</strong><span>Pick a time</span></a>
+          <a class="cta" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg><strong>Leave contact</strong><span>[Reply within 1 working day]</span></a>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="ds-label">4 · lead form (opens from "Leave contact")</div>
+  <div class="card" style="max-width:560px">
+    <h3>Leave your contact</h3>
+    <p class="small muted">Nick replies personally [within one working day].</p>
+    <div class="field"><label for="n">Name</label><input class="input" id="n" autocomplete="name"></div>
+    <div class="field"><label for="e">Work email</label><input class="input" id="e" type="email" autocomplete="email"></div>
+    <div class="field field--error"><label for="c">Company</label><input class="input" id="c" autocomplete="organization" aria-invalid="true" aria-describedby="c-h"><span class="hint" id="c-h">Please enter your company name.</span></div>
+    <label class="consent"><input type="checkbox"><span>I agree that ivmanto may use my details and my advisor conversation to answer this request. Withdraw any time. <a href="#">Privacy notice</a></span></label>
+    <label class="consent"><input type="checkbox"><span>Optional: send me occasional insights on AI governance (max. monthly, unsubscribe any time).</span></label>
+    <button class="btn btn--primary btn--block">Send</button>
+  </div>
+
+  <h2 style="margin-top:var(--space-16)">Cards</h2>
+  <div class="ds-label">pillar card</div>
+  <div class="grid grid-3">
+    <div class="card card--link pillar"><svg class="card__icon" viewBox="0 0 44 44" width="44" height="44" aria-hidden="true"><rect x="3" y="3" width="38" height="38" rx="9" fill="var(--accent-subtle)" stroke="var(--accent)" stroke-width="1.5"/><text x="22" y="27.5" text-anchor="middle" font-family="Montserrat, Inter, sans-serif" font-size="15" font-weight="600" fill="var(--accent)">G</text></svg><h3><a class="card__link" href="#" style="color:inherit;text-decoration:none">Governance</a></h3><p class="muted small">Roles, decision rights and policies for how your company uses AI.</p><ul><li>AI policy &amp; acceptable use</li><li>AI inventory &amp; ownership</li></ul></div>
+  </div>
+  <div class="ds-label">package cards (default · recommended)</div>
+  <div class="grid grid-3">
+    <div class="card package"><div class="package__top"><span class="tag tag--pillar">Risk</span></div><h3>AI risk assessment</h3><div class="package__price">€ [price]<small>fixed, excl. VAT</small></div><div class="package__meta"><span><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> 3 weeks</span><span><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/></svg> Risk register + report</span></div><ul class="ticks"><li>Scope workshop (2 h)</li><li>Risk register for up to 5 AI systems</li><li>Prioritised mitigation plan</li></ul><a class="btn btn--secondary" href="#">View package</a></div>
+    <div class="card package package--recommended"><div class="package__top"><span class="tag tag--pillar">Compliance</span><span class="badge-recommended">Recommended</span></div><h3>EU AI Act readiness</h3><div class="package__price">€ [price]<small>fixed, excl. VAT</small></div><div class="package__meta"><span><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> 4 weeks</span><span><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/></svg> Gap report + roadmap</span></div><ul class="ticks"><li>Classification of your AI systems</li><li>Gap analysis against obligations</li><li>12-month roadmap</li></ul><a class="btn btn--primary" href="#">View package</a></div>
+  </div>
+  <p class="small muted">Package names, scope and prices are placeholders until Nick defines the catalogue.</p>
+
+  <h2 style="margin-top:var(--space-16)">Order stepper</h2>
+  <div class="ds-box"><ol class="stepper"><li class="done"><span>Package</span></li><li aria-current="step"><span>Your details</span></li><li><span>Review</span></li><li><span>Confirmation</span></li></ol></div>
+
+  <h2 style="margin-top:var(--space-16)">Credential and frameworks</h2>
+  <div class="ds-box row" style="gap:var(--space-8)">
+    <div class="credential"><div class="credential__seal">MIT<br>PE</div><div><strong>MIT Professional Education</strong><p>Certificate · verified on Accredible <a href="#">View credential</a></p></div></div>
+    <div class="frameworks"><span class="tag tag--framework">EU AI Act</span><span class="tag tag--framework">ISO/IEC 42001</span><span class="tag tag--framework">ISO/IEC 27001</span><span class="tag tag--framework">NIST AI RMF</span><span class="tag tag--framework">GDPR</span></div>
+  </div>
+  <p class="small muted">The seal is a placeholder. The live site uses the official Accredible badge image and link. Frameworks are listed as "we work with", never as certified or partnered.</p>
+
+  <h2 style="margin-top:var(--space-16)">How it works</h2>
+  <ol class="flow"><li><span class="flow__icon"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5h16v11H11l-4.5 3.5v-3.5H4z"/><path d="M8 9.5h8M8 12.5h5"/></svg></span><div><h4>Describe</h4><p class="small muted">Ask the advisor or book a call.</p></div></li><li><span class="flow__icon"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M8.5 12.2l2.6 2.6 4.6-5.2"/></svg></span><div><h4>Choose</h4><p class="small muted">Fixed scope and price, up front.</p></div></li><li><span class="flow__icon"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3.5h8l4 4v13H6z"/><path d="M14 3.5v4h4M9 12h6M9 15.5h6"/></svg></span><div><h4>Deliver</h4><p class="small muted">Workshops and documents, built with you.</p></div></li><li><span class="flow__icon"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14v5.5h16V14"/><path d="M12 4v10.5M8 10.5l4 4 4-4"/></svg></span><div><h4>Hand over</h4><p class="small muted">Everything stays in your tools.</p></div></li></ol>
+
+  <h2 style="margin-top:var(--space-16)">FAQ</h2>
+  <div class="faq" style="max-width:760px"><details open><summary>Is this legal advice?</summary><p>No. We provide governance, risk and compliance consulting. Where legal interpretation is needed, we work alongside your lawyer.</p></details><details><summary>Can you work in German?</summary><p>Placeholder answer.</p></details></div>
+
+  <h2 style="margin-top:var(--space-16)">Cookie banner</h2>
+  <div class="cookie inline"><h4>Cookies</h4><p>We use analytics cookies only if you agree. Essential cookies keep the site working. <a href="#">Details</a></p><div class="row"><button class="btn btn--secondary">Reject</button><button class="btn btn--secondary">Settings</button><button class="btn btn--primary">Accept</button></div></div>
+  <p class="small muted">Accept and Reject are the same size and on the first layer (TTDSG §25 / GDPR; the German authorities' guidance).</p>
+</main>
+<footer class="site-footer"><div class="container">
+  <div class="cols">
+    <div><a class="brand" href="home.html"><svg class="wordmark" viewBox="50.0 -808.0 3974.8 827.0" width="106" height="22" role="img" aria-label="ivmanto"><path fill="var(--text)" d="M63 0V-510H202V0ZM58 -586V-737H207V-586Z M931.84 0V-510H1066.84V-390H1070.84V0ZM1275.84 0V-326Q1275.84 -369 1254.34 -388.5Q1232.84 -408 1193.84 -408Q1158.84 -408 1130.84 -392.5Q1102.84 -377 1086.84 -348.5Q1070.84 -320 1070.84 -281L1057.84 -397Q1082.84 -453 1130.84 -486.5Q1178.84 -520 1244.84 -520Q1323.84 -520 1368.84 -475.5Q1413.84 -431 1413.84 -361V0ZM1618.84 0V-326Q1618.84 -369 1597.34 -388.5Q1575.84 -408 1536.84 -408Q1501.84 -408 1473.84 -392.5Q1445.84 -377 1429.84 -348.5Q1413.84 -320 1413.84 -281L1390.84 -397Q1415.84 -453 1466.34 -486.5Q1516.84 -520 1585.84 -520Q1666.84 -520 1711.84 -474Q1756.84 -428 1756.84 -353V0Z M2205.84 0Q2199.84 -21 2197.84 -45.5Q2195.84 -70 2195.84 -103H2191.84V-345Q2191.84 -380 2170.34 -399.5Q2148.84 -419 2104.84 -419Q2063.84 -419 2039.34 -404Q2014.84 -389 2007.84 -361H1876.84Q1885.84 -431 1945.84 -475.5Q2005.84 -520 2109.84 -520Q2216.84 -520 2272.84 -471.5Q2328.84 -423 2328.84 -332V-103Q2328.84 -79 2332.34 -53.5Q2335.84 -28 2343.84 0ZM2028.84 10Q1951.84 10 1906.84 -28.5Q1861.84 -67 1861.84 -132Q1861.84 -202 1913.84 -244.5Q1965.84 -287 2060.84 -300L2214.84 -322V-239L2082.84 -219Q2040.84 -212 2019.84 -195.5Q1998.84 -179 1998.84 -149Q1998.84 -121 2018.34 -107Q2037.84 -93 2071.84 -93Q2121.84 -93 2156.84 -119.5Q2191.84 -146 2191.84 -182L2204.84 -104Q2183.84 -48 2138.84 -19Q2093.84 10 2028.84 10Z M2470.84 0V-510H2605.84V-390H2609.84V0ZM2827.84 0V-319Q2827.84 -364 2805.34 -386Q2782.84 -408 2738.84 -408Q2700.84 -408 2671.84 -391Q2642.84 -374 2626.34 -344.5Q2609.84 -315 2609.84 -274L2596.84 -397Q2621.84 -453 2670.84 -486.5Q2719.84 -520 2790.84 -520Q2874.84 -520 2920.34 -473Q2965.84 -426 2965.84 -347V0Z M3321.84 11Q3225.84 11 3179.84 -35Q3133.84 -81 3133.84 -174V-625L3271.84 -676V-170Q3271.84 -135 3291.34 -117.5Q3310.84 -100 3352.84 -100Q3368.84 -100 3381.84 -103Q3394.84 -106 3407.84 -110V-3Q3394.84 3 3372.34 7Q3349.84 11 3321.84 11ZM3037.84 -404V-510H3407.84V-404Z M3739.84 10Q3657.84 10 3595.34 -24Q3532.84 -58 3497.84 -118.5Q3462.84 -179 3462.84 -257Q3462.84 -336 3497.84 -395Q3532.84 -454 3595.34 -487Q3657.84 -520 3739.84 -520Q3823.84 -520 3885.84 -487Q3947.84 -454 3982.34 -395Q4016.84 -336 4016.84 -257Q4016.84 -179 3982.34 -118.5Q3947.84 -58 3885.34 -24Q3822.84 10 3739.84 10ZM3739.84 -100Q3777.84 -100 3807.84 -119Q3837.84 -138 3855.84 -173.5Q3873.84 -209 3873.84 -258Q3873.84 -330 3835.34 -370Q3796.84 -410 3739.84 -410Q3682.84 -410 3644.84 -369.5Q3606.84 -329 3606.84 -258Q3606.84 -209 3624.34 -173.5Q3641.84 -138 3672.34 -119Q3702.84 -100 3739.84 -100Z"/><path fill="var(--brand)" d="M292 -510H438.21L579.87 -180.55L993.51 -800L657.51 0H511.3Z"/></svg></a><p style="margin-top:16px">AI governance, risk and compliance services for SMEs. Delivered by Nikolay Tonev.</p></div>
+    <div><h4>Services</h4><ul><li><a href="pillar.html">Governance</a></li><li><a href="#">Risk management</a></li><li><a href="#">Compliance</a></li><li><a href="package.html">All packages</a></li></ul></div>
+    <div><h4>Company</h4><ul><li><a href="#">About</a></li><li><a href="#">Insights</a></li><li><a href="#">Book a call</a></li><li><a href="#">Contact</a></li></ul></div>
+    <div><h4>Legal</h4><ul><li><a href="#">Imprint</a></li><li><a href="#">Privacy</a></li><li><a href="#">Terms</a></li><li><a href="#">Cookie settings</a></li><li><a href="#">AI use on this site</a></li></ul></div>
+  </div>
+  <div class="legal-line"><span>© 2026 ivmanto</span><span>Information on this site is not legal advice.</span></div>
+</div></footer>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  function get() { try { return localStorage.getItem('ivm-theme'); } catch (e) { return null; } }
+  function set(t) { try { localStorage.setItem('ivm-theme', t); } catch (e) {} }
+  var t = get(); if (t) root.dataset.theme = t;
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-toggle-theme]'); if (!b) return;
+    var dark = root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+    root.dataset.theme = dark ? 'light' : 'dark'; set(root.dataset.theme);
+  });
+})();
+</script>
+
+</body>
+</html>
