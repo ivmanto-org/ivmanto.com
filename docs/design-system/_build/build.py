@@ -31,6 +31,12 @@ ICONS = {
     "menu": '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>',
 }
 
+ICONS["pause"] = '<svg class="i-pause" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M9 6v12M15 6v12"/></svg>'
+ICONS["play"] = '<svg class="i-play" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true" hidden><path d="M8 5.5l10 6.5-10 6.5z"/></svg>'
+# How-it-works step icons: the files in assets/icons are the source
+for _f in sorted((DS / "assets/icons").glob("step-*.svg")):
+    ICONS[_f.stem.replace("-", "_")] = _f.read_text().strip().replace("<svg ", '<svg aria-hidden="true" ', 1)
+
 def pillar_icon(letter):
     return ('<svg class="card__icon" viewBox="0 0 44 44" width="44" height="44" aria-hidden="true"><rect x="3" y="3" width="38" height="38" rx="9" fill="var(--accent-subtle)" '
             'stroke="var(--accent)" stroke-width="1.5"/><text x="22" y="27.5" text-anchor="middle" font-family="Montserrat, Inter, sans-serif" '
@@ -60,6 +66,7 @@ PARTIALS = {
     "HEADER": (DS / "_build/templates/_header.html").read_text(),
     "FOOTER": (DS / "_build/templates/_footer.html").read_text(),
     "THEME_JS": (DS / "_build/templates/_theme.js").read_text(),
+    "HERO_MOTION_JS": (DS / "_build/templates/_hero_motion.js").read_text(),
 }
 
 HEAD = """<meta charset="utf-8">

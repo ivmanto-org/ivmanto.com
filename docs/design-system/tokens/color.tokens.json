@@ -276,6 +276,51 @@
         "$type": "color",
         "$value": "{color.teal.500}",
         "$description": "Focus ring (2px + 2px offset)"
+      },
+      "band-bg": {
+        "$type": "color",
+        "$value": "{color.navy.900}",
+        "$description": "Dark band fill (home sections 4b + 5)"
+      },
+      "band-surface": {
+        "$type": "color",
+        "$value": "{color.navy.800}",
+        "$description": "Cards inside the band"
+      },
+      "band-border": {
+        "$type": "color",
+        "$value": "#233149",
+        "$description": "Hairlines inside the band"
+      },
+      "band-border-input": {
+        "$type": "color",
+        "$value": "#6b7a93",
+        "$description": "Stronger borders inside the band"
+      },
+      "band-text": {
+        "$type": "color",
+        "$value": "#e6edf5",
+        "$description": "Text inside the band"
+      },
+      "band-text-muted": {
+        "$type": "color",
+        "$value": "#9aa8bc",
+        "$description": "Secondary text inside the band"
+      },
+      "band-accent": {
+        "$type": "color",
+        "$value": "{color.teal.300}",
+        "$description": "Accent inside the band"
+      },
+      "band-accent-subtle": {
+        "$type": "color",
+        "$value": "#0d2b33",
+        "$description": "Tinted fills inside the band"
+      },
+      "band-on-accent": {
+        "$type": "color",
+        "$value": "{color.teal.950}",
+        "$description": "Text on accent fill inside the band"
       }
     },
     "dark": {
@@ -381,6 +426,51 @@
         "$type": "color",
         "$value": "{color.teal.300}",
         "$description": "Focus ring (2px + 2px offset)"
+      },
+      "band-bg": {
+        "$type": "color",
+        "$value": "{color.teal.950}",
+        "$description": "Dark band fill (home sections 4b + 5)"
+      },
+      "band-surface": {
+        "$type": "color",
+        "$value": "#0a3f4a",
+        "$description": "Cards inside the band"
+      },
+      "band-border": {
+        "$type": "color",
+        "$value": "#14606b",
+        "$description": "Hairlines inside the band"
+      },
+      "band-border-input": {
+        "$type": "color",
+        "$value": "#4f8f98",
+        "$description": "Stronger borders inside the band"
+      },
+      "band-text": {
+        "$type": "color",
+        "$value": "#e6edf5",
+        "$description": "Text inside the band"
+      },
+      "band-text-muted": {
+        "$type": "color",
+        "$value": "#a9c4c8",
+        "$description": "Secondary text inside the band"
+      },
+      "band-accent": {
+        "$type": "color",
+        "$value": "{color.teal.200}",
+        "$description": "Accent inside the band"
+      },
+      "band-accent-subtle": {
+        "$type": "color",
+        "$value": "{color.teal.800}",
+        "$description": "Tinted fills inside the band"
+      },
+      "band-on-accent": {
+        "$type": "color",
+        "$value": "{color.teal.950}",
+        "$description": "Text on accent fill inside the band"
       }
     }
   }

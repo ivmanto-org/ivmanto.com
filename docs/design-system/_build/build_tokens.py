@@ -39,6 +39,16 @@ SEMANTIC = {
     "danger":         ("red.700",   "red.300",   "High risk, errors"),
     "danger-subtle":  ("red.100",   "#2e1615",   ""),
     "focus":          ("teal.500",  "teal.300",  "Focus ring (2px + 2px offset)"),
+    # Home dark band (components/backgrounds.md). Inside .band these replace the roles of the same name.
+    "band-bg":            ("navy.900", "teal.950", "Dark band fill (home sections 4b + 5)"),
+    "band-surface":       ("navy.800", "#0a3f4a",  "Cards inside the band"),
+    "band-border":        ("#233149",  "#14606b",  "Hairlines inside the band"),
+    "band-border-input":  ("#6b7a93",  "#4f8f98",  "Stronger borders inside the band"),
+    "band-text":          ("#e6edf5",  "#e6edf5",  "Text inside the band"),
+    "band-text-muted":    ("#9aa8bc",  "#a9c4c8",  "Secondary text inside the band"),
+    "band-accent":        ("teal.300", "teal.200", "Accent inside the band"),
+    "band-accent-subtle": ("#0d2b33",  "teal.800", "Tinted fills inside the band"),
+    "band-on-accent":     ("teal.950", "teal.950", "Text on accent fill inside the band"),
 }
 
 def resolve(ref):
@@ -86,7 +96,11 @@ def build_css():
 
 PAIRS = [("text", "bg"), ("text", "surface"), ("text-muted", "bg"), ("text-muted", "surface"),
          ("accent", "bg"), ("accent", "surface"), ("on-accent", "accent"), ("data", "surface"),
-         ("signal", "surface"), ("success", "surface"), ("danger", "surface"), ("border-input", "surface")]
+         ("signal", "surface"), ("success", "surface"), ("danger", "surface"), ("border-input", "surface"),
+         ("band-text", "band-bg"), ("band-text", "band-surface"), ("band-text-muted", "band-bg"),
+         ("band-text-muted", "band-surface"), ("band-accent", "band-bg"), ("band-accent", "band-surface"),
+         ("band-accent", "band-accent-subtle"), ("band-on-accent", "band-accent"), ("band-border-input", "band-surface"),
+         ("text", "accent-subtle"), ("text-muted", "accent-subtle")]
 
 def contrast_report():
     rows = []
@@ -102,5 +116,5 @@ if __name__ == "__main__":
     (OUT / "contrast.json").write_text(json.dumps(
         [{"theme": t, "fg": f, "bg": b, "ratio": c} for t, f, b, c in contrast_report()], indent=2) + "\n")
     for t, f, b, c in contrast_report():
-        need = 3.0 if f in ("border-input", "data") else 4.5
+        need = 3.0 if f in ("border-input", "band-border-input", "data") else 4.5
         print(f"{t:5} {f:14} on {b:8} {c:5}  {'OK' if c >= need else 'FAIL'} (need {need})")

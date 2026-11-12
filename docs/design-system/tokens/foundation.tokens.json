@@ -257,6 +257,6 @@
         ]
       }
     },
-    "$description": "No infinite animations, no float/blob/glow. Respect prefers-reduced-motion: disable all transforms."
+    "$description": "No infinite animations, no float/blob/glow. One approved exception: the home hero (components/hero-motion.md). Respect prefers-reduced-motion: disable all transforms."
   }
 }

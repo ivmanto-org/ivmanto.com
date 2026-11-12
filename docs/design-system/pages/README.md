@@ -10,6 +10,7 @@ Self-contained HTML previews (open in Claude Desktop or any browser; the header 
 | `order.html` | Order flow, step 2 | B2B order request with a sticky summary |
 
 ## Home: section order and why
+v1.1 (2026-11-11): the order is unchanged, the copy is cut by about half (`home-copy.md`) and the hero has motion (`../components/hero-motion.md`, preview `../previews/hero-motion.html`). v1.2 (2026-11-12): sections 4b and 5 sit in one dark band and the closing CTA is tinted (`../components/backgrounds.md`). `home.html` shows all of this.
 1. **Hero + advisor.** Answer "what is this and is it for me" in one line. Ask "what's your situation" right away, so the visitor gets an individual answer instead of reading a menu.
 2. **Frameworks strip.** Instant orientation for a CAIO or CDO: the vocabulary they search for.
 3. **Three pillars.** For visitors who prefer to browse; each pillar card lists its services.

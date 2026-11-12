@@ -1,7 +1,7 @@
 # ivmanto design system
 
 Owner: Brio (design). Implementation: Clauco (Nuxt 3 + Tailwind). Review: Ivmo. Sign-off: Nick.
-Status: **v1.0, approved by Nick** (2026-11-10); v1.0.1 records later decisions. Handed to Clauco for the new site.
+Status: **v1.0, approved by Nick** (2026-11-10); Later versions (now v1.2.1: home hero motion, text cut, dark band) are in `CHANGELOG.md` and `DECISIONS.md`. Handed to Clauco for the new site.
 
 **What is decided, what is a placeholder, and what was rejected: see [`DECISIONS.md`](DECISIONS.md).** It wins over any other file or chat.
 
@@ -36,7 +36,10 @@ they are wary of hype, and they want to know what they get, from whom, by when, 
 
 ## Principles
 1. **Calm precision.** Trust comes from structure and restraint. Flat surfaces, 1px borders, soft
-   shadows only on hover. No glow, glass, gradient text, floating blobs or infinite animation.
+   shadows only on hover. No glass, gradient text or moving text. One exception, approved by Nick
+   2026-11-11: the home hero has a soft glow, a one-time entrance and a slow wave in the hexagon
+   grid (`components/hero-motion.md`). Nowhere else. Since 2026-11-12 the home page also has one dark
+   band and a tinted closing section, both still (`components/backgrounds.md`).
 2. **One idea, used consistently.** The tick (approved, checked) and the hexagon with rising
    chevrons are the only motifs: logo, avatar, list ticks, funnel steps, a faint hexagon grid at most.
    They are not decoration.

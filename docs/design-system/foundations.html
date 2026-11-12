@@ -71,6 +71,15 @@
   --danger: #b4443f;
   --danger-subtle: #fbe9e8;
   --focus: #00a896;
+  --band-bg: #0a1220;
+  --band-surface: #0f1a2b;
+  --band-border: #233149;
+  --band-border-input: #6b7a93;
+  --band-text: #e6edf5;
+  --band-text-muted: #9aa8bc;
+  --band-accent: #62d5c3;
+  --band-accent-subtle: #0d2b33;
+  --band-on-accent: #062f38;
   color-scheme: light;
 }
 
@@ -96,6 +105,15 @@
   --danger: #f0a19c;
   --danger-subtle: #2e1615;
   --focus: #62d5c3;
+  --band-bg: #062f38;
+  --band-surface: #0a3f4a;
+  --band-border: #14606b;
+  --band-border-input: #4f8f98;
+  --band-text: #e6edf5;
+  --band-text-muted: #a9c4c8;
+  --band-accent: #a0e8db;
+  --band-accent-subtle: #05636f;
+  --band-on-accent: #062f38;
   color-scheme: dark;
 }
 
@@ -122,6 +140,15 @@
     --danger: #f0a19c;
     --danger-subtle: #2e1615;
     --focus: #62d5c3;
+    --band-bg: #062f38;
+    --band-surface: #0a3f4a;
+    --band-border: #14606b;
+    --band-border-input: #4f8f98;
+    --band-text: #e6edf5;
+    --band-text-muted: #a9c4c8;
+    --band-accent: #a0e8db;
+    --band-accent-subtle: #05636f;
+    --band-on-accent: #062f38;
     color-scheme: dark;
   }
 }
@@ -565,6 +592,51 @@ const TOKENS = {
         "$type": "color",
         "$value": "{color.teal.500}",
         "$description": "Focus ring (2px + 2px offset)"
+      },
+      "band-bg": {
+        "$type": "color",
+        "$value": "{color.navy.900}",
+        "$description": "Dark band fill (home sections 4b + 5)"
+      },
+      "band-surface": {
+        "$type": "color",
+        "$value": "{color.navy.800}",
+        "$description": "Cards inside the band"
+      },
+      "band-border": {
+        "$type": "color",
+        "$value": "#233149",
+        "$description": "Hairlines inside the band"
+      },
+      "band-border-input": {
+        "$type": "color",
+        "$value": "#6b7a93",
+        "$description": "Stronger borders inside the band"
+      },
+      "band-text": {
+        "$type": "color",
+        "$value": "#e6edf5",
+        "$description": "Text inside the band"
+      },
+      "band-text-muted": {
+        "$type": "color",
+        "$value": "#9aa8bc",
+        "$description": "Secondary text inside the band"
+      },
+      "band-accent": {
+        "$type": "color",
+        "$value": "{color.teal.300}",
+        "$description": "Accent inside the band"
+      },
+      "band-accent-subtle": {
+        "$type": "color",
+        "$value": "#0d2b33",
+        "$description": "Tinted fills inside the band"
+      },
+      "band-on-accent": {
+        "$type": "color",
+        "$value": "{color.teal.950}",
+        "$description": "Text on accent fill inside the band"
       }
     },
     "dark": {
@@ -670,6 +742,51 @@ const TOKENS = {
         "$type": "color",
         "$value": "{color.teal.300}",
         "$description": "Focus ring (2px + 2px offset)"
+      },
+      "band-bg": {
+        "$type": "color",
+        "$value": "{color.teal.950}",
+        "$description": "Dark band fill (home sections 4b + 5)"
+      },
+      "band-surface": {
+        "$type": "color",
+        "$value": "#0a3f4a",
+        "$description": "Cards inside the band"
+      },
+      "band-border": {
+        "$type": "color",
+        "$value": "#14606b",
+        "$description": "Hairlines inside the band"
+      },
+      "band-border-input": {
+        "$type": "color",
+        "$value": "#4f8f98",
+        "$description": "Stronger borders inside the band"
+      },
+      "band-text": {
+        "$type": "color",
+        "$value": "#e6edf5",
+        "$description": "Text inside the band"
+      },
+      "band-text-muted": {
+        "$type": "color",
+        "$value": "#a9c4c8",
+        "$description": "Secondary text inside the band"
+      },
+      "band-accent": {
+        "$type": "color",
+        "$value": "{color.teal.200}",
+        "$description": "Accent inside the band"
+      },
+      "band-accent-subtle": {
+        "$type": "color",
+        "$value": "{color.teal.800}",
+        "$description": "Tinted fills inside the band"
+      },
+      "band-on-accent": {
+        "$type": "color",
+        "$value": "{color.teal.950}",
+        "$description": "Text on accent fill inside the band"
       }
     }
   }
@@ -819,6 +936,138 @@ const CONTRAST = [
     "fg": "border-input",
     "bg": "surface",
     "ratio": 4.02
+  },
+  {
+    "theme": "light",
+    "fg": "band-text",
+    "bg": "band-bg",
+    "ratio": 15.89
+  },
+  {
+    "theme": "dark",
+    "fg": "band-text",
+    "bg": "band-bg",
+    "ratio": 12.09
+  },
+  {
+    "theme": "light",
+    "fg": "band-text",
+    "bg": "band-surface",
+    "ratio": 14.79
+  },
+  {
+    "theme": "dark",
+    "fg": "band-text",
+    "bg": "band-surface",
+    "ratio": 9.76
+  },
+  {
+    "theme": "light",
+    "fg": "band-text-muted",
+    "bg": "band-bg",
+    "ratio": 7.77
+  },
+  {
+    "theme": "dark",
+    "fg": "band-text-muted",
+    "bg": "band-bg",
+    "ratio": 7.76
+  },
+  {
+    "theme": "light",
+    "fg": "band-text-muted",
+    "bg": "band-surface",
+    "ratio": 7.23
+  },
+  {
+    "theme": "dark",
+    "fg": "band-text-muted",
+    "bg": "band-surface",
+    "ratio": 6.26
+  },
+  {
+    "theme": "light",
+    "fg": "band-accent",
+    "bg": "band-bg",
+    "ratio": 10.56
+  },
+  {
+    "theme": "dark",
+    "fg": "band-accent",
+    "bg": "band-bg",
+    "ratio": 10.23
+  },
+  {
+    "theme": "light",
+    "fg": "band-accent",
+    "bg": "band-surface",
+    "ratio": 9.83
+  },
+  {
+    "theme": "dark",
+    "fg": "band-accent",
+    "bg": "band-surface",
+    "ratio": 8.26
+  },
+  {
+    "theme": "light",
+    "fg": "band-accent",
+    "bg": "band-accent-subtle",
+    "ratio": 8.38
+  },
+  {
+    "theme": "dark",
+    "fg": "band-accent",
+    "bg": "band-accent-subtle",
+    "ratio": 4.99
+  },
+  {
+    "theme": "light",
+    "fg": "band-on-accent",
+    "bg": "band-accent",
+    "ratio": 8.04
+  },
+  {
+    "theme": "dark",
+    "fg": "band-on-accent",
+    "bg": "band-accent",
+    "ratio": 10.23
+  },
+  {
+    "theme": "light",
+    "fg": "band-border-input",
+    "bg": "band-surface",
+    "ratio": 4.02
+  },
+  {
+    "theme": "dark",
+    "fg": "band-border-input",
+    "bg": "band-surface",
+    "ratio": 3.14
+  },
+  {
+    "theme": "light",
+    "fg": "text",
+    "bg": "accent-subtle",
+    "ratio": 16.77
+  },
+  {
+    "theme": "dark",
+    "fg": "text",
+    "bg": "accent-subtle",
+    "ratio": 12.62
+  },
+  {
+    "theme": "light",
+    "fg": "text-muted",
+    "bg": "accent-subtle",
+    "ratio": 7.12
+  },
+  {
+    "theme": "dark",
+    "fg": "text-muted",
+    "bg": "accent-subtle",
+    "ratio": 6.17
   }
 ]
 ;

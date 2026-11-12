@@ -2,12 +2,15 @@
 
 The single record of what Nick has decided, what is still a placeholder, and what was rejected.
 If any other file, chat or agent disagrees with this log, **this log wins**. Newest first within each section.
-Owner: Brio. Last updated 2026-11-11.
+Owner: Brio. Last updated 2026-11-12 (home backgrounds).
 
 ## 1. Approved (use as is)
 
 | Date | Decision | Where |
 |---|---|---|
+| 2026-11-12 | **Home backgrounds, option C "Dark band"**: sections 4b and 5 become one deep band (navy in the light theme, deep teal in the dark theme) with a still glow and hex grid; the closing CTA gets a teal tint. Everything else stays flat. One band per page, home only. | `components/backgrounds.md`, `previews/home-backgrounds.html` |
+| 2026-11-11 | **Home hero motion, variant C**: soft glow, one-time entrance of the hero content, slow teal wave through the hexagon grid. Home hero only; the text itself never moves; pause button and reduced-motion fallback are required. This is the one exception to "no glow, no endless animation" (2026-11-09). | `components/hero-motion.md`, `previews/hero-motion.html` |
+| 2026-11-11 | **Home text cut**: about half the visible words. Pillar taglines, compact package cards, how-it-works as an icon diagram, one-sentence about block with badges, insights without summaries, four FAQ questions. Detail stays on the inner pages. | `pages/home-copy.md`, `components/cards.md`, `components/layout.md` |
 | 2026-11-10 | **Design system v1.0 approved** for the new site. Clauco builds it (PR #122 docs, #126 / draft PR #129 site, branch `dev-v0.2.0`). | whole folder |
 | 2026-11-10 | **Logo: four parts.** (1) Wordmark "ivmanto" with the **tick-v** (Tally, Instrument Sans 650, outlined, SIL OFL). (2) **Symbol**: hexagon with two rising chevrons, the **upper teal chevron wider** (concept C, revision 2). (3) **Lockup**: symbol + wordmark. (4) **Short form** "iv" + tick. | `brand.html`, `assets/logo/` |
 | 2026-11-10 | **Website header = lockup, 30 px. Footer = wordmark alone.** | `_build/templates/_header.html`, `_footer.html` |
@@ -61,6 +64,10 @@ Owner: Brio. Last updated 2026-11-11.
 
 | Date | Item | Replaced by |
 |---|---|---|
+| 2026-11-12 | Background options A (Soft light) and B (Grid echo) | Option C (Dark band) |
+| 2026-11-11 | Headline text that moves like a wave (Nick's idea, dropped after Brio's objection: legibility, tone, accessibility) | Motion behind the text (variant C) |
+| 2026-11-11 | Hero variants A (wave only) and B (glow + entrance only) | Variant C |
+| 2026-11-11 | HowItWorks with mono numbers and "no connectors"; home cards with package lists, tick lists and summaries | v1.1 specs |
 | 2026-11-10 | Serif headlines (chosen 2026-11-09) | Montserrat |
 | 2026-11-10 | Five Montserrat logotype studies (Bookends, Rise, Rise + cell, Cell o, Cell dot): "that is a No" | Tally's tick-v wordmark |
 | 2026-11-10 | Tick-v at weights 600, 675, 700 | weight 650 |

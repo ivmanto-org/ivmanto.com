@@ -1,0 +1,367 @@
+<title>ivmanto hero motion</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@600&display=swap">
+<style>
+/* Layout: preview toolbar on top, then the real home hero (text left, advisor right) on a full-width band.
+   Colours and type are the ivmanto design-system tokens (assets/css/ds/tokens.css, foundation.css). */
+:root {
+  --bg: #f8fafc; --surface: #ffffff; --surface-sunken: #f1f5f9;
+  --border: #e2e8f0; --border-input: #64748b;
+  --text: #0f172a; --text-muted: #475569;
+  --accent: #027a89; --accent-hover: #05636f; --on-accent: #ffffff; --accent-subtle: #ecfbf8;
+  --brand: #00a896; --data: #4f6d9a; --focus: #00a896;
+  --grid-rgb: 100 116 139; --wave-rgb: 2 122 137;
+  --wave-fill: 0.07; --wave-line: 0.42; --glow-strength: 16%;
+  --card-shadow: 0 4px 16px -4px #0f172a1f;
+
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-headline: "Montserrat", "Inter", system-ui, sans-serif;
+  --text-xs: 0.75rem; --text-sm: 0.875rem; --text-md: 1rem; --text-xl: 1.25rem;
+  --text-4xl: 2.5rem; --text-5xl: 3.25rem;
+  --radius-sm: 4px; --radius-md: 8px; --radius-lg: 12px; --radius-full: 9999px;
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0a1220; --surface: #0f1a2b; --surface-sunken: #152238;
+    --border: #233149; --border-input: #6b7a93;
+    --text: #e6edf5; --text-muted: #9aa8bc;
+    --accent: #62d5c3; --accent-hover: #a0e8db; --on-accent: #062f38; --accent-subtle: #0d2b33;
+    --brand: #02c39a; --data: #9fb4d6; --focus: #62d5c3;
+    --grid-rgb: 148 163 184; --wave-rgb: 98 213 195;
+    --wave-fill: 0.06; --wave-line: 0.5; --glow-strength: 20%;
+    --card-shadow: none;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0a1220; --surface: #0f1a2b; --surface-sunken: #152238;
+  --border: #233149; --border-input: #6b7a93;
+  --text: #e6edf5; --text-muted: #9aa8bc;
+  --accent: #62d5c3; --accent-hover: #a0e8db; --on-accent: #062f38; --accent-subtle: #0d2b33;
+  --brand: #02c39a; --data: #9fb4d6; --focus: #62d5c3;
+  --grid-rgb: 148 163 184; --wave-rgb: 98 213 195;
+  --wave-fill: 0.06; --wave-line: 0.5; --glow-strength: 20%;
+  --card-shadow: none;
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+body { background: var(--bg); color: var(--text); font: 400 var(--text-md)/1.65 var(--font-sans); }
+p { margin: 0; }
+button { font: inherit; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+.wrap { max-width: 1200px; margin: 0 auto;
+  padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); }
+
+/* ---------- Preview toolbar (not part of the site) ---------- */
+.bar { border-bottom: 1px solid var(--border); background: var(--surface); }
+.bar .wrap { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; padding-block: 12px; }
+.bar__title { font: 600 var(--text-sm)/1.3 var(--font-sans); margin-right: auto; }
+.bar__title small { display: block; font-weight: 400; font-size: var(--text-xs); color: var(--text-muted); }
+.seg { display: inline-flex; flex-wrap: wrap; border: 1px solid var(--border-input); border-radius: var(--radius-md); overflow: hidden; }
+.seg button { border: 0; background: transparent; color: var(--text-muted); padding: 8px 14px; min-height: 40px; cursor: pointer; font-size: var(--text-sm); font-weight: 500; }
+.seg button + button { border-left: 1px solid var(--border); }
+.seg button:hover { color: var(--text); background: var(--surface-sunken); }
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); }
+.tool { border: 1px solid var(--border-input); border-radius: var(--radius-md); background: transparent; color: var(--text); padding: 8px 14px; min-height: 40px; cursor: pointer; font-size: var(--text-sm); font-weight: 500; }
+.tool:hover { background: var(--surface-sunken); }
+.tools { display: flex; flex-wrap: wrap; gap: 8px; }
+
+/* ---------- Hero (mirrors pages/index.vue + ds/pages.css) ---------- */
+.hero { position: relative; isolation: isolate; overflow: hidden; padding-block: 48px 64px; }
+.hero-grid { display: grid; gap: 32px; grid-template-areas: "text" "adv" "more"; }
+.hero-text { grid-area: text; min-width: 0; } .hero-adv { grid-area: adv; min-width: 0; } .hero-more { grid-area: more; min-width: 0; }
+@media (min-width: 1000px) {
+  .hero { padding-block: 96px; }
+  .hero-grid { grid-template-columns: 1fr 1.05fr; grid-template-areas: "text adv" "more adv"; gap: 24px 48px; align-content: center; }
+  .hero-text { align-self: end; }
+}
+.overline { font: 600 var(--text-xs)/1.4 var(--font-sans); letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin: 0 0 12px; }
+h1 { font: 600 clamp(var(--text-4xl), 4.6vw, var(--text-5xl))/1.15 var(--font-headline); letter-spacing: -0.015em; margin: 0 0 16px; text-wrap: balance; color: var(--text); }
+h1 em { font-style: normal; color: var(--accent); }
+h1 .line { display: block; overflow: hidden; padding-bottom: 0.14em; margin-bottom: -0.14em; }
+h1 .line > span, h1 .line > em { display: block; }
+.lead { font-size: var(--text-xl); line-height: 1.55; color: var(--text-muted); max-width: 34em; }
+.row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.btn { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 10px 20px; border-radius: var(--radius-md); border: 1px solid transparent; font: 500 var(--text-md)/1.2 var(--font-sans); text-decoration: none; cursor: pointer; }
+.btn--primary { background: var(--accent); color: var(--on-accent); }
+.btn--primary:hover { background: var(--accent-hover); }
+.btn--secondary { background: var(--surface); color: var(--text); border-color: var(--border-input); }
+.trust-line { display: flex; flex-wrap: wrap; gap: 16px 24px; margin-top: 32px; font-size: var(--text-sm); color: var(--text-muted); }
+.trust-line span { display: inline-flex; gap: 8px; align-items: center; }
+.trust-line span::before { content: ""; width: 7px; height: 7px; border-right: 2px solid var(--accent); border-top: 2px solid var(--accent); transform: rotate(45deg); }
+
+/* Advisor mock (static) */
+.advisor { background: var(--surface); border: 1px solid var(--border-input); border-radius: var(--radius-lg); box-shadow: var(--card-shadow); overflow: hidden; }
+.advisor__head { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--border); font-size: var(--text-sm); }
+.advisor__head strong { font-weight: 600; }
+.avatar { width: 28px; height: 28px; flex: none; }
+.advisor__head .avatar { width: 24px; height: 24px; }
+.avatar circle { fill: var(--brand); }
+.avatar path { fill: none; stroke: var(--surface); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+.ai-label { padding: 1px 8px; border-radius: var(--radius-sm); background: var(--accent-subtle); color: var(--accent); font: 600 var(--text-xs)/1.6 var(--font-sans); letter-spacing: .04em; }
+.advisor__log { padding: 16px; min-height: 150px; }
+.msg--ai { display: grid; grid-template-columns: 28px 1fr; gap: 12px; max-width: 92%; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 16px 16px; }
+.chip { border: 1px solid var(--border); background: var(--surface); color: var(--text-muted); border-radius: var(--radius-full); padding: 6px 12px; font-size: var(--text-sm); }
+.advisor__form { display: flex; gap: 12px; padding: 16px; border-top: 1px solid var(--border); align-items: flex-end; flex-wrap: wrap; }
+.fake-input { flex: 1 1 220px; min-height: 52px; padding: 14px 16px; border: 1px solid var(--border-input); border-radius: var(--radius-md); background: var(--bg); color: var(--text-muted); }
+
+/* ---------- Motion layers ---------- */
+.hexcanvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none;
+  -webkit-mask-image: radial-gradient(ellipse at 70% 30%, #000 0%, transparent 70%); mask-image: radial-gradient(ellipse at 70% 30%, #000 0%, transparent 70%); }
+.hero[data-wave="on"] .hexcanvas {
+  -webkit-mask-image: radial-gradient(ellipse 95% 95% at 50% 40%, #000 25%, transparent 78%); mask-image: radial-gradient(ellipse 95% 95% at 50% 40%, #000 25%, transparent 78%); }
+
+.glow { position: absolute; inset: -20%; z-index: -2; pointer-events: none; opacity: 0; transition: opacity 600ms var(--ease);
+  background:
+    radial-gradient(38% 42% at 74% 30%, color-mix(in srgb, var(--brand) var(--glow-strength), transparent), transparent 70%),
+    radial-gradient(34% 40% at 16% 82%, color-mix(in srgb, var(--data) var(--glow-strength), transparent), transparent 70%);
+  animation: drift 22s ease-in-out infinite alternate; }
+.hero[data-glow="on"] .glow { opacity: 1; }
+@keyframes drift { from { transform: translate3d(-2%, -1%, 0) scale(1); } to { transform: translate3d(3%, 2%, 0) scale(1.08); } }
+.hero.is-paused .glow { animation-play-state: paused; }
+
+/* Entrance: plays once, ends in the normal resting state */
+.hero.enter .overline { animation: fade 500ms var(--ease) both; }
+.hero.enter h1 .line > * { animation: rise 750ms var(--ease) both; }
+.hero.enter h1 .line:nth-child(1) > * { animation-delay: 120ms; }
+.hero.enter h1 .line:nth-child(2) > * { animation-delay: 320ms; }
+.hero.enter .lead { animation: lift 600ms var(--ease) 640ms both; }
+.hero.enter .hero-more { animation: lift 600ms var(--ease) 800ms both; }
+.hero.enter .advisor { animation: lift 700ms var(--ease) 380ms both; }
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes rise { from { transform: translateY(108%); } to { transform: none; } }
+@keyframes lift { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition-duration: 0ms !important; }
+}
+
+/* ---------- Notes under the hero ---------- */
+.notes { border-top: 1px solid var(--border); background: var(--surface-sunken); }
+.notes .wrap { padding-block: 24px 40px; display: grid; gap: 8px; }
+.notes h2 { font: 600 var(--text-md)/1.3 var(--font-sans); margin: 0; }
+.notes p { color: var(--text-muted); font-size: var(--text-sm); max-width: 68ch; }
+</style>
+
+<div class="bar">
+  <div class="wrap">
+    <p class="bar__title">Hero motion preview<small>Home page hero, text unchanged. Pick a variant.</small></p>
+    <div class="seg" role="group" aria-label="Variant">
+      <button type="button" id="v-today" data-variant="today" aria-pressed="false">Today</button>
+      <button type="button" id="v-a" data-variant="a" aria-pressed="false">A · Grid wave</button>
+      <button type="button" id="v-b" data-variant="b" aria-pressed="false">B · Glow + entrance</button>
+      <button type="button" id="v-c" data-variant="c" aria-pressed="true">C · Both</button>
+    </div>
+    <div class="tools">
+      <button type="button" class="tool" id="replay">Replay</button>
+      <button type="button" class="tool" id="pause" aria-pressed="false">Pause motion</button>
+      <button type="button" class="tool" id="theme">Switch light / dark</button>
+    </div>
+  </div>
+</div>
+
+<section class="hero" id="hero" data-wave="on" data-glow="on">
+  <div class="glow" aria-hidden="true"></div>
+  <canvas class="hexcanvas" id="hex" aria-hidden="true"></canvas>
+  <div class="wrap hero-grid">
+    <div class="hero-text">
+      <p class="overline">AI governance · risk · compliance</p>
+      <h1><span class="line"><span>Use AI with confidence.</span></span><span class="line"><em>Govern it with clarity.</em></span></h1>
+      <p class="lead">Fixed-scope services that get your company ready for the EU AI Act and ISO/IEC 42001: clear owners, documented risks, audit-ready evidence.</p>
+    </div>
+    <div class="hero-adv">
+      <div class="advisor">
+        <div class="advisor__head">
+          <svg class="avatar" viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="14"/><path d="M8 14.5l4 4 8-9"/></svg>
+          <strong>Which service do you need?</strong>
+          <span class="ai-label">AI</span>
+        </div>
+        <div class="advisor__log">
+          <div class="msg--ai">
+            <svg class="avatar" viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="14"/><path d="M8 14.5l4 4 8-9"/></svg>
+            <p>Describe in a sentence or two what you’re working on or worried about. I’ll point you to the service that fits.</p>
+          </div>
+        </div>
+        <div class="chips">
+          <span class="chip">We’re rolling out an AI assistant</span>
+          <span class="chip">Does the EU AI Act apply to us?</span>
+          <span class="chip">ISO 42001 readiness</span>
+        </div>
+        <div class="advisor__form">
+          <div class="fake-input">Type your question…</div>
+          <span class="btn btn--primary">Send</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero-more">
+      <div class="row">
+        <span class="btn btn--primary">See packages and prices</span>
+        <span class="btn btn--secondary">Book a call</span>
+      </div>
+      <div class="trust-line">
+        <span>MIT Professional Education certificate</span>
+        <span>Fixed price, fixed scope</span>
+        <span>Based in Germany</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="notes">
+  <div class="wrap">
+    <h2 id="note-title">C · Both</h2>
+    <p id="note-body"></p>
+    <p>The advisor card is a static mock. All motion stops for visitors who have reduced motion switched on.</p>
+  </div>
+</div>
+
+<script>
+(function () {
+  var NOTES = {
+    today: ['Today', 'The hero as it is now: a faint, still hexagon grid behind the advisor.'],
+    a: ['A · Grid wave', 'A slow wave of teal light travels through the hexagon cells behind the text. The text itself stays still. One pass takes about nine seconds.'],
+    b: ['B · Glow + entrance', 'Two soft colour glows sit behind the hero and drift very slowly. On load the headline rises in line by line, the teal line second, then everything stays still.'],
+    c: ['C · Both', 'The entrance and glows from B, with the grid wave from A running behind them.']
+  };
+  var HEX_R = 32, HEX_W = 56, ROW_H = 48;          // same cell size as the site's .hexgrid texture
+  var WAVE_LENGTH = 560, WAVE_PERIOD = 9;           // px between crests, seconds per crest
+  var BASE_ALPHA = 0.09;
+
+  var root = document.documentElement;
+  var hero = document.getElementById('hero');
+  var canvas = document.getElementById('hex');
+  var ctx = canvas.getContext('2d');
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var state = { variant: 'c', paused: false, w: 0, h: 0, t0: performance.now(), frozenAt: 0, raf: 0 };
+  var colors = { grid: '148 163 184', wave: '98 213 195', fill: 0.06, line: 0.5 };
+
+  function readColors() {
+    var cs = getComputedStyle(root);
+    colors.grid = cs.getPropertyValue('--grid-rgb').trim() || colors.grid;
+    colors.wave = cs.getPropertyValue('--wave-rgb').trim() || colors.wave;
+    colors.fill = parseFloat(cs.getPropertyValue('--wave-fill')) || colors.fill;
+    colors.line = parseFloat(cs.getPropertyValue('--wave-line')) || colors.line;
+  }
+
+  function resize() {
+    var r = hero.getBoundingClientRect();
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    state.w = r.width; state.h = r.height;
+    canvas.width = Math.round(r.width * dpr); canvas.height = Math.round(r.height * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    draw(now());
+  }
+
+  function hexPath(cx, cy) {
+    ctx.beginPath();
+    ctx.moveTo(cx, cy - HEX_R);
+    ctx.lineTo(cx + HEX_W / 2, cy - HEX_R / 2);
+    ctx.lineTo(cx + HEX_W / 2, cy + HEX_R / 2);
+    ctx.lineTo(cx, cy + HEX_R);
+    ctx.lineTo(cx - HEX_W / 2, cy + HEX_R / 2);
+    ctx.lineTo(cx - HEX_W / 2, cy - HEX_R / 2);
+    ctx.closePath();
+  }
+
+  function waveOn() { return state.variant === 'a' || state.variant === 'c'; }
+  function now() { return state.paused ? state.frozenAt : (performance.now() - state.t0) / 1000; }
+
+  function draw(t) {
+    var w = state.w, h = state.h, rows = Math.ceil(h / ROW_H) + 2, cols = Math.ceil(w / HEX_W) + 2, r, c, cx, cy;
+    ctx.clearRect(0, 0, w, h);
+    ctx.lineWidth = 1;
+
+    // Base grid: three edges per cell so shared edges are drawn once.
+    ctx.beginPath();
+    for (r = -1; r < rows; r++) {
+      for (c = -1; c < cols; c++) {
+        cx = c * HEX_W + (r & 1 ? HEX_W / 2 : 0); cy = r * ROW_H;
+        ctx.moveTo(cx - HEX_W / 2, cy - HEX_R / 2);
+        ctx.lineTo(cx, cy - HEX_R);
+        ctx.lineTo(cx + HEX_W / 2, cy - HEX_R / 2);
+        ctx.lineTo(cx + HEX_W / 2, cy + HEX_R / 2);
+      }
+    }
+    ctx.strokeStyle = 'rgb(' + colors.grid + ' / ' + BASE_ALPHA + ')';
+    ctx.stroke();
+
+    if (!waveOn() || reduced.matches) return;
+    for (r = -1; r < rows; r++) {
+      for (c = -1; c < cols; c++) {
+        cx = c * HEX_W + (r & 1 ? HEX_W / 2 : 0); cy = r * ROW_H;
+        var phase = (cx * 0.8 + cy * 0.6) / WAVE_LENGTH - t / WAVE_PERIOD;
+        var crest = Math.max(0, Math.sin(phase * Math.PI * 2));
+        var ripple = 0.7 + 0.3 * Math.sin(cx / 97 - cy / 61 + t * 0.5);
+        var i = crest * crest * crest * ripple;
+        if (i < 0.02) continue;
+        hexPath(cx, cy);
+        ctx.fillStyle = 'rgb(' + colors.wave + ' / ' + (i * colors.fill).toFixed(3) + ')';
+        ctx.fill();
+        ctx.strokeStyle = 'rgb(' + colors.wave + ' / ' + (i * colors.line).toFixed(3) + ')';
+        ctx.stroke();
+      }
+    }
+  }
+
+  function loop() {
+    draw(now());
+    state.raf = (waveOn() && !state.paused && !reduced.matches) ? requestAnimationFrame(loop) : 0;
+  }
+  function restartLoop() { cancelAnimationFrame(state.raf); state.raf = 0; loop(); }
+
+  function playEntrance() {
+    hero.classList.remove('enter');
+    if (state.variant !== 'b' && state.variant !== 'c') return;
+    void hero.offsetWidth;                          // restart the CSS animations
+    hero.classList.add('enter');
+  }
+
+  function setVariant(v) {
+    state.variant = v;
+    hero.dataset.wave = waveOn() ? 'on' : 'off';
+    hero.dataset.glow = (v === 'b' || v === 'c') ? 'on' : 'off';
+    document.querySelectorAll('.seg button').forEach(function (b) {
+      b.setAttribute('aria-pressed', String(b.dataset.variant === v));
+    });
+    document.getElementById('note-title').textContent = NOTES[v][0];
+    document.getElementById('note-body').textContent = NOTES[v][1];
+    playEntrance();
+    restartLoop();
+  }
+
+  document.querySelectorAll('.seg button').forEach(function (b) {
+    b.addEventListener('click', function () { setVariant(b.dataset.variant); });
+  });
+  document.getElementById('replay').addEventListener('click', function () {
+    state.t0 = performance.now(); state.frozenAt = 0;
+    playEntrance(); restartLoop();
+  });
+  document.getElementById('pause').addEventListener('click', function () {
+    if (!state.paused) state.frozenAt = now();
+    else state.t0 = performance.now() - state.frozenAt * 1000;
+    state.paused = !state.paused;
+    hero.classList.toggle('is-paused', state.paused);
+    this.setAttribute('aria-pressed', String(state.paused));
+    this.textContent = state.paused ? 'Resume motion' : 'Pause motion';
+    restartLoop();
+  });
+  document.getElementById('theme').addEventListener('click', function () {
+    var isDark = root.dataset.theme ? root.dataset.theme === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+    root.dataset.theme = isDark ? 'light' : 'dark';
+    readColors(); draw(now());
+  });
+
+  new MutationObserver(function () { readColors(); draw(now()); }).observe(root, { attributes: true, attributeFilter: ['data-theme'] });
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () { readColors(); draw(now()); });
+  reduced.addEventListener('change', restartLoop);
+  if ('ResizeObserver' in window) new ResizeObserver(resize).observe(hero); else window.addEventListener('resize', resize);
+
+  readColors();
+  resize();
+  setVariant('c');
+})();
+</script>

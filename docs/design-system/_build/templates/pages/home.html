@@ -17,6 +17,10 @@
 @media (min-width: 900px) { .about { grid-template-columns: 320px 1fr; } }
 .portrait { aspect-ratio: 4/5; border-radius: var(--radius-lg); background: var(--surface-sunken); border: 1px solid var(--border); display: grid; place-items: center; color: var(--text-muted); font-size: var(--text-sm); }
 .post .meta { font-size: var(--text-xs); color: var(--text-muted); letter-spacing: .04em; text-transform: uppercase; }
+.about__text { display: grid; gap: var(--space-4); justify-items: start; min-width: 0; }
+.about__text > * { margin: 0; }
+.post h3 { margin: 0; }
+.more { margin: var(--space-8) 0 0; }
 .closing { text-align: center; }
 .closing p { margin-inline: auto; }
 </style>
@@ -24,12 +28,16 @@
 <body>
 {{HEADER}}
 <main>
+  <!-- v1.2: copy from pages/home-copy.md, hero motion (hero-motion.md), backgrounds (backgrounds.md) -->
   <!-- 1 · Hero with AI advisor -->
-  <section class="hero hexgrid"><div class="container hero-grid">
+  <section class="hero hexgrid hero-motion">
+    <div class="hero-motion__glow" aria-hidden="true"></div>
+    <canvas class="hero-motion__grid" aria-hidden="true"></canvas>
+    <div class="container hero-grid">
     <div class="hero-text">
       <p class="overline">AI governance · risk · compliance</p>
-      <h1>Use AI with confidence. <em>Govern it with clarity.</em></h1>
-      <p class="lead">Fixed-scope services that get your company ready for the EU AI Act and ISO/IEC 42001: clear owners, documented risks, audit-ready evidence.</p>
+      <h1><span class="line"><span>Use AI with confidence.</span></span> <span class="line"><em>Govern it with clarity.</em></span></h1>
+      <p class="lead">Fixed-scope services for the EU AI Act and ISO/IEC 42001.</p>
     </div>
     <div class="hero-more">
       <div class="row">
@@ -51,7 +59,9 @@
         </form>
       </div>
     </div>
-  </div></section>
+    </div>
+    <button class="icon-btn hero-motion__pause" type="button" aria-pressed="false" aria-label="Pause background motion">{{ICON:pause}}{{ICON:play}}</button>
+  </section>
 
   <!-- 2 · Frameworks -->
   <section class="section--line" style="padding:var(--space-8) 0"><div class="container fw-strip">
@@ -59,52 +69,63 @@
     <span class="tag tag--framework">EU AI Act</span><span class="tag tag--framework">ISO/IEC 42001</span><span class="tag tag--framework">ISO/IEC 27001</span><span class="tag tag--framework">NIST AI RMF</span><span class="tag tag--framework">GDPR</span>
   </div></section>
 
-  <!-- 3 · Pillars -->
+  <!-- 3 · Pillars: icon, title, tagline -->
   <section class="section section--sunken"><div class="container">
-    <div class="section-head"><p class="overline">What we do</p><h2>Three pillars, one accountable partner</h2><p class="muted">Most SMEs need a little of each. Start where the pressure is.</p></div>
+    <div class="section-head"><p class="overline">What we do</p><h2>Three pillars, one accountable partner</h2></div>
     <div class="grid grid-3">
-      <div class="card card--link pillar">{{PILLAR:G}}<h3><a class="card__link" href="pillar.html" style="color:inherit;text-decoration:none">Governance</a></h3><p class="muted small">Roles, decision rights and policies for how your company uses AI.</p><ul><li>AI policy &amp; acceptable use</li><li>AI inventory &amp; ownership</li><li>Governance operating model</li></ul></div>
-      <div class="card card--link pillar">{{PILLAR:R}}<h3><a class="card__link" href="#" style="color:inherit;text-decoration:none">Risk management</a></h3><p class="muted small">Identify, assess and reduce AI, data and vendor risks, with countermeasures on record.</p><ul><li>AI risk assessment</li><li>Risk register setup</li><li>AI vendor &amp; third-party risk</li></ul></div>
-      <div class="card card--link pillar">{{PILLAR:C}}<h3><a class="card__link" href="#" style="color:inherit;text-decoration:none">Compliance</a></h3><p class="muted small">Know your obligations and prove you meet them: audit-proof documentation, not binders.</p><ul><li>EU AI Act readiness</li><li>ISO/IEC 42001 gap assessment</li><li>Incident &amp; audit workflows</li></ul></div>
+      <div class="card card--link pillar">{{PILLAR:G}}<h3><a class="card__link" href="pillar.html" style="color:inherit;text-decoration:none">Governance</a></h3><p class="muted" style="margin:0">Who decides what about AI.</p></div>
+      <div class="card card--link pillar">{{PILLAR:R}}<h3><a class="card__link" href="#" style="color:inherit;text-decoration:none">Risk management</a></h3><p class="muted" style="margin:0">Find and reduce your AI risks.</p></div>
+      <div class="card card--link pillar">{{PILLAR:C}}<h3><a class="card__link" href="#" style="color:inherit;text-decoration:none">Compliance</a></h3><p class="muted" style="margin:0">Know your obligations. Prove you meet them.</p></div>
     </div>
   </div></section>
 
-  <!-- 4 · Packages -->
+  <!-- 4 · Packages: compact cards (no ticks list) -->
   <section class="section"><div class="container">
-    <div class="section-head"><p class="overline">Packages</p><h2>Fixed scope. Fixed price. Order directly.</h2><p class="muted">No open-ended retainers. Each package states what you get, how long it takes and what it costs.</p></div>
+    <div class="section-head"><p class="overline">Packages</p><h2>Fixed scope. Fixed price. Order directly.</h2></div>
     <div class="grid grid-3">
-      <div class="card package"><div class="package__top"><span class="tag tag--pillar">Governance</span></div><h3>AI inventory &amp; ownership</h3><div class="package__price">€ [price]<small>fixed, excl. VAT</small></div><div class="package__meta"><span>{{ICON:clock}} 2 weeks</span><span>{{ICON:doc}} Inventory + RACI</span></div><ul class="ticks"><li>Discovery interviews</li><li>Register of AI systems in use</li><li>Owner per system</li></ul><a class="btn btn--secondary" href="package.html">View package</a></div>
-      <div class="card package package--recommended"><div class="package__top"><span class="tag tag--pillar">Compliance</span><span class="badge-recommended">Recommended start</span></div><h3>EU AI Act readiness</h3><div class="package__price">€ [price]<small>fixed, excl. VAT</small></div><div class="package__meta"><span>{{ICON:clock}} 4 weeks</span><span>{{ICON:doc}} Gap report + roadmap</span></div><ul class="ticks"><li>Classification of your AI systems</li><li>Gap analysis against obligations</li><li>12-month roadmap</li></ul><a class="btn btn--primary" href="package.html">View package</a></div>
-      <div class="card package"><div class="package__top"><span class="tag tag--pillar">Risk</span></div><h3>AI risk assessment</h3><div class="package__price">€ [price]<small>fixed, excl. VAT</small></div><div class="package__meta"><span>{{ICON:clock}} 3 weeks</span><span>{{ICON:doc}} Register + report</span></div><ul class="ticks"><li>Scope workshop</li><li>Risk register, up to 5 systems</li><li>Prioritised mitigation plan</li></ul><a class="btn btn--secondary" href="package.html">View package</a></div>
+      <div class="card package"><div class="package__top"><span class="tag tag--pillar">Governance</span></div><h3>AI governance quick check</h3><div class="package__price">€ [price]<small>fixed, excl. VAT</small></div><div class="package__meta"><span>{{ICON:clock}} 1 week</span><span>{{ICON:doc}} Snapshot + top-5 risk memo</span></div><a class="btn btn--secondary" href="package.html">View package</a></div>
+      <div class="card package"><div class="package__top"><span class="tag tag--pillar">Risk management</span></div><h3>AI risk assessment</h3><div class="package__price">€ [price]<small>fixed, excl. VAT</small></div><div class="package__meta"><span>{{ICON:clock}} 4 weeks</span><span>{{ICON:doc}} Risk report + working register</span></div><a class="btn btn--secondary" href="package.html">View package</a></div>
+      <div class="card package package--recommended"><div class="package__top"><span class="tag tag--pillar">Compliance</span><span class="badge-recommended">Recommended start</span></div><h3>EU AI Act readiness</h3><div class="package__price">€ [price]<small>fixed, excl. VAT</small></div><div class="package__meta"><span>{{ICON:clock}} 5 weeks</span><span>{{ICON:doc}} Inventory + gap report + roadmap</span></div><a class="btn btn--primary" href="package.html">View package</a></div>
     </div>
-    <p style="margin-top:var(--space-8)"><a class="btn btn--ghost" href="#">All packages {{ICON:chev}}</a></p>
+    <p class="more"><a class="btn btn--ghost" href="#">All packages {{ICON:chev}}</a></p>
   </div></section>
 
-  <!-- 5 · How it works -->
-  <section class="section section--sunken"><div class="container">
-    <div class="section-head"><p class="overline">How it works</p><h2>From question to evidence in four steps</h2></div>
-    <ol class="flow"><li><h4>Describe</h4><p class="small muted">Ask the advisor above or book a 30-minute call.</p></li><li><h4>Choose</h4><p class="small muted">Pick a package. Scope and price are fixed before we start.</p></li><li><h4>Deliver</h4><p class="small muted">Workshops with your team, documents built with you, a clear owner for every item.</p></li><li><h4>Hand over</h4><p class="small muted">You keep every artefact in your own tools. No lock-in.</p></li></ol>
+  <!-- 4b + 5 · One dark band -->
+  <div class="band">
+  <section class="section"><div class="container">
+    <div class="section-head"><p class="overline">Built on real engineering</p><h2>We build what we govern</h2></div>
+    <div class="grid grid-2">
+      <div class="card card--link"><h3><a class="card__link" href="#" style="color:inherit;text-decoration:none">Data &amp; AI engineering on Google Cloud</a></h3><p class="muted" style="margin:0">Data platforms and AI agents, built in your own Google Cloud project.</p></div>
+      <div class="card card--link"><h3><a class="card__link" href="#" style="color:inherit;text-decoration:none">ivGIL</a></h3><p class="muted" style="margin:0">Our AI governance platform. Early access is open.</p></div>
+    </div>
   </div></section>
+  <section class="section"><div class="container">
+    <div class="section-head"><p class="overline">How it works</p><h2>From question to evidence in four steps</h2></div>
+    <ol class="flow"><li><span class="flow__icon">{{ICON:step_describe}}</span><div><h4>Describe</h4><p class="small muted">Ask the advisor or book a call.</p></div></li><li><span class="flow__icon">{{ICON:step_choose}}</span><div><h4>Choose</h4><p class="small muted">Fixed scope and price, up front.</p></div></li><li><span class="flow__icon">{{ICON:step_deliver}}</span><div><h4>Deliver</h4><p class="small muted">Workshops and documents, built with you.</p></div></li><li><span class="flow__icon">{{ICON:step_handover}}</span><div><h4>Hand over</h4><p class="small muted">Everything stays in your tools.</p></div></li></ol>
+  </div></section>
+  </div>
 
   <!-- 6 · About -->
   <section class="section"><div class="container about">
     <div class="portrait">Portrait photo (Nick)</div>
-    <div>
+    <div class="about__text">
       <p class="overline">Who you work with</p>
       <h2>One accountable expert, not an account team</h2>
-      <p class="lead">I'm Nikolay Tonev. [Two to three sentences on background: cloud and data architecture, years in enterprise IT, why AI governance.] You work with me directly, from the first call to the handover.</p>
-      <div class="credential" style="margin-top:var(--space-6)"><div class="credential__seal">MIT<br>PE</div><div><strong>MIT Professional Education</strong><p>[Programme name] · verified on Accredible <a href="#">View credential</a></p></div></div>
+      <p class="lead">I'm Nikolay Tonev. You work with me directly, from the first call to the handover.</p>
+      <div class="row"><span class="tag tag--framework">MIT Professional Education certificate</span><span class="tag tag--framework">Google Cloud Professional Cloud Architect</span></div>
+      <p><a class="btn btn--ghost" href="#">More about me {{ICON:chev}}</a></p>
     </div>
   </div></section>
 
-  <!-- 7 · Insights -->
+  <!-- 7 · Insights: date and title only -->
   <section class="section section--sunken"><div class="container">
     <div class="section-head"><p class="overline">Insights</p><h2>Notes on AI governance</h2></div>
     <div class="grid grid-3">
-      <article class="card card--link post"><p class="meta">EU AI Act · 6 min</p><h3><a class="card__link" href="#" style="color:inherit;text-decoration:none">[Blog post title]</a></h3><p class="small muted">[One-line summary from the existing blog.]</p></article>
-      <article class="card card--link post"><p class="meta">ISO/IEC 42001 · 8 min</p><h3><a class="card__link" href="#" style="color:inherit;text-decoration:none">[Blog post title]</a></h3><p class="small muted">[One-line summary.]</p></article>
-      <article class="card card--link post"><p class="meta">Risk · 5 min</p><h3><a class="card__link" href="#" style="color:inherit;text-decoration:none">[Blog post title]</a></h3><p class="small muted">[One-line summary.]</p></article>
+      <article class="card card--link post"><p class="meta">[Month year]</p><h3><a class="card__link" href="#" style="color:inherit;text-decoration:none">[Blog post title]</a></h3></article>
+      <article class="card card--link post"><p class="meta">[Month year]</p><h3><a class="card__link" href="#" style="color:inherit;text-decoration:none">[Blog post title]</a></h3></article>
+      <article class="card card--link post"><p class="meta">[Month year]</p><h3><a class="card__link" href="#" style="color:inherit;text-decoration:none">[Blog post title]</a></h3></article>
     </div>
+    <p class="more"><a class="btn btn--ghost" href="#">All insights {{ICON:chev}}</a></p>
   </div></section>
 
   <!-- 8 · FAQ -->
@@ -118,15 +139,16 @@
     </div>
   </div></section>
 
-  <!-- 9 · Closing CTA -->
-  <section class="section section--sunken hexgrid"><div class="container closing">
+  <!-- 9 · Closing CTA: tinted, still hex grid -->
+  <section class="section section--tint hexgrid"><div class="container closing">
     <h2>Not sure where to start?</h2>
-    <p class="lead">A 30-minute call is enough to find the first step. No preparation needed.</p>
+    <p class="lead">A 30-minute call finds the first step.</p>
     <div class="row" style="justify-content:center;margin-top:var(--space-6)"><a class="btn btn--primary" href="#">Book a call</a><a class="btn btn--secondary" href="#">Ask the advisor</a></div>
   </div></section>
 </main>
 {{FOOTER}}
 <div class="cookie" role="dialog" aria-label="Cookie consent"><h4>Cookies</h4><p>We use analytics cookies only if you agree. <a href="#">Details</a></p><div class="row"><button class="btn btn--secondary btn--sm" onclick="this.closest('.cookie').remove()">Reject</button><button class="btn btn--secondary btn--sm">Settings</button><button class="btn btn--primary btn--sm" onclick="this.closest('.cookie').remove()">Accept</button></div></div>
 {{THEME_JS}}
+{{HERO_MOTION_JS}}
 </body>
 </html>
