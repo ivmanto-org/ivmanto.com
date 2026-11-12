@@ -16,6 +16,12 @@ variable "rate_limit_requests_per_minute" {
   default     = 300
 }
 
+variable "api_rate_limit_requests_per_minute" {
+  description = "Per-IP request budget per minute for /api/advisor and /api/leads before 429 (Cloud Armor priority 900). Tighter than the site-wide budget: advisor calls Mistral per request, leads sends SMTP mail."
+  type        = number
+  default     = 30
+}
+
 variable "lb_service_users" {
   description = "Identities that apply Nestbalm's LB Terraform (nestbalm-app-prod) and reference ivmanto's backend services."
   type        = list(string)

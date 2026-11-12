@@ -30,6 +30,32 @@ resource "google_compute_security_policy" "edge" {
   name        = "ivmanto-edge-armor"
   description = "Per-IP rate limit for ivmanto.com behind Nestbalm's shared LB."
 
+  # Tighter per-IP limit for the two unauthenticated API endpoints
+  # (go-live gate from #127 review: advisor calls Mistral per request,
+  # leads sends SMTP mail — both are cost/abuse surfaces that need a
+  # smaller budget than the site-wide 300/min rule at priority 1000).
+  # Lower priority number = evaluated first, so this rule wins for the
+  # matched paths; everything else falls through to priority 1000.
+  rule {
+    action      = "throttle"
+    priority    = 900
+    description = "Per-IP rate limit for /api/advisor and /api/leads"
+    match {
+      expr {
+        expression = "request.path.matches(\"^/api/(advisor|leads)(/.*)?$\")"
+      }
+    }
+    rate_limit_options {
+      conform_action = "allow"
+      exceed_action  = "deny(429)"
+      enforce_on_key = "IP"
+      rate_limit_threshold {
+        count        = var.api_rate_limit_requests_per_minute
+        interval_sec = 60
+      }
+    }
+  }
+
   rule {
     action      = "throttle"
     priority    = 1000
