@@ -6,16 +6,19 @@
     {
       "id": "governance",
       "name": "Governance",
+      "tagline": "Who decides what about AI.",
       "summary": "Roles, decision rights and policies for how your company uses AI."
     },
     {
       "id": "risk",
       "name": "Risk management",
+      "tagline": "Find and reduce your AI risks.",
       "summary": "Identify, assess and reduce AI, data and vendor risks, with countermeasures on record."
     },
     {
       "id": "compliance",
       "name": "Compliance",
+      "tagline": "Know your obligations. Prove you meet them.",
       "summary": "Know your obligations and prove you meet them: audit-ready documentation, not binders."
     }
   ],

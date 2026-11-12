@@ -9,6 +9,9 @@ export type Line = 'governance' | 'engineering' | 'platform'
 export interface Pillar {
   id: PillarId
   name: string
+  /** Home page line, at most seven words (DS v1.1 cards.md). */
+  tagline: string
+  /** Pillar pages. */
   summary: string
 }
 

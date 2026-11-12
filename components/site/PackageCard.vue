@@ -2,7 +2,11 @@
 import type { Package } from '~/composables/useCatalogue'
 
 // badge: 'site' marks the one overall recommended start, 'pillar' marks each pillar's start (one amber badge per page).
-const props = withDefaults(defineProps<{ pkg: Package; badge?: 'site' | 'pillar' | 'none' }>(), { badge: 'site' })
+// compact: no ticks list (home page only, DS v1.1 cards.md).
+const props = withDefaults(defineProps<{ pkg: Package; badge?: 'site' | 'pillar' | 'none'; compact?: boolean }>(), {
+  badge: 'site',
+  compact: false,
+})
 const { pillar } = useCatalogue()
 const pillarName = computed(() => pillar(props.pkg.pillar)?.name ?? LINE_NAMES[props.pkg.line])
 const recommended = computed(() => {
@@ -26,7 +30,7 @@ const recommended = computed(() => {
       <span>{{ formatDuration(pkg) }}</span>
       <span>{{ pkg.deliverable }}</span>
     </div>
-    <ul class="ticks">
+    <ul v-if="!compact" class="ticks">
       <li v-for="item in pkg.includes" :key="item">{{ item }}</li>
     </ul>
     <NuxtLink :to="`/packages/${pkg.id}`" class="btn btn--secondary btn--block">View package</NuxtLink>
