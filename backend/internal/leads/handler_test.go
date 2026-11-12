@@ -190,3 +190,78 @@ func TestLeadSendFailureIs500NotPanic(t *testing.T) {
 		t.Fatalf("want code send_failed, got %v", body)
 	}
 }
+
+// --- PR #128 review fixes (Clauco 2026-11-12) ---
+
+// TestLeadRejectsHeaderInjection: H1 — CR/LF in company (or name) is the
+// mail-header injection vector into the Subject line and must 400.
+func TestLeadRejectsHeaderInjection(t *testing.T) {
+	m := &fakeMailer{}
+	srv := newServer(m)
+	defer srv.Close()
+
+	injected := "Acme\r\nFrom: someone@else\r\nContent-Type: text/plain\r\n\r\nforged"
+	body := `{"source":"advisor","name":"Ada","email":"ada@example.com","company":"` + injected + `","message":"hi","consent":true}`
+	resp, _ := post(t, srv, body)
+	if resp.StatusCode != http.StatusBadRequest {
+		t.Fatalf("CR/LF in company must 400, got %d", resp.StatusCode)
+	}
+	if m.calls != 0 {
+		t.Fatal("mailer must not be called on rejected input")
+	}
+
+	// Same for name.
+	body = `{"source":"advisor","name":"Ada\r\nBcc: victim@example.com","email":"ada@example.com","company":"Acme","message":"hi","consent":true}`
+	resp, _ = post(t, srv, body)
+	if resp.StatusCode != http.StatusBadRequest {
+		t.Fatalf("CR/LF in name must 400, got %d", resp.StatusCode)
+	}
+
+	// And DEL.
+	body = `{"source":"advisor","name":"Ada","email":"ada@example.com","company":"Acme","message":"hi","role":"cfo\x7f","consent":true}`
+	resp, _ = post(t, srv, body)
+	if resp.StatusCode != http.StatusBadRequest {
+		t.Fatalf("DEL in role must 400, got %d", resp.StatusCode)
+	}
+	if m.calls != 0 {
+		t.Fatal("mailer must not be called on rejected input")
+	}
+}
+
+// TestLeadShortFieldCaps: M1 — name, company, package_id are capped.
+func TestLeadShortFieldCaps(t *testing.T) {
+	m := &fakeMailer{}
+	srv := newServer(m)
+	defer srv.Close()
+
+	long := strings.Repeat("a", 201)
+	for _, field := range []string{"name", "company", "package_id"} {
+		body := `{"source":"advisor","name":"Ada","email":"ada@example.com","company":"Acme","message":"hi","consent":true,"` + field + `":"` + long + `"}`
+		resp, _ := post(t, srv, body)
+		if resp.StatusCode != http.StatusBadRequest {
+			t.Fatalf("%s over cap must 400, got %d", field, resp.StatusCode)
+		}
+	}
+	if m.calls != 0 {
+		t.Fatal("mailer must not be called on rejected input")
+	}
+}
+
+// TestLeadRejectsDisplayAddress: M2 — mail.ParseAddress accepts
+// "Bob <bob@example.com>"; the handler must reject anything whose parsed
+// form differs from what was sent, so only a bare address reaches the
+// mailto: link.
+func TestLeadRejectsDisplayAddress(t *testing.T) {
+	m := &fakeMailer{}
+	srv := newServer(m)
+	defer srv.Close()
+
+	body := `{"source":"advisor","name":"Ada","email":"Bob <bob@example.com>","company":"Acme","message":"hi","consent":true}`
+	resp, _ := post(t, srv, body)
+	if resp.StatusCode != http.StatusBadRequest {
+		t.Fatalf("display-form email must 400, got %d", resp.StatusCode)
+	}
+	if m.calls != 0 {
+		t.Fatal("mailer must not be called on rejected input")
+	}
+}

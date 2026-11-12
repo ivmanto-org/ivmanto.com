@@ -46,9 +46,11 @@ func (h *Handler) RegisterRoutes(mux *http.ServeMux) {
 // opt-in is captured now, the actual double opt-in comes later). Role and
 // interest are the ivGIL form's optional fields: the visitor's role (free
 // string) and whether they want early access or to become a design partner.
-// Consent is a required, explicitly-ticked checkbox (Art. 6(1)(a)); the
-// handler refuses to send without it. Message is the editable prefill of
-// the conversation summary.
+// Consent is the required confirmation tick (the processing basis for the
+// lead mail is Art. 6(1)(b), steps at the visitor's request before a
+// contract — Ivgil's verdict 2026-11-11; only the separate insights opt-in
+// is consent, Art. 6(1)(a)); the handler refuses to send without the tick.
+// Message is the editable prefill of the conversation summary.
 type leadRequest struct {
 	Source        string `json:"source"`
 	PackageID     string `json:"package_id"`
@@ -80,13 +82,31 @@ var validLeadInterests = map[string]bool{
 const (
 	// maxLeadBody guards against oversized payloads (defence in depth).
 	maxLeadBody = 16 << 10
-	// maxMessageLength caps the conversation summary (mirrors the advisor's
-	// per-message cap; the form textarea already limits to 600 chars but a
-	// crafty client can bypass the textarea).
+	// maxMessageLength caps the conversation summary. Generous on
+	// purpose: the summary can carry more than one advisor exchange
+	// (the form textarea limits to 600 chars per message, but a crafty
+	// client can bypass the textarea).
 	maxMessageLength = 4000
 	// maxRoleLength caps the ivGIL form's free-string role field.
 	maxRoleLength = 200
+	// maxShortFieldLength caps name, company and package_id (PR #128 M1):
+	// they end up in the mail subject line and must stay sane.
+	maxShortFieldLength = 200
 )
+
+// hasControlChars reports whether s contains any character that is
+// illegal in a mail header value: anything below 0x20 (including CR/LF)
+// and DEL. Rejecting them at the handler keeps CR/LF out of the Subject
+// line that SendLeadNotification builds from company and name (PR #128
+// H1: header injection).
+func hasControlChars(s string) bool {
+	for _, r := range s {
+		if r < 0x20 || r == 0x7f {
+			return true
+		}
+	}
+	return false
+}
 
 func (h *Handler) handleLead(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
@@ -122,15 +142,46 @@ func (h *Handler) handleLead(w http.ResponseWriter, r *http.Request) {
 		writeError(w, http.StatusBadRequest, "role is too long", "bad_request")
 		return
 	}
+	// Header-injection guard (PR #128 H1): name, company, email,
+	// package_id and role all end up in mail headers (company and name in
+	// the Subject). Control characters there would let a caller add
+	// headers to the mail Nick receives.
+	for field, value := range map[string]string{
+		"name":       req.Name,
+		"company":    req.Company,
+		"email":      req.Email,
+		"package_id": req.PackageID,
+		"role":       req.Role,
+	} {
+		if hasControlChars(value) {
+			writeError(w, http.StatusBadRequest, field+" must not contain control characters", "bad_request")
+			return
+		}
+		if len([]rune(value)) > maxShortFieldLength {
+			writeError(w, http.StatusBadRequest, field+" is too long", "bad_request")
+			return
+		}
+	}
 
 	if req.Name == "" || req.Email == "" || req.Company == "" {
 		writeError(w, http.StatusBadRequest, "name, email and company are required", "bad_request")
 		return
 	}
-	if _, err := mail.ParseAddress(req.Email); err != nil {
+	// Parse and use the bare address (PR #128 M2): mail.ParseAddress
+	// accepts "Bob <bob@example.com>" and comments, and the raw string
+	// would then flow into the mailto: link. Keep only the parsed
+	// address, and reject input whose parsed form differs from what was
+	// sent.
+	addr, err := mail.ParseAddress(req.Email)
+	if err != nil {
 		writeError(w, http.StatusBadRequest, "a valid email is required", "bad_email")
 		return
 	}
+	if addr.Address != req.Email {
+		writeError(w, http.StatusBadRequest, "a valid email is required", "bad_email")
+		return
+	}
+	req.Email = addr.Address
 	if req.Message == "" {
 		writeError(w, http.StatusBadRequest, "message is required", "bad_request")
 		return

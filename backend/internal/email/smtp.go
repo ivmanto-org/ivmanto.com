@@ -92,6 +92,10 @@ func (s *SmtpService) send(to, cc []string, subject, htmlBody string, attachment
 	if len(cc) > 0 {
 		msg.WriteString(fmt.Sprintf("Cc: %s\r\n", strings.Join(cc, ", ")))
 	}
+	// Strip CR/LF from the subject no matter who built it (PR #128 H1
+	// defence in depth): a newline here would let a caller inject headers
+	// into the mail.
+	subject = strings.NewReplacer("\r", "", "\n", "").Replace(subject)
 	msg.WriteString(fmt.Sprintf("Subject: %s\r\n", subject))
 	msg.WriteString("MIME-Version: 1.0\r\n")
 	msg.WriteString(fmt.Sprintf("Content-Type: multipart/mixed; boundary=%s\r\n", writer.Boundary()))
@@ -335,7 +339,7 @@ func buildLeadNotificationHTML(lead LeadInfo) string {
 %s%s%s</ul>
 <p><strong>Request / conversation summary:</strong></p>
 <p>%s</p>
-<p><em>Consent given (Art. 6(1)(a)): yes. Insights opt-in: %s.</em></p>`,
+<p><em>Confirmation ticked: yes. Insights opt-in (consent, Art. 6(1)(a)): %s.</em></p>`,
 		htmlEscape(lead.Source),
 		htmlEscape(lead.Name),
 		htmlEscape(lead.Email), htmlEscape(lead.Email),

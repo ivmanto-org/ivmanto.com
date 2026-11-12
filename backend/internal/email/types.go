@@ -43,10 +43,13 @@ type GeneratedIdea struct {
 // Interest are the ivGIL form's optional fields (visitor's role; early
 // access vs design partner) — forwarded to Nick, never acted on
 // server-side. Name, Email, Company and Message are required; Consent
-// documents the Art. 6(1)(a) conversation-sharing consent and must be true
-// for the email to be sent. InsightsOptIn is the visitor's insights
-// double-opt-in flag — captured and forwarded to Nick, never acted on
-// server-side. The lead is emailed to Nick and NOT stored.
+// documents the confirmation tick and must be true
+// for the email to be sent: the processing basis for the lead mail is
+// Art. 6(1)(b) (steps at the visitor's request before a contract,
+// Ivgil's verdict 2026-11-11); only InsightsOptIn is consent,
+// Art. 6(1)(a). InsightsOptIn is the visitor's insights double-opt-in
+// flag — captured and forwarded to Nick, never acted on server-side.
+// The lead is emailed to Nick and NOT stored.
 type LeadInfo struct {
 	Source        string
 	PackageID     string
