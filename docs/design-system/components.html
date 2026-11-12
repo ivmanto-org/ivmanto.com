@@ -278,7 +278,7 @@ p { margin: 0 0 var(--space-4); max-width: var(--measure); }
 .pillar ul { margin: var(--space-4) 0 0; padding: 0; list-style: none; font-size: var(--text-sm); color: var(--text-muted); }
 .pillar li { padding: 6px 0; border-top: 1px solid var(--border); }
 
-/* Package card */
+/* Buy box on the package page (the package card itself is the ticket below, v1.3) */
 .package { display: flex; flex-direction: column; gap: var(--space-4); }
 .package--recommended { border-color: var(--signal); }
 .package__top { display: flex; justify-content: space-between; align-items: start; gap: var(--space-3); }
@@ -287,6 +287,48 @@ p { margin: 0 0 var(--space-4); max-width: var(--measure); }
 .package__meta { display: flex; flex-wrap: wrap; gap: var(--space-4); font-size: var(--text-sm); color: var(--text-muted); }
 .package__meta span { display: inline-flex; gap: 6px; align-items: center; }
 .package .btn { margin-top: auto; }
+/* Pillar index (home, v1.3; spec: cards.md): numbered columns instead of cards */
+.pillar-index { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--space-8) var(--space-12); }
+.pillar-index__item { position: relative; display: grid; gap: var(--space-2); padding: var(--space-6) 0 var(--space-4); border-top: 2px solid var(--text); }
+.pillar-index__item > * { margin: 0; }
+.pillar-index__item::before { content: ""; position: absolute; left: 0; top: -2px; width: 100%; height: 2px; background: var(--accent); transform: scaleX(0); transform-origin: left; }
+.pillar-index__no { margin-bottom: var(--space-4); font: 600 5.5rem/0.9 var(--font-headline); letter-spacing: -0.04em; color: transparent; -webkit-text-stroke: 1.5px var(--accent); }
+.pillar-index__item h3 { font-size: var(--text-2xl); }
+.pillar-index__item .card__link { color: inherit; text-decoration: none; }
+.pillar-index__item .card__link:focus-visible { outline: none; }
+.pillar-index__item .card__link:focus-visible::after { outline: 2px solid var(--focus); outline-offset: 4px; border-radius: var(--radius-sm); }
+.pillar-index__go { position: absolute; right: 0; top: var(--space-6); width: 44px; height: 44px; display: grid; place-items: center; border-radius: 50%; border: 1px solid var(--border-input); color: var(--text); }
+.pillar-index__item:hover::before, .pillar-index__item:focus-within::before { transform: scaleX(1); }
+.pillar-index__item:hover .pillar-index__no, .pillar-index__item:focus-within .pillar-index__no { color: var(--accent); }
+.pillar-index__item:hover .pillar-index__go, .pillar-index__item:focus-within .pillar-index__go { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+@media (prefers-reduced-motion: no-preference) {
+  .pillar-index__item::before { transition: transform var(--dur-slow) var(--ease); }
+  .pillar-index__no, .pillar-index__go { transition: color var(--dur-base) var(--ease), background var(--dur-base) var(--ease), border-color var(--dur-base) var(--ease); }
+}
+
+/* Package card = ticket (v1.3; spec: cards.md): scope above the perforation, price on the stub */
+.ticket { --notch: 13px; --stub: 124px; --ticket-ground: var(--bg); position: relative; display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--border-input); border-radius: var(--radius-lg); }
+.section--sunken .ticket { --ticket-ground: var(--surface-sunken); }
+/* two half-circle notches where the stub tears off; they take the colour of the ground behind the ticket */
+.ticket::before, .ticket::after { content: ""; position: absolute; bottom: calc(var(--stub) - var(--notch)); width: calc(var(--notch) * 2); height: calc(var(--notch) * 2); border-radius: 50%; background: var(--ticket-ground); border: 1px solid var(--border-input); }
+.ticket::before { left: calc(var(--notch) * -1 - 1px); clip-path: inset(-2px -2px -2px 50%); }
+.ticket::after { right: calc(var(--notch) * -1 - 1px); clip-path: inset(-2px 50% -2px -2px); }
+.ticket__body { flex: 1; display: flex; flex-direction: column; gap: var(--space-4); padding: var(--space-6); }
+.ticket__body > * { margin: 0; }
+.ticket__body h3 { font-size: var(--text-xl); }
+.ticket__spec { display: grid; gap: var(--space-3); margin-top: auto; padding-top: var(--space-2); }
+.ticket__spec div { display: grid; grid-template-columns: 5.5rem 1fr; gap: var(--space-3); align-items: baseline; }
+.ticket__spec dt { font: 500 var(--text-xs)/1.4 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); }
+.ticket__spec dd { margin: 0; font-size: var(--text-sm); }
+.ticket__stub { height: var(--stub); box-sizing: border-box; display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); margin: 0 calc(var(--notch) + 4px); padding: 0 calc(var(--space-6) - var(--notch) - 4px); border-top: 2px dashed var(--border-input); }
+.ticket__price { font: 600 var(--text-3xl)/1 var(--font-headline); letter-spacing: var(--tracking-headline); white-space: nowrap; }
+.ticket__price small { display: block; margin-top: 8px; font: 400 var(--text-xs)/1.2 var(--font-sans); letter-spacing: 0; color: var(--text-muted); }
+/* recommended: teal outline and the one filled stub; the amber stays in the badge */
+.ticket--recommended, .ticket--recommended::before, .ticket--recommended::after { border-color: var(--accent); }
+.ticket--recommended .ticket__stub { margin: 0; padding: 0 var(--space-6); background: var(--accent); color: var(--on-accent); border-top-color: var(--surface); border-radius: 0 0 calc(var(--radius-lg) - 1px) calc(var(--radius-lg) - 1px); }
+.ticket--recommended .ticket__price small { color: var(--on-accent); }
+.ticket--recommended .ticket__stub .btn { background: var(--surface); color: var(--text); border-color: var(--surface); }
+.ticket--recommended .ticket__stub .btn:hover { background: var(--surface-sunken); border-color: var(--surface-sunken); }
 .ticks { list-style: none; margin: 0; padding: 0; }
 .ticks li { position: relative; padding-left: 22px; margin: 6px 0; font-size: var(--text-sm); }
 .ticks li::before { content: ""; position: absolute; left: 2px; top: .62em; width: 7px; height: 7px; border-right: 2px solid var(--accent); border-top: 2px solid var(--accent); transform: rotate(45deg); }
@@ -429,7 +471,8 @@ p { margin: 0 0 var(--space-4); max-width: var(--measure); }
 .hero-motion__grid { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none;
   -webkit-mask-image: radial-gradient(ellipse 95% 95% at 50% 40%, #000 25%, transparent 78%); mask-image: radial-gradient(ellipse 95% 95% at 50% 40%, #000 25%, transparent 78%); }
 .hero-motion.is-paused .hero-motion__glow { animation-play-state: paused; }
-.hero-motion__pause { position: absolute; right: max(20px, env(safe-area-inset-right, 0px)); bottom: 20px; background: var(--surface); }
+.hero-motion__pause { position: absolute; left: max(20px, env(safe-area-inset-left, 0px)); bottom: 20px; background: var(--surface); } /* bottom left: the cookie banner sits bottom right */
+@media (prefers-reduced-motion: reduce) { .hero-motion__pause { display: none; } } /* nothing moves, so there is nothing to pause */
 .hero-motion__pause [hidden] { display: none; }
 .hero-motion h1 .line { display: block; overflow: hidden; padding-bottom: 0.14em; margin-bottom: -0.14em; }
 .hero-motion h1 .line > * { display: block; }
@@ -569,16 +612,28 @@ p { margin: 0 0 var(--space-4); max-width: var(--measure); }
   </div>
 
   <h2 style="margin-top:var(--space-16)">Cards</h2>
-  <div class="ds-label">pillar card</div>
+  <div class="ds-label">pillar card (pillar pages, cross-links)</div>
   <div class="grid grid-3">
     <div class="card card--link pillar"><svg class="card__icon" viewBox="0 0 44 44" width="44" height="44" aria-hidden="true"><rect x="3" y="3" width="38" height="38" rx="9" fill="var(--accent-subtle)" stroke="var(--accent)" stroke-width="1.5"/><text x="22" y="27.5" text-anchor="middle" font-family="Montserrat, Inter, sans-serif" font-size="15" font-weight="600" fill="var(--accent)">G</text></svg><h3><a class="card__link" href="#" style="color:inherit;text-decoration:none">Governance</a></h3><p class="muted small">Roles, decision rights and policies for how your company uses AI.</p><ul><li>AI policy &amp; acceptable use</li><li>AI inventory &amp; ownership</li></ul></div>
   </div>
-  <div class="ds-label">package cards (default · recommended)</div>
+  <div class="ds-label">pillar index (home page: numerals fill on hover or focus)</div>
+    <ol class="pillar-index">
+      <li class="pillar-index__item"><span class="pillar-index__no" aria-hidden="true">01</span><h3><a class="card__link" href="#">Governance</a></h3><p class="muted">Who decides what about AI.</p><span class="pillar-index__go" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></li>
+      <li class="pillar-index__item"><span class="pillar-index__no" aria-hidden="true">02</span><h3><a class="card__link" href="#">Risk management</a></h3><p class="muted">Find and reduce your AI risks.</p><span class="pillar-index__go" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></li>
+      <li class="pillar-index__item"><span class="pillar-index__no" aria-hidden="true">03</span><h3><a class="card__link" href="#">Compliance</a></h3><p class="muted">Know your obligations. Prove you meet them.</p><span class="pillar-index__go" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></li>
+    </ol>
+  <div class="ds-label">package tickets (default · recommended)</div>
   <div class="grid grid-3">
-    <div class="card package"><div class="package__top"><span class="tag tag--pillar">Risk</span></div><h3>AI risk assessment</h3><div class="package__price">€ [price]<small>fixed, excl. VAT</small></div><div class="package__meta"><span><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> 3 weeks</span><span><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/></svg> Risk register + report</span></div><ul class="ticks"><li>Scope workshop (2 h)</li><li>Risk register for up to 5 AI systems</li><li>Prioritised mitigation plan</li></ul><a class="btn btn--secondary" href="#">View package</a></div>
-    <div class="card package package--recommended"><div class="package__top"><span class="tag tag--pillar">Compliance</span><span class="badge-recommended">Recommended</span></div><h3>EU AI Act readiness</h3><div class="package__price">€ [price]<small>fixed, excl. VAT</small></div><div class="package__meta"><span><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> 4 weeks</span><span><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/></svg> Gap report + roadmap</span></div><ul class="ticks"><li>Classification of your AI systems</li><li>Gap analysis against obligations</li><li>12-month roadmap</li></ul><a class="btn btn--primary" href="#">View package</a></div>
+    <div class="ticket"><div class="ticket__body"><div class="package__top"><span class="tag tag--pillar">Risk</span></div><h3>AI risk assessment</h3><ul class="ticks"><li>Scope workshop (2 h)</li><li>Risk register for up to 5 AI systems</li><li>Prioritised mitigation plan</li></ul><dl class="ticket__spec"><div><dt>Duration</dt><dd>3 weeks</dd></div><div><dt>You get</dt><dd>Risk register + report</dd></div></dl></div><div class="ticket__stub"><div class="ticket__price">€ [price]<small>fixed, excl. VAT</small></div><a class="btn btn--secondary" href="#" aria-label="View package: AI risk assessment">View <svg class="chev" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></a></div></div>
+    <div class="ticket ticket--recommended"><div class="ticket__body"><div class="package__top"><span class="tag tag--pillar">Compliance</span><span class="badge-recommended">Recommended</span></div><h3>EU AI Act readiness</h3><ul class="ticks"><li>Classification of your AI systems</li><li>Gap analysis against obligations</li><li>12-month roadmap</li></ul><dl class="ticket__spec"><div><dt>Duration</dt><dd>4 weeks</dd></div><div><dt>You get</dt><dd>Gap report + roadmap</dd></div></dl></div><div class="ticket__stub"><div class="ticket__price">€ [price]<small>fixed, excl. VAT</small></div><a class="btn btn--primary" href="#" aria-label="View package: EU AI Act readiness">View <svg class="chev" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></a></div></div>
   </div>
   <p class="small muted">Package names, scope and prices are placeholders until Nick defines the catalogue.</p>
+  <div class="ds-label">package tickets, compact (home page only: no ticks list)</div>
+  <div class="grid grid-3">
+    <div class="ticket"><div class="ticket__body"><div class="package__top"><span class="tag tag--pillar">Governance</span></div><h3>AI governance quick check</h3><dl class="ticket__spec"><div><dt>Duration</dt><dd>1 day</dd></div><div><dt>You get</dt><dd>Snapshot + top-5 risk memo</dd></div></dl></div><div class="ticket__stub"><div class="ticket__price">€ [price]<small>fixed, excl. VAT</small></div><a class="btn btn--secondary" href="#" aria-label="View package: AI governance quick check">View <svg class="chev" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></a></div></div>
+    <div class="ticket ticket--recommended"><div class="ticket__body"><div class="package__top"><span class="tag tag--pillar">Compliance</span><span class="badge-recommended">Recommended start</span></div><h3>EU AI Act readiness</h3><dl class="ticket__spec"><div><dt>Duration</dt><dd>5 weeks</dd></div><div><dt>You get</dt><dd>Inventory + gap report + roadmap</dd></div></dl></div><div class="ticket__stub"><div class="ticket__price">€ [price]<small>fixed, excl. VAT</small></div><a class="btn btn--primary" href="#" aria-label="View package: EU AI Act readiness">View <svg class="chev" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></a></div></div>
+  </div>
+  <p class="small muted" style="margin-top:var(--space-3)">Same markup as the full card without <span class="mono">ul.ticks</span>. The full list stays on /packages and the package page. Spec: <span class="mono">components/cards.md</span>.</p>
 
   <h2 style="margin-top:var(--space-16)">Order stepper</h2>
   <div class="ds-box"><ol class="stepper"><li class="done"><span>Package</span></li><li aria-current="step"><span>Your details</span></li><li><span>Review</span></li><li><span>Confirmation</span></li></ol></div>
@@ -592,6 +647,30 @@ p { margin: 0 0 var(--space-4); max-width: var(--measure); }
 
   <h2 style="margin-top:var(--space-16)">How it works</h2>
   <ol class="flow"><li><span class="flow__icon"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5h16v11H11l-4.5 3.5v-3.5H4z"/><path d="M8 9.5h8M8 12.5h5"/></svg></span><div><h4>Describe</h4><p class="small muted">Ask the advisor or book a call.</p></div></li><li><span class="flow__icon"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M8.5 12.2l2.6 2.6 4.6-5.2"/></svg></span><div><h4>Choose</h4><p class="small muted">Fixed scope and price, up front.</p></div></li><li><span class="flow__icon"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3.5h8l4 4v13H6z"/><path d="M14 3.5v4h4M9 12h6M9 15.5h6"/></svg></span><div><h4>Deliver</h4><p class="small muted">Workshops and documents, built with you.</p></div></li><li><span class="flow__icon"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14v5.5h16V14"/><path d="M12 4v10.5M8 10.5l4 4 4-4"/></svg></span><div><h4>Hand over</h4><p class="small muted">Everything stays in your tools.</p></div></li></ol>
+
+  <h2 style="margin-top:var(--space-16)">Dark band</h2>
+  <div class="ds-label">.band · cards, links, tags, buttons and the diagram inside it need no special styles</div>
+  <div class="band" style="border-radius:var(--radius-lg)">
+    <section class="section"><div class="container">
+      <div class="section-head"><p class="overline">Built on real engineering</p><h2>We build what we govern</h2></div>
+      <div class="grid grid-2">
+        <div class="card card--link"><h3><a class="card__link" href="#" style="color:inherit;text-decoration:none">Data &amp; AI engineering on Google Cloud</a></h3><p class="muted" style="margin:0">Data platforms and AI agents, built in your own Google Cloud project.</p></div>
+        <div class="card"><h3>Inside a band card</h3><p class="muted">Muted text, a <a href="#">text link</a> and a tag keep their contrast.</p><div class="row"><span class="tag tag--framework">ISO/IEC 42001</span><a class="btn btn--primary btn--sm" href="#">Primary</a><a class="btn btn--secondary btn--sm" href="#">Secondary</a></div></div>
+      </div>
+    </div></section>
+    <section class="section"><div class="container">
+      <ol class="flow"><li><span class="flow__icon"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5h16v11H11l-4.5 3.5v-3.5H4z"/><path d="M8 9.5h8M8 12.5h5"/></svg></span><div><h4>Describe</h4><p class="small muted">Ask the advisor or book a call.</p></div></li><li><span class="flow__icon"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M8.5 12.2l2.6 2.6 4.6-5.2"/></svg></span><div><h4>Choose</h4><p class="small muted">Fixed scope and price, up front.</p></div></li><li><span class="flow__icon"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3.5h8l4 4v13H6z"/><path d="M14 3.5v4h4M9 12h6M9 15.5h6"/></svg></span><div><h4>Deliver</h4><p class="small muted">Workshops and documents, built with you.</p></div></li><li><span class="flow__icon"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14v5.5h16V14"/><path d="M12 4v10.5M8 10.5l4 4 4-4"/></svg></span><div><h4>Hand over</h4><p class="small muted">Everything stays in your tools.</p></div></li></ol>
+    </div></section>
+  </div>
+  <p class="small muted" style="margin-top:var(--space-3)">One band per page, home only. No motion, no amber, no form and no long text inside it. On the live page the band runs the full width; here it sits in the page column. Spec: <span class="mono">components/backgrounds.md</span>.</p>
+
+  <h2 style="margin-top:var(--space-16)">Tinted section</h2>
+  <div class="ds-label">.section--tint · closing call to action</div>
+  <section class="section section--tint hexgrid" style="border-radius:var(--radius-lg)"><div class="container" style="text-align:center">
+    <h2>Not sure where to start?</h2>
+    <p class="lead" style="margin-inline:auto">A 30-minute call finds the first step.</p>
+    <div class="row" style="justify-content:center;margin-top:var(--space-6)"><a class="btn btn--primary" href="#">Book a call</a><a class="btn btn--secondary" href="#">Ask the advisor</a></div>
+  </div></section>
 
   <h2 style="margin-top:var(--space-16)">FAQ</h2>
   <div class="faq" style="max-width:760px"><details open><summary>Is this legal advice?</summary><p>No. We provide governance, risk and compliance consulting. Where legal interpretation is needed, we work alongside your lawyer.</p></details><details><summary>Can you work in German?</summary><p>Placeholder answer.</p></details></div>

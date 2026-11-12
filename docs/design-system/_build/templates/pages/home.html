@@ -7,8 +7,10 @@
 .hero { padding: var(--space-12) 0 var(--space-16); }
 .hero-grid { display: grid; gap: var(--space-8); grid-template-areas: "text" "adv" "more"; }
 .hero-text { grid-area: text; } .hero-adv { grid-area: adv; } .hero-more { grid-area: more; }
-@media (min-width: 1000px) { .hero-grid { grid-template-columns: 1fr 1.05fr; grid-template-areas: "text adv" "more adv"; gap: var(--space-6) var(--space-12); align-content: center; } .hero-text { align-self: end; } .hero { padding: var(--space-24) 0; } }
+@media (min-width: 1000px) { .hero-grid { grid-template-columns: 1.15fr 1fr; grid-template-areas: "text adv" "more adv"; gap: var(--space-6) var(--space-12); align-content: center; } .hero-text { align-self: end; } .hero { padding: var(--space-24) 0; } }
 .hero h1 em { font-style: normal; color: var(--accent); }
+/* v1.3.1: two-line headline on desktop (each sentence on one line from 1000px up); 48px at most, text column a little wider than the advisor */
+@media (min-width: 1000px) { .hero h1 { font-size: clamp(2.25rem, calc(4.4vw - 7px), 3rem); } }
 .trust-line { display: flex; flex-wrap: wrap; gap: var(--space-4) var(--space-6); margin-top: var(--space-8); font-size: var(--text-sm); color: var(--text-muted); }
 .trust-line span { display: inline-flex; gap: 8px; align-items: center; }
 .trust-line span::before { content: ""; width: 7px; height: 7px; border-right: 2px solid var(--accent); border-top: 2px solid var(--accent); transform: rotate(45deg); }
@@ -69,23 +71,23 @@
     <span class="tag tag--framework">EU AI Act</span><span class="tag tag--framework">ISO/IEC 42001</span><span class="tag tag--framework">ISO/IEC 27001</span><span class="tag tag--framework">NIST AI RMF</span><span class="tag tag--framework">GDPR</span>
   </div></section>
 
-  <!-- 3 · Pillars: icon, title, tagline -->
+  <!-- 3 · Pillars: numbered index (v1.3), title, tagline -->
   <section class="section section--sunken"><div class="container">
     <div class="section-head"><p class="overline">What we do</p><h2>Three pillars, one accountable partner</h2></div>
-    <div class="grid grid-3">
-      <div class="card card--link pillar">{{PILLAR:G}}<h3><a class="card__link" href="pillar.html" style="color:inherit;text-decoration:none">Governance</a></h3><p class="muted" style="margin:0">Who decides what about AI.</p></div>
-      <div class="card card--link pillar">{{PILLAR:R}}<h3><a class="card__link" href="#" style="color:inherit;text-decoration:none">Risk management</a></h3><p class="muted" style="margin:0">Find and reduce your AI risks.</p></div>
-      <div class="card card--link pillar">{{PILLAR:C}}<h3><a class="card__link" href="#" style="color:inherit;text-decoration:none">Compliance</a></h3><p class="muted" style="margin:0">Know your obligations. Prove you meet them.</p></div>
-    </div>
+    <ol class="pillar-index">
+      <li class="pillar-index__item"><span class="pillar-index__no" aria-hidden="true">01</span><h3><a class="card__link" href="pillar.html">Governance</a></h3><p class="muted">Who decides what about AI.</p><span class="pillar-index__go" aria-hidden="true">{{ICON:arrow}}</span></li>
+      <li class="pillar-index__item"><span class="pillar-index__no" aria-hidden="true">02</span><h3><a class="card__link" href="#">Risk management</a></h3><p class="muted">Find and reduce your AI risks.</p><span class="pillar-index__go" aria-hidden="true">{{ICON:arrow}}</span></li>
+      <li class="pillar-index__item"><span class="pillar-index__no" aria-hidden="true">03</span><h3><a class="card__link" href="#">Compliance</a></h3><p class="muted">Know your obligations. Prove you meet them.</p><span class="pillar-index__go" aria-hidden="true">{{ICON:arrow}}</span></li>
+    </ol>
   </div></section>
 
-  <!-- 4 · Packages: compact cards (no ticks list) -->
+  <!-- 4 · Packages: compact tickets (v1.3, no ticks list) -->
   <section class="section"><div class="container">
     <div class="section-head"><p class="overline">Packages</p><h2>Fixed scope. Fixed price. Order directly.</h2></div>
     <div class="grid grid-3">
-      <div class="card package"><div class="package__top"><span class="tag tag--pillar">Governance</span></div><h3>AI governance quick check</h3><div class="package__price">€ [price]<small>fixed, excl. VAT</small></div><div class="package__meta"><span>{{ICON:clock}} 1 week</span><span>{{ICON:doc}} Snapshot + top-5 risk memo</span></div><a class="btn btn--secondary" href="package.html">View package</a></div>
-      <div class="card package"><div class="package__top"><span class="tag tag--pillar">Risk management</span></div><h3>AI risk assessment</h3><div class="package__price">€ [price]<small>fixed, excl. VAT</small></div><div class="package__meta"><span>{{ICON:clock}} 4 weeks</span><span>{{ICON:doc}} Risk report + working register</span></div><a class="btn btn--secondary" href="package.html">View package</a></div>
-      <div class="card package package--recommended"><div class="package__top"><span class="tag tag--pillar">Compliance</span><span class="badge-recommended">Recommended start</span></div><h3>EU AI Act readiness</h3><div class="package__price">€ [price]<small>fixed, excl. VAT</small></div><div class="package__meta"><span>{{ICON:clock}} 5 weeks</span><span>{{ICON:doc}} Inventory + gap report + roadmap</span></div><a class="btn btn--primary" href="package.html">View package</a></div>
+      <div class="ticket"><div class="ticket__body"><div class="package__top"><span class="tag tag--pillar">Governance</span></div><h3>AI governance quick check</h3><dl class="ticket__spec"><div><dt>Duration</dt><dd>1 day</dd></div><div><dt>You get</dt><dd>Snapshot + top-5 risk memo</dd></div></dl></div><div class="ticket__stub"><div class="ticket__price">€ [price]<small>fixed, excl. VAT</small></div><a class="btn btn--secondary" href="package.html" aria-label="View package: AI governance quick check">View {{ICON:chev}}</a></div></div>
+      <div class="ticket"><div class="ticket__body"><div class="package__top"><span class="tag tag--pillar">Risk management</span></div><h3>AI risk assessment</h3><dl class="ticket__spec"><div><dt>Duration</dt><dd>4 weeks</dd></div><div><dt>You get</dt><dd>Risk report + working register</dd></div></dl></div><div class="ticket__stub"><div class="ticket__price">€ [price]<small>fixed, excl. VAT</small></div><a class="btn btn--secondary" href="package.html" aria-label="View package: AI risk assessment">View {{ICON:chev}}</a></div></div>
+      <div class="ticket ticket--recommended"><div class="ticket__body"><div class="package__top"><span class="tag tag--pillar">Compliance</span><span class="badge-recommended">Recommended start</span></div><h3>EU AI Act readiness</h3><dl class="ticket__spec"><div><dt>Duration</dt><dd>5 weeks</dd></div><div><dt>You get</dt><dd>Inventory + gap report + roadmap</dd></div></dl></div><div class="ticket__stub"><div class="ticket__price">€ [price]<small>fixed, excl. VAT</small></div><a class="btn btn--primary" href="package.html" aria-label="View package: EU AI Act readiness">View {{ICON:chev}}</a></div></div>
     </div>
     <p class="more"><a class="btn btn--ghost" href="#">All packages {{ICON:chev}}</a></p>
   </div></section>
@@ -112,7 +114,7 @@
       <p class="overline">Who you work with</p>
       <h2>One accountable expert, not an account team</h2>
       <p class="lead">I'm Nikolay Tonev. You work with me directly, from the first call to the handover.</p>
-      <div class="row"><span class="tag tag--framework">MIT Professional Education certificate</span><span class="tag tag--framework">Google Cloud Professional Cloud Architect</span></div>
+      <div class="row"><span class="tag tag--framework">MIT Professional Education certificate</span><span class="tag tag--framework">Google Cloud Professional Cloud Architect · certified 2019, 2022 and 2024</span></div>
       <p><a class="btn btn--ghost" href="#">More about me {{ICON:chev}}</a></p>
     </div>
   </div></section>

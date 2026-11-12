@@ -278,7 +278,7 @@ p { margin: 0 0 var(--space-4); max-width: var(--measure); }
 .pillar ul { margin: var(--space-4) 0 0; padding: 0; list-style: none; font-size: var(--text-sm); color: var(--text-muted); }
 .pillar li { padding: 6px 0; border-top: 1px solid var(--border); }
 
-/* Package card */
+/* Buy box on the package page (the package card itself is the ticket below, v1.3) */
 .package { display: flex; flex-direction: column; gap: var(--space-4); }
 .package--recommended { border-color: var(--signal); }
 .package__top { display: flex; justify-content: space-between; align-items: start; gap: var(--space-3); }
@@ -287,6 +287,48 @@ p { margin: 0 0 var(--space-4); max-width: var(--measure); }
 .package__meta { display: flex; flex-wrap: wrap; gap: var(--space-4); font-size: var(--text-sm); color: var(--text-muted); }
 .package__meta span { display: inline-flex; gap: 6px; align-items: center; }
 .package .btn { margin-top: auto; }
+/* Pillar index (home, v1.3; spec: cards.md): numbered columns instead of cards */
+.pillar-index { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--space-8) var(--space-12); }
+.pillar-index__item { position: relative; display: grid; gap: var(--space-2); padding: var(--space-6) 0 var(--space-4); border-top: 2px solid var(--text); }
+.pillar-index__item > * { margin: 0; }
+.pillar-index__item::before { content: ""; position: absolute; left: 0; top: -2px; width: 100%; height: 2px; background: var(--accent); transform: scaleX(0); transform-origin: left; }
+.pillar-index__no { margin-bottom: var(--space-4); font: 600 5.5rem/0.9 var(--font-headline); letter-spacing: -0.04em; color: transparent; -webkit-text-stroke: 1.5px var(--accent); }
+.pillar-index__item h3 { font-size: var(--text-2xl); }
+.pillar-index__item .card__link { color: inherit; text-decoration: none; }
+.pillar-index__item .card__link:focus-visible { outline: none; }
+.pillar-index__item .card__link:focus-visible::after { outline: 2px solid var(--focus); outline-offset: 4px; border-radius: var(--radius-sm); }
+.pillar-index__go { position: absolute; right: 0; top: var(--space-6); width: 44px; height: 44px; display: grid; place-items: center; border-radius: 50%; border: 1px solid var(--border-input); color: var(--text); }
+.pillar-index__item:hover::before, .pillar-index__item:focus-within::before { transform: scaleX(1); }
+.pillar-index__item:hover .pillar-index__no, .pillar-index__item:focus-within .pillar-index__no { color: var(--accent); }
+.pillar-index__item:hover .pillar-index__go, .pillar-index__item:focus-within .pillar-index__go { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+@media (prefers-reduced-motion: no-preference) {
+  .pillar-index__item::before { transition: transform var(--dur-slow) var(--ease); }
+  .pillar-index__no, .pillar-index__go { transition: color var(--dur-base) var(--ease), background var(--dur-base) var(--ease), border-color var(--dur-base) var(--ease); }
+}
+
+/* Package card = ticket (v1.3; spec: cards.md): scope above the perforation, price on the stub */
+.ticket { --notch: 13px; --stub: 124px; --ticket-ground: var(--bg); position: relative; display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--border-input); border-radius: var(--radius-lg); }
+.section--sunken .ticket { --ticket-ground: var(--surface-sunken); }
+/* two half-circle notches where the stub tears off; they take the colour of the ground behind the ticket */
+.ticket::before, .ticket::after { content: ""; position: absolute; bottom: calc(var(--stub) - var(--notch)); width: calc(var(--notch) * 2); height: calc(var(--notch) * 2); border-radius: 50%; background: var(--ticket-ground); border: 1px solid var(--border-input); }
+.ticket::before { left: calc(var(--notch) * -1 - 1px); clip-path: inset(-2px -2px -2px 50%); }
+.ticket::after { right: calc(var(--notch) * -1 - 1px); clip-path: inset(-2px 50% -2px -2px); }
+.ticket__body { flex: 1; display: flex; flex-direction: column; gap: var(--space-4); padding: var(--space-6); }
+.ticket__body > * { margin: 0; }
+.ticket__body h3 { font-size: var(--text-xl); }
+.ticket__spec { display: grid; gap: var(--space-3); margin-top: auto; padding-top: var(--space-2); }
+.ticket__spec div { display: grid; grid-template-columns: 5.5rem 1fr; gap: var(--space-3); align-items: baseline; }
+.ticket__spec dt { font: 500 var(--text-xs)/1.4 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); }
+.ticket__spec dd { margin: 0; font-size: var(--text-sm); }
+.ticket__stub { height: var(--stub); box-sizing: border-box; display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); margin: 0 calc(var(--notch) + 4px); padding: 0 calc(var(--space-6) - var(--notch) - 4px); border-top: 2px dashed var(--border-input); }
+.ticket__price { font: 600 var(--text-3xl)/1 var(--font-headline); letter-spacing: var(--tracking-headline); white-space: nowrap; }
+.ticket__price small { display: block; margin-top: 8px; font: 400 var(--text-xs)/1.2 var(--font-sans); letter-spacing: 0; color: var(--text-muted); }
+/* recommended: teal outline and the one filled stub; the amber stays in the badge */
+.ticket--recommended, .ticket--recommended::before, .ticket--recommended::after { border-color: var(--accent); }
+.ticket--recommended .ticket__stub { margin: 0; padding: 0 var(--space-6); background: var(--accent); color: var(--on-accent); border-top-color: var(--surface); border-radius: 0 0 calc(var(--radius-lg) - 1px) calc(var(--radius-lg) - 1px); }
+.ticket--recommended .ticket__price small { color: var(--on-accent); }
+.ticket--recommended .ticket__stub .btn { background: var(--surface); color: var(--text); border-color: var(--surface); }
+.ticket--recommended .ticket__stub .btn:hover { background: var(--surface-sunken); border-color: var(--surface-sunken); }
 .ticks { list-style: none; margin: 0; padding: 0; }
 .ticks li { position: relative; padding-left: 22px; margin: 6px 0; font-size: var(--text-sm); }
 .ticks li::before { content: ""; position: absolute; left: 2px; top: .62em; width: 7px; height: 7px; border-right: 2px solid var(--accent); border-top: 2px solid var(--accent); transform: rotate(45deg); }
@@ -429,7 +471,8 @@ p { margin: 0 0 var(--space-4); max-width: var(--measure); }
 .hero-motion__grid { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none;
   -webkit-mask-image: radial-gradient(ellipse 95% 95% at 50% 40%, #000 25%, transparent 78%); mask-image: radial-gradient(ellipse 95% 95% at 50% 40%, #000 25%, transparent 78%); }
 .hero-motion.is-paused .hero-motion__glow { animation-play-state: paused; }
-.hero-motion__pause { position: absolute; right: max(20px, env(safe-area-inset-right, 0px)); bottom: 20px; background: var(--surface); }
+.hero-motion__pause { position: absolute; left: max(20px, env(safe-area-inset-left, 0px)); bottom: 20px; background: var(--surface); } /* bottom left: the cookie banner sits bottom right */
+@media (prefers-reduced-motion: reduce) { .hero-motion__pause { display: none; } } /* nothing moves, so there is nothing to pause */
 .hero-motion__pause [hidden] { display: none; }
 .hero-motion h1 .line { display: block; overflow: hidden; padding-bottom: 0.14em; margin-bottom: -0.14em; }
 .hero-motion h1 .line > * { display: block; }
@@ -525,9 +568,9 @@ p { margin: 0 0 var(--space-4); max-width: var(--measure); }
   <section class="section" id="packages"><div class="container">
     <div class="section-head"><p class="overline">Governance packages</p><h2>Pick a starting point</h2></div>
     <div class="grid grid-3">
-      <div class="card package"><h3>AI inventory &amp; ownership</h3><div class="package__price">€ [price]<small>fixed</small></div><div class="package__meta"><span><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> 2 weeks</span></div><ul class="ticks"><li>Discovery interviews</li><li>AI system register</li><li>Owner per system</li></ul><a class="btn btn--secondary" href="package.html">View package</a></div>
-      <div class="card package package--recommended"><div class="package__top"><span></span><span class="badge-recommended">Recommended start</span></div><h3>AI policy &amp; acceptable use</h3><div class="package__price">€ [price]<small>fixed</small></div><div class="package__meta"><span><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> 3 weeks</span></div><ul class="ticks"><li>AI policy and acceptable-use rules</li><li>Approval workflow for new AI tools</li><li>Staff briefing (1 h)</li></ul><a class="btn btn--primary" href="package.html">View package</a></div>
-      <div class="card package"><h3>Governance operating model</h3><div class="package__price">€ [price]<small>fixed</small></div><div class="package__meta"><span><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> 6 weeks</span></div><ul class="ticks"><li>AI governance board setup</li><li>RACI and escalation paths</li><li>Review cadence</li></ul><a class="btn btn--secondary" href="package.html">View package</a></div>
+      <div class="ticket"><div class="ticket__body"><h3>AI inventory &amp; ownership</h3><ul class="ticks"><li>Discovery interviews</li><li>AI system register</li><li>Owner per system</li></ul><dl class="ticket__spec"><div><dt>Duration</dt><dd>2 weeks</dd></div></dl></div><div class="ticket__stub"><div class="ticket__price">€ [price]<small>fixed, excl. VAT</small></div><a class="btn btn--secondary" href="package.html" aria-label="View package: AI inventory and ownership">View <svg class="chev" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></a></div></div>
+      <div class="ticket ticket--recommended"><div class="ticket__body"><div class="package__top"><span></span><span class="badge-recommended">Recommended start</span></div><h3>AI policy &amp; acceptable use</h3><ul class="ticks"><li>AI policy and acceptable-use rules</li><li>Approval workflow for new AI tools</li><li>Staff briefing (1 h)</li></ul><dl class="ticket__spec"><div><dt>Duration</dt><dd>3 weeks</dd></div></dl></div><div class="ticket__stub"><div class="ticket__price">€ [price]<small>fixed, excl. VAT</small></div><a class="btn btn--primary" href="package.html" aria-label="View package: AI policy and acceptable use">View <svg class="chev" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></a></div></div>
+      <div class="ticket"><div class="ticket__body"><h3>Governance operating model</h3><ul class="ticks"><li>AI governance board setup</li><li>RACI and escalation paths</li><li>Review cadence</li></ul><dl class="ticket__spec"><div><dt>Duration</dt><dd>6 weeks</dd></div></dl></div><div class="ticket__stub"><div class="ticket__price">€ [price]<small>fixed, excl. VAT</small></div><a class="btn btn--secondary" href="package.html" aria-label="View package: Governance operating model">View <svg class="chev" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></a></div></div>
     </div>
   </div></section>
 

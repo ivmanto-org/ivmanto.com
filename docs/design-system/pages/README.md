@@ -13,7 +13,7 @@ Self-contained HTML previews (open in Claude Desktop or any browser; the header 
 v1.1 (2026-11-11): the order is unchanged, the copy is cut by about half (`home-copy.md`) and the hero has motion (`../components/hero-motion.md`, preview `../previews/hero-motion.html`). v1.2 (2026-11-12): sections 4b and 5 sit in one dark band and the closing CTA is tinted (`../components/backgrounds.md`). `home.html` shows all of this.
 1. **Hero + advisor.** Answer "what is this and is it for me" in one line. Ask "what's your situation" right away, so the visitor gets an individual answer instead of reading a menu.
 2. **Frameworks strip.** Instant orientation for a CAIO or CDO: the vocabulary they search for.
-3. **Three pillars.** For visitors who prefer to browse; each pillar card lists its services.
+3. **Three pillars.** For visitors who prefer to browse: a numbered index (01 to 03) with title and tagline.
 4. **Packages.** Fixed scope and fixed price are the differentiator against "request a demo" vendors.
 5. **How it works.** Lowers perceived risk (four steps, no lock-in).
 6. **About Nick.** A person, not a platform: portrait, two to three sentences, Accredible credential.

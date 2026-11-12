@@ -1,6 +1,6 @@
 # Hero motion (home)
 
-Approved by Nick 2026-11-11 (variant C). Live preview: `../previews/hero-motion.html` (switch between Today, A, B, C; light and dark).
+Approved by Nick 2026-11-11 (variant C); pause button position and reduced-motion rule changed 2026-11-12 (v1.2.3). Live preview: `../previews/hero-motion.html` (switch between Today, A, B, C; light and dark).
 Applies to the **home hero only**. Pillar heroes and the closing CTA keep the still hex-grid texture.
 
 Three layers, back to front: glow, hex grid with wave, content with a one-time entrance. The headline text never moves after the entrance.
@@ -35,8 +35,8 @@ CSS only, so the text is in the HTML and readable if scripts fail. Only `opacity
 Easing `--ease`. Everything is still after about 1.4 s. Each headline line needs `overflow: hidden` with `padding-bottom: .14em; margin-bottom: -.14em` so descenders are not cut.
 
 ## Accessibility (required)
-- `prefers-reduced-motion: reduce`: no entrance, no drift, no wave. The still grid and the still glow are shown.
-- The glow and wave run longer than five seconds, so WCAG 2.2.2 requires a way to stop them: an icon button (`.icon-btn`, 40px) in the hero's bottom-right corner, label "Pause background motion" / "Play background motion", `aria-pressed`. The choice is stored as `ivm-motion` in localStorage (a preference, no consent needed, same as `ivm-theme`).
+- `prefers-reduced-motion: reduce`: no entrance, no drift, no wave. The still grid and the still glow are shown. The pause button is hidden, because nothing moves.
+- The glow and wave run longer than five seconds, so WCAG 2.2.2 requires a way to stop them: an icon button (`.icon-btn`, 40px) in the hero's **bottom-left** corner (20px from the edges; the cookie banner occupies the bottom right on a first visit), label "Pause background motion" / "Play background motion", `aria-pressed`. The choice is stored as `ivm-motion` in localStorage (a preference, no consent needed, same as `ivm-theme`).
 - Text contrast is unchanged: the wave fill stays under 7%, checked against `--text` and `--text-muted` in both themes.
 
 ## Not allowed

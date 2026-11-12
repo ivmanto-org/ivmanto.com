@@ -2,15 +2,19 @@
 
 The single record of what Nick has decided, what is still a placeholder, and what was rejected.
 If any other file, chat or agent disagrees with this log, **this log wins**. Newest first within each section.
-Owner: Brio. Last updated 2026-11-12 (home backgrounds).
+Owner: Brio. Last updated 2026-11-12 (hero headline).
 
 ## 1. Approved (use as is)
 
 | Date | Decision | Where |
 |---|---|---|
+| 2026-11-12 | **Home headline: two lines on desktop, option C.** Text column a little wider (`1.15fr` / `1fr`), headline at most 48px on the home hero. Options A (wider column only) and B (smaller headline only) are not used. | `pages/home-copy.md`, `previews/hero-headline.html` |
+| 2026-11-12 | **Cards, concept B "Ticket".** The package card is a ticket (scope above a perforation, price on the stub; recommended = teal outline and filled stub). The three pillar cards on the home page become a numbered index with outlined numerals. Chosen from three concepts (A Cell, B Ticket, C Rows); A and C are not used. | `components/cards.md`, `components/ivmanto.css`, `previews/cards-alternatives.html` |
+| 2026-11-12 | **Hero pause button: bottom-left corner, hidden under reduced motion.** It was bottom right, where the cookie banner covered it on a first visit. With `prefers-reduced-motion: reduce` nothing moves, so the button is not shown. | `components/hero-motion.md`, `components/ivmanto.css` |
 | 2026-11-12 | **Home backgrounds, option C "Dark band"**: sections 4b and 5 become one deep band (navy in the light theme, deep teal in the dark theme) with a still glow and hex grid; the closing CTA gets a teal tint. Everything else stays flat. One band per page, home only. | `components/backgrounds.md`, `previews/home-backgrounds.html` |
 | 2026-11-11 | **Home hero motion, variant C**: soft glow, one-time entrance of the hero content, slow teal wave through the hexagon grid. Home hero only; the text itself never moves; pause button and reduced-motion fallback are required. This is the one exception to "no glow, no endless animation" (2026-11-09). | `components/hero-motion.md`, `previews/hero-motion.html` |
 | 2026-11-11 | **Home text cut**: about half the visible words. Pillar taglines, compact package cards, how-it-works as an icon diagram, one-sentence about block with badges, insights without summaries, four FAQ questions. Detail stays on the inner pages. | `pages/home-copy.md`, `components/cards.md`, `components/layout.md` |
+| 2026-11-11 | **Cloud Architect badge on home carries the years**: "Certified 2019, 2022 and 2024". The last certificate expired 2026-09-01, so the badge states history; a bare badge would read as current. Changes the text cut, which had the years on /about only. Decided by Nick, reported by Clauco 2026-11-12; built on dev-v0.2.0. | `pages/home-copy.md` |
 | 2026-11-10 | **Design system v1.0 approved** for the new site. Clauco builds it (PR #122 docs, #126 / draft PR #129 site, branch `dev-v0.2.0`). | whole folder |
 | 2026-11-10 | **Logo: four parts.** (1) Wordmark "ivmanto" with the **tick-v** (Tally, Instrument Sans 650, outlined, SIL OFL). (2) **Symbol**: hexagon with two rising chevrons, the **upper teal chevron wider** (concept C, revision 2). (3) **Lockup**: symbol + wordmark. (4) **Short form** "iv" + tick. | `brand.html`, `assets/logo/` |
 | 2026-11-10 | **Website header = lockup, 30 px. Footer = wordmark alone.** | `_build/templates/_header.html`, `_footer.html` |
@@ -45,7 +49,7 @@ Owner: Brio. Last updated 2026-11-12 (home backgrounds).
 
 | Item | Waiting for |
 |---|---|
-| Package names, scope, durations and **prices** (9 packages, 3 per pillar) | Nick (catalogue) |
+| Package names, scope, durations and **prices**. Nick, 2026-11-12: prices stay placeholders (`€ [price]`) everywhere, including the site preview, until the market research and the GTM strategy confirm them. | Nick (market research, GTM strategy) |
 | Order flow: order request + invoice **or** Stripe checkout | Nick (#112) |
 | AI provider: Mistral API **or** Mistral on Vertex AI | Nick (#112) |
 | Chat retention, lead retention, lead reply-time promise | Nick |
