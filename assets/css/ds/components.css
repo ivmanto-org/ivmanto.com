@@ -283,30 +283,6 @@ p { margin: 0 0 var(--space-4); max-width: var(--measure); }
 .faq details[open] summary::after { transform: rotate(-135deg); }
 .faq details p { margin: var(--space-3) 0 0; color: var(--text-muted); }
 
-/* ---------- Cookie banner ---------- */
-.cookie { position: fixed; left: 16px; right: 16px; bottom: 16px; z-index: 30; max-width: 560px; margin-left: auto; background: var(--surface); border: 1px solid var(--border-input); border-radius: var(--radius-lg); box-shadow: var(--shadow-md); padding: var(--space-6); }
-.cookie.inline { position: static; margin: 0; }
-.cookie p { font-size: var(--text-sm); color: var(--text-muted); }
-.cookie .row .btn { flex: 1; } /* Accept and Reject equal weight (TTDSG/GDPR) */
-
-/* ---------- Footer ---------- */
-.site-footer { border-top: 1px solid var(--border); padding: var(--space-16) 0 var(--space-8); font-size: var(--text-sm); color: var(--text-muted); }
-.site-footer .cols { display: grid; gap: var(--space-8); grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
-.site-footer h4 { color: var(--text); font-size: var(--text-sm); }
-.site-footer ul { list-style: none; margin: 0; padding: 0; }
-.site-footer li { margin: 6px 0; }
-.site-footer a { color: var(--text-muted); text-decoration: none; }
-.site-footer a:hover { color: var(--text); }
-.legal-line { margin-top: var(--space-12); padding-top: var(--space-6); border-top: 1px solid var(--border); display: flex; flex-wrap: wrap; gap: var(--space-4); justify-content: space-between; }
-
-
-/* ---------- Fixes / responsive refinements ---------- */
-.advisor__log { max-height: min(70vh, 640px); }
-.advisor__log--static { max-height: none; } /* spec previews only */
-.rec .card__icon { width: 40px; height: 40px; margin: 0; }
-.site-header .btn { white-space: nowrap; }
-@media (max-width: 479px) { .header-actions .btn--sm { display: none; } } /* "Book a call" moves into the menu */
-
 /* ---------- Hero motion (home hero only, v1.1; spec: hero-motion.md) ---------- */
 :root { --glow-strength: 16%; --wave-fill: 0.07; --wave-line: 0.42; --grid-line: #64748b; }
 :root[data-theme="dark"] { --glow-strength: 20%; --wave-fill: 0.06; --wave-line: 0.5; --grid-line: #94a3b8; }

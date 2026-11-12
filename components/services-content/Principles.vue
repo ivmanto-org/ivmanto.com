@@ -1,13 +1,6 @@
-<script setup lang="ts">
-// 1. Import your composable
-// usePageMetadata is auto-imported by Nuxt
-// 2. Get the reactive title
-const { cleanTitle } = usePageMetadata()
-</script>
-
+<!-- Long-form background text. The page (pages/data-ai/[id].vue) owns the h1. -->
 <template>
   <article class="prose prose-sm lg:prose-base max-w-none p-6">
-    <h1>{{ cleanTitle }}</h1>
     <p class="italic lg:text-l">
       Our approach is grounded in the globally recognized standards of DAMA and its Data Management
       Body of Knowledge (DMBOK), ensuring we turn your information into your most reliable and
