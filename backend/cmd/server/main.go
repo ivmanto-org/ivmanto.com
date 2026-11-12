@@ -9,6 +9,7 @@ import (
 	"cloud.google.com/go/storage"
 	"cloud.google.com/go/vertexai/genai"
 	"github.com/joho/godotenv"
+	"ivmanto.com/backend/internal/advisor"
 	"ivmanto.com/backend/internal/analytics"
 	"ivmanto.com/backend/internal/articles"
 	"ivmanto.com/backend/internal/blog"
@@ -100,6 +101,47 @@ func main() {
 	articlesHandler := articles.NewHandler(logger)
 	blogHandler := blog.NewHandler(logger, blogCache, cfg.Blog.ArticlesStatusToken, cfg.Blog.PubSubPushSAEmail, cfg.Blog.PubSubPushAudience, cfg.Blog.FrontendRebuildWebhookURL)
 
+	// AI service advisor (#112): load the shared catalogue and build the
+	// Mistral provider when MISTRAL_API_KEY is set. Everything is
+	// fail-soft: any misconfiguration (missing key, missing/unparseable
+	// catalogue) leaves the provider nil, so /api/advisor answers 503
+	// rather than preventing the rest of the backend (booking, contact,
+	// blog) from starting.
+	cataloguePath := cfg.Advisor.CataloguePath
+	if cataloguePath == "" {
+		cataloguePath = advisor.DefaultCataloguePath
+	}
+
+	var advisorProvider advisor.Provider
+	var advCatalogue *advisor.Catalogue
+	if cfg.Advisor.MistralAPIKey != "" {
+		var cerr error
+		advCatalogue, cerr = advisor.LoadCatalogue(cataloguePath)
+		if cerr != nil {
+			slog.Error("MISTRAL_API_KEY set but service catalogue could not be loaded — advisor DISABLED (503)", "path", cataloguePath, "error", cerr)
+		} else {
+			advisorProvider, err = advisor.NewMistralProvider(advisor.MistralOptions{
+				APIKey:    cfg.Advisor.MistralAPIKey,
+				Model:     cfg.Advisor.MistralModel,
+				Catalogue: advCatalogue,
+			})
+			if err != nil {
+				slog.Error("could not build advisor provider — advisor DISABLED (503)", "error", err)
+				advisorProvider = nil
+				advCatalogue = nil
+			} else {
+				model := cfg.Advisor.MistralModel
+				if model == "" {
+					model = advisor.DefaultMistralModel
+				}
+				slog.Info("advisor enabled", "model", model, "catalogue", cataloguePath)
+			}
+		}
+	} else {
+		slog.Warn("MISTRAL_API_KEY unset — /api/advisor will answer 503 (not configured)")
+	}
+	advisorHandler := advisor.NewHandler(logger, advisorProvider, advCatalogue)
+
 	// Security note (#115 review, LOW-1): the /api/_internal/* endpoints sit
 	// behind Cloud Run with invoker_iam_disabled and the Load Balancer logging
 	// enabled — the backend is the ONLY gate. Warn loudly at startup if either
@@ -118,6 +160,7 @@ func main() {
 	ideasHandler.RegisterRoutes(mux)
 	articlesHandler.RegisterRoutes(mux)
 	blogHandler.RegisterRoutes(mux)
+	advisorHandler.RegisterRoutes(mux)
 
 	// 6. Apply middleware
 	var finalHandler http.Handler = mux

@@ -17,6 +17,7 @@ type Config struct {
 	Ideas     IdeasConfig
 	Analytics AnalyticsConfig
 	Blog      BlogConfig
+	Advisor   AdvisorConfig
 }
 
 // ServiceConfig holds configuration for the HTTP service.
@@ -65,6 +66,16 @@ type BlogConfig struct {
 type AnalyticsConfig struct {
 	ApiSecret     string `env:"GA_API_SECRET,required"`
 	MeasurementID string `env:"GA_MEASUREMENT_ID,required"`
+}
+
+// AdvisorConfig holds configuration for the AI service advisor (#112).
+// All fields are optional: an empty MistralAPIKey leaves the advisor
+// unconfigured (POST /api/advisor answers 503) rather than failing boot —
+// the advisor is a funnel enhancement, not a startup dependency.
+type AdvisorConfig struct {
+	MistralAPIKey string
+	MistralModel  string // empty = advisor.DefaultMistralModel
+	CataloguePath string // empty = DefaultCataloguePath
 }
 
 // Load reads configuration from environment variables.
@@ -151,6 +162,11 @@ func Load() (*Config, error) {
 		missingVars = append(missingVars, "GA_MEASUREMENT_ID")
 	}
 
+	// Load advisor config (all optional; see AdvisorConfig).
+	mistralAPIKey := os.Getenv("MISTRAL_API_KEY")
+	mistralModel := os.Getenv("MISTRAL_MODEL")
+	cataloguePath := os.Getenv("CATALOGUE_PATH")
+
 	if len(missingVars) > 0 {
 		return nil, fmt.Errorf("missing required environment variables: %s", strings.Join(missingVars, ", "))
 	}
@@ -176,6 +192,11 @@ func Load() (*Config, error) {
 			PubSubPushSAEmail:         pubsubPushSAEmail,
 			PubSubPushAudience:        pubsubPushAudience,
 			FrontendRebuildWebhookURL: os.Getenv("FRONTEND_REBUILD_WEBHOOK_URL"),
+		},
+		Advisor: AdvisorConfig{
+			MistralAPIKey: mistralAPIKey,
+			MistralModel:  mistralModel,
+			CataloguePath: cataloguePath,
 		},
 	}, nil
 }
