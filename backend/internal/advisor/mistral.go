@@ -189,8 +189,7 @@ func (m *MistralProvider) Reply(ctx context.Context, messages []ChatMessage) (Re
 }
 
 func truncate(s string, n int) string {
-	if len(s) <= n {
-		return s
-	}
-	return s[:n]
+	// Byte-slicing can split a UTF-8 character in the log line; trim on
+	// runes instead (PR #127 LOW).
+	return truncateRunes(s, n)
 }

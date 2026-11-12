@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"log/slog"
 	"net/http"
+	"strconv"
+	"strings"
 )
 
 // Handler serves the advisor HTTP endpoints. It is provider-agnostic: the
@@ -68,6 +70,7 @@ func (h *Handler) handleAdvisor(w http.ResponseWriter, r *http.Request) {
 	}
 
 	userTurns := 0
+	prevRole := ""
 	for _, msg := range req.Messages {
 		switch msg.Role {
 		case "user":
@@ -78,8 +81,23 @@ func (h *Handler) handleAdvisor(w http.ResponseWriter, r *http.Request) {
 			writeError(w, http.StatusBadRequest, `role must be "user" or "assistant"`, "bad_request")
 			return
 		}
-		if len([]rune(msg.Content)) > MaxMessageChars {
-			writeError(w, http.StatusBadRequest, "message exceeds 600 characters", "message_too_long")
+		// The advisor alternates turns: two consecutive messages with the
+		// same role are not a conversation the provider understands
+		// (PR #127 M1).
+		if msg.Role == prevRole {
+			writeError(w, http.StatusBadRequest, "conversation must alternate roles", "bad_request")
+			return
+		}
+		prevRole = msg.Role
+		// The 600-char cap protects the question being asked; the
+		// advisor's own answers can be longer, so assistant messages get
+		// their own generous cap (PR #127 H1).
+		cap := MaxMessageChars
+		if msg.Role == "assistant" {
+			cap = MaxAssistantMessageChars
+		}
+		if len([]rune(msg.Content)) > cap {
+			writeError(w, http.StatusBadRequest, "message exceeds "+strconv.Itoa(cap)+" characters", "message_too_long")
 			return
 		}
 		if msg.Content == "" {
@@ -102,11 +120,27 @@ func (h *Handler) handleAdvisor(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Bound the conversation array itself, not just the user turns: a
+	// scripted caller must not be able to forward unlimited assistant
+	// context at Mistral's expense (PR #127 M1). Checked after the turn
+	// limit so the deliberate 429 steering state still wins.
+	if len(req.Messages) > MaxMessages {
+		writeError(w, http.StatusBadRequest, "too many messages", "bad_request")
+		return
+	}
+
 	resp, err := h.provider.Reply(r.Context(), req.Messages)
 	if err != nil {
 		// Spec state 5: never leak internals; the frontend shows its
 		// error notice and keeps the visitor's text.
 		h.logger.Error("advisor provider failed", "error", err.Error())
+		writeError(w, http.StatusBadGateway, "advisor could not answer", "provider_error")
+		return
+	}
+	// An empty reply is a broken provider response, not an answer: surface
+	// it as a provider error instead of an empty bubble (PR #127 M2).
+	if strings.TrimSpace(resp.Reply) == "" {
+		h.logger.Error("advisor provider returned empty reply")
 		writeError(w, http.StatusBadGateway, "advisor could not answer", "provider_error")
 		return
 	}
@@ -124,11 +158,17 @@ func (h *Handler) validate(resp Response) Response {
 	recs := make([]Recommendation, 0, len(resp.Recommendations))
 	seen := make(map[string]bool, len(resp.Recommendations))
 	for _, rec := range resp.Recommendations {
-		if rec.ID == "" || seen[rec.ID] || !h.catalogue.ValidID(rec.ID) {
-			h.logger.Warn("advisor recommendation dropped", "id", rec.ID, "in_catalogue", h.catalogue.ValidID(rec.ID))
+		if rec.ID == "" || seen[rec.ID] {
+			// A duplicate or empty id is not worth a log line (PR #127
+			// LOW): drop it quietly.
+			continue
+		}
+		if !h.catalogue.ValidID(rec.ID) {
+			h.logger.Warn("advisor recommendation dropped", "id", rec.ID)
 			continue
 		}
 		seen[rec.ID] = true
+		rec.Why = truncateRunes(rec.Why, MaxWhyChars)
 		recs = append(recs, rec)
 		if len(recs) == 3 {
 			break
@@ -142,10 +182,20 @@ func (h *Handler) validate(resp Response) Response {
 	}
 
 	return Response{
-		Reply:           resp.Reply,
+		Reply:           truncateRunes(resp.Reply, MaxReplyChars),
 		Recommendations: recs, // always non-nil so JSON emits []
 		NextAction:      next,
 	}
+}
+
+// truncateRunes shortens s to at most n runes, without splitting a
+// multi-byte character (PR #127 M2/LOW).
+func truncateRunes(s string, n int) string {
+	if len([]rune(s)) <= n {
+		return s
+	}
+	runes := []rune(s)
+	return string(runes[:n])
 }
 
 func writeError(w http.ResponseWriter, status int, msg, code string) {

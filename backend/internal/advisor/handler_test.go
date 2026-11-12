@@ -325,3 +325,126 @@ func TestAdvisorRejectsEmptyMessages(t *testing.T) {
 		t.Fatalf("want 400 for invalid json, got %d", resp.StatusCode)
 	}
 }
+
+// --- PR #127 review fixes (Clauco 2026-11-12) ---
+
+// TestAdvisorSecondTurnWithLongAssistantMessage: H1 — a follow-up turn
+// must not 400 just because the advisor's own previous answer exceeds
+// the 600-char user cap.
+func TestAdvisorSecondTurnWithLongAssistantMessage(t *testing.T) {
+	fake := &fakeProvider{resp: Response{Reply: "second answer", NextAction: "call"}}
+	srv := newServer(fake)
+	defer srv.Close()
+	long := strings.Repeat("a", 750) // > MaxMessageChars, < MaxAssistantMessageChars
+	body := `{"messages":[{"role":"user","content":"q1"},{"role":"assistant","content":"` + long + `"},{"role":"user","content":"q2"}]}`
+	resp, out := post(t, srv, body)
+	if resp.StatusCode != http.StatusOK {
+		t.Fatalf("follow-up with 750-char assistant message must pass, got %d", resp.StatusCode)
+	}
+	if out["reply"] != "second answer" {
+		t.Fatalf("want reply, got %v", out["reply"])
+	}
+}
+
+// TestAdvisorAssistantMessageOverCap: assistant messages have their own
+// generous cap; beyond it, 400 message_too_long.
+func TestAdvisorAssistantMessageOverCap(t *testing.T) {
+	fake := &fakeProvider{resp: Response{Reply: "r", NextAction: "call"}}
+	srv := newServer(fake)
+	defer srv.Close()
+	long := strings.Repeat("a", MaxAssistantMessageChars+1)
+	body := `{"messages":[{"role":"user","content":"q"},{"role":"assistant","content":"` + long + `"},{"role":"user","content":"q2"}]}`
+	resp, out := post(t, srv, body)
+	if resp.StatusCode != http.StatusBadRequest {
+		t.Fatalf("want 400, got %d", resp.StatusCode)
+	}
+	if out["code"] != "message_too_long" {
+		t.Fatalf("want code message_too_long, got %v", out["code"])
+	}
+	if fake.called != 0 {
+		t.Fatal("provider must not be called on limit violation")
+	}
+}
+
+// TestAdvisorRejectsSameRoleRun: M1 — two consecutive messages with the
+// same role are rejected.
+func TestAdvisorRejectsSameRoleRun(t *testing.T) {
+	fake := &fakeProvider{resp: Response{Reply: "r", NextAction: "call"}}
+	srv := newServer(fake)
+	defer srv.Close()
+	body := `{"messages":[{"role":"user","content":"q1"},{"role":"user","content":"q2"}]}`
+	resp, _ := post(t, srv, body)
+	if resp.StatusCode != http.StatusBadRequest {
+		t.Fatalf("want 400 for same-role run, got %d", resp.StatusCode)
+	}
+	if fake.called != 0 {
+		t.Fatal("provider must not be called on limit violation")
+	}
+}
+
+// TestAdvisorRejectsTooManyMessages: M1 — the conversation array itself
+// is bounded (2 x MaxUserTurns), regardless of role mix.
+func TestAdvisorRejectsTooManyMessages(t *testing.T) {
+	fake := &fakeProvider{resp: Response{Reply: "r", NextAction: "call"}}
+	srv := newServer(fake)
+	defer srv.Close()
+	parts := make([]string, 0, MaxMessages+2)
+	for i := 0; i < MaxMessages+2; i++ {
+		role := "assistant"
+		if i%2 == 0 {
+			role = "user"
+		}
+		parts = append(parts, `{"role":"`+role+`","content":"m"}`)
+	}
+	body := `{"messages":[` + strings.Join(parts, ",") + `]}`
+	resp, _ := post(t, srv, body)
+	if resp.StatusCode != http.StatusBadRequest {
+		t.Fatalf("want 400 for over-long message array, got %d", resp.StatusCode)
+	}
+	if fake.called != 0 {
+		t.Fatal("provider must not be called on limit violation")
+	}
+}
+
+// TestAdvisorEmptyReplyIsProviderError: M2 — an empty reply from the
+// provider is a 502, not an empty 200 answer.
+func TestAdvisorEmptyReplyIsProviderError(t *testing.T) {
+	fake := &fakeProvider{resp: Response{Reply: "   ", NextAction: "call"}}
+	srv := newServer(fake)
+	defer srv.Close()
+	resp, out := post(t, srv, `{"messages":[{"role":"user","content":"q"}]}`)
+	if resp.StatusCode != http.StatusBadGateway {
+		t.Fatalf("want 502 for empty reply, got %d", resp.StatusCode)
+	}
+	if out["code"] != "provider_error" {
+		t.Fatalf("want code provider_error, got %v", out["code"])
+	}
+}
+
+// TestAdvisorTruncatesWhyAndReply: M2 — server-side bounds on why (160)
+// and reply.
+func TestAdvisorTruncatesWhyAndReply(t *testing.T) {
+	longReply := strings.Repeat("r", MaxReplyChars+50)
+	fake := &fakeProvider{resp: Response{
+		Reply: longReply,
+		Recommendations: []Recommendation{{
+			ID:  "gov-quick-check",
+			Why: strings.Repeat("w", MaxWhyChars+10),
+		}},
+		NextAction: "call",
+	}}
+	srv := newServer(fake)
+	defer srv.Close()
+	resp, out := post(t, srv, `{"messages":[{"role":"user","content":"q"}]}`)
+	if resp.StatusCode != http.StatusOK {
+		t.Fatalf("want 200, got %d", resp.StatusCode)
+	}
+	if got := len([]rune(out["reply"].(string))); got != MaxReplyChars {
+		t.Fatalf("reply must be truncated to %d chars, got %d", MaxReplyChars, got)
+	}
+	recs := out["recommendations"].([]any)
+	rec := recs[0].(map[string]any)
+	if got := len([]rune(rec["why"].(string))); got != MaxWhyChars {
+		t.Fatalf("why must be truncated to %d chars, got %d", MaxWhyChars, got)
+	}
+}
