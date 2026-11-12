@@ -1,10 +1,27 @@
 package advisor
 
 import (
+	_ "embed"
 	"encoding/json"
 	"fmt"
 	"os"
 )
+
+// embeddedCatalogue is a byte-for-byte copy of data/catalogue.json, compiled
+// into the binary so the backend image needs no extra file (the Docker build
+// context is backend/ only). TestEmbeddedCatalogueMatchesSiteCatalogue fails
+// when the two drift: after editing data/catalogue.json run
+//
+//	cp data/catalogue.json backend/internal/advisor/catalogue_embedded.json
+//
+//go:embed catalogue_embedded.json
+var embeddedCatalogue []byte
+
+// EmbeddedCatalogue returns the catalogue compiled into the binary. It is the
+// default; CATALOGUE_PATH overrides it with a file (LoadCatalogue).
+func EmbeddedCatalogue() (*Catalogue, error) {
+	return parseCatalogue(embeddedCatalogue, "embedded catalogue")
+}
 
 // Catalogue is the in-memory form of data/catalogue.json — the single
 // source for packages on the site and for the advisor (#112). The advisor
@@ -51,24 +68,22 @@ type Package struct {
 	PillarRecommended *bool `json:"pillar_recommended"`
 }
 
-// DefaultCataloguePath is where the backend looks for the shared service
-// catalogue when CATALOGUE_PATH is unset. Producing a build that carries it
-// next to the binary is a deploy concern (Cloud Run working dir); env var
-// overrides for other layouts.
-const DefaultCataloguePath = "data/catalogue.json"
-
 // LoadCatalogue reads and parses the catalogue JSON file at path.
 func LoadCatalogue(path string) (*Catalogue, error) {
 	data, err := os.ReadFile(path)
 	if err != nil {
 		return nil, fmt.Errorf("read catalogue: %w", err)
 	}
+	return parseCatalogue(data, path)
+}
+
+func parseCatalogue(data []byte, source string) (*Catalogue, error) {
 	var c Catalogue
 	if err := json.Unmarshal(data, &c); err != nil {
-		return nil, fmt.Errorf("parse catalogue %s: %w", path, err)
+		return nil, fmt.Errorf("parse catalogue %s: %w", source, err)
 	}
 	if len(c.Packages) == 0 {
-		return nil, fmt.Errorf("catalogue %s contains no packages", path)
+		return nil, fmt.Errorf("catalogue %s contains no packages", source)
 	}
 	return &c, nil
 }

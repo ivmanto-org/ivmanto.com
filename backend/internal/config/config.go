@@ -76,7 +76,7 @@ type AnalyticsConfig struct {
 type AdvisorConfig struct {
 	MistralAPIKey string
 	MistralModel  string // empty = advisor.DefaultMistralModel
-	CataloguePath string // empty = DefaultCataloguePath
+	CataloguePath string // empty = the catalogue compiled into the binary
 }
 
 // Load reads configuration from environment variables.
