@@ -59,7 +59,7 @@ useSeoMeta({ title: current.name, description: current.outcome })
 
       <aside class="buybox card" aria-label="Order">
         <span class="package__price">{{ formatPrice(current) }}<small>{{ priceTerms(current) }}</small></span>
-        <p v-if="current.price_note" class="small muted" style="margin-top: var(--space-2)">{{ current.price_note }}</p>
+        <p v-if="priceNote(current)" class="small muted" style="margin-top: var(--space-2)">{{ priceNote(current) }}</p>
         <ul class="ticks" style="margin: var(--space-6) 0">
           <li>Scope and price fixed before we start</li>
           <li>Delivered by Nick, no hand-offs</li>

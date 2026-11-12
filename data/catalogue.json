@@ -1,6 +1,7 @@
 {
-  "_status": "v1 (2026-11-11): Nick chose the 6-package line-up from the market research (tmp/2026-11-11-answers-and-market-research.md). Prices are the research recommendations; Nick confirms before go-live. line: governance | engineering | platform.",
+  "_status": "v1 (2026-11-11): Nick chose the 6-package line-up from the market research (tmp/2026-11-11-answers-and-market-research.md). Prices are the research recommendations; Nick confirms before go-live. Until then prices_confirmed stays false and the site shows the placeholder. line: governance | engineering | platform.",
   "version": 1,
+  "prices_confirmed": false,
   "currency": "EUR",
   "pillars": [
     {

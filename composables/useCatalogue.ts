@@ -40,6 +40,8 @@ export interface Package {
 
 interface Catalogue {
   version: number
+  /** False until Nick confirms the prices: the site then shows the placeholder, never a figure. */
+  prices_confirmed: boolean
   currency: string
   pillars: Pillar[]
   packages: Package[]
@@ -49,14 +51,25 @@ const catalogue = raw as unknown as Catalogue
 
 const priceFormat = new Intl.NumberFormat('en-IE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 })
 
+export const PRICE_PLACEHOLDER = '€ [price]'
+
+// Nick, 2026-11-12: prices stay placeholders until the market research and the GTM strategy confirm them.
+// Every price on the site and in the advisor's recommendations renders through formatPrice and priceNote.
 export function formatPrice(pkg: Pick<Package, 'price_eur' | 'price_unit'>): string {
-  if (pkg.price_eur == null) return '€ [price]'
+  if (!catalogue.prices_confirmed || pkg.price_eur == null) return PRICE_PLACEHOLDER
   const amount = priceFormat.format(pkg.price_eur)
   return pkg.price_unit === 'month' ? `${amount}/month` : amount
 }
 
 export function priceTerms(pkg: Pick<Package, 'price_unit'>): string {
   return pkg.price_unit === 'month' ? 'per month, excl. VAT' : 'fixed, excl. VAT'
+}
+
+/** The price note, unless prices are unconfirmed and the note itself quotes a figure. */
+export function priceNote(pkg: Pick<Package, 'price_note'>): string | undefined {
+  if (!pkg.price_note) return undefined
+  if (!catalogue.prices_confirmed && /€\s*\d/.test(pkg.price_note)) return undefined
+  return pkg.price_note
 }
 
 export function formatDuration(pkg: Pick<Package, 'duration_weeks' | 'duration_label'>): string {

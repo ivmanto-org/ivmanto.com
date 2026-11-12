@@ -30,7 +30,7 @@ const faqs = [
 useSeoMeta({
   title: 'ivmanto | AI governance, risk and compliance',
   description:
-    'Fixed-scope services that get your company ready for the EU AI Act and ISO/IEC 42001: clear owners, documented risks, audit-ready evidence.',
+    'Fixed-scope, fixed-price services for the EU AI Act and ISO/IEC 42001. AI governance, risk management and compliance for SMEs.',
 })
 
 function formatDate(iso: string): string {
@@ -75,24 +75,27 @@ function formatDate(iso: string): string {
       </div>
     </section>
 
-    <!-- 3 · Pillars -->
+    <!-- 3 · Pillars: numbered index (DS v1.3 cards.md) -->
     <section class="section section--sunken">
       <div class="container">
         <div class="section-head">
           <p class="overline">What we do</p>
           <h2>Three pillars, one accountable partner</h2>
         </div>
-        <div class="grid grid-3">
-          <article v-for="p in pillars" :key="p.id" class="card card--link pillar">
-            <SitePillarIcon :pillar="p.id" />
-            <h3><NuxtLink :to="`/services/${p.id}`" class="card__link" style="color: inherit; text-decoration: none">{{ p.name }}</NuxtLink></h3>
-            <p class="muted" style="margin: 0">{{ p.tagline }}</p>
-          </article>
-        </div>
+        <ol class="pillar-index">
+          <li v-for="(p, i) in pillars" :key="p.id" class="pillar-index__item">
+            <span class="pillar-index__no" aria-hidden="true">{{ String(i + 1).padStart(2, '0') }}</span>
+            <h3><NuxtLink :to="`/services/${p.id}`" class="card__link">{{ p.name }}</NuxtLink></h3>
+            <p class="muted">{{ p.tagline }}</p>
+            <span class="pillar-index__go" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+            </span>
+          </li>
+        </ol>
       </div>
     </section>
 
-    <!-- 4 · Packages -->
+    <!-- 4 · Packages: compact tickets -->
     <section class="section">
       <div class="container">
         <div class="section-head">
@@ -102,7 +105,7 @@ function formatDate(iso: string): string {
         <div class="grid grid-3">
           <SitePackageCard v-for="pk in featured()" :key="pk.id" :pkg="pk" compact />
         </div>
-        <p style="margin-top: var(--space-8)"><NuxtLink to="/packages" class="btn btn--ghost">All packages →</NuxtLink></p>
+        <p style="margin-top: var(--space-8)"><NuxtLink to="/packages" class="btn btn--ghost">All packages <SiteChevIcon /></NuxtLink></p>
       </div>
     </section>
 
@@ -160,7 +163,7 @@ function formatDate(iso: string): string {
               <span><strong>Google Cloud Professional Cloud Architect</strong><small>Certified 2019, 2022 and 2024</small></span>
             </a>
           </div>
-          <p style="margin-top: var(--space-6)"><NuxtLink to="/about" class="btn btn--ghost">More about me →</NuxtLink></p>
+          <p style="margin-top: var(--space-6)"><NuxtLink to="/about" class="btn btn--ghost">More about me <SiteChevIcon /></NuxtLink></p>
         </div>
       </div>
     </section>
@@ -178,7 +181,7 @@ function formatDate(iso: string): string {
             <h3><NuxtLink :to="`/blog/${a.slug}`" class="card__link" style="color: inherit; text-decoration: none">{{ a.title }}</NuxtLink></h3>
           </article>
         </div>
-        <p style="margin-top: var(--space-8)"><NuxtLink to="/blog" class="btn btn--ghost">All insights →</NuxtLink></p>
+        <p style="margin-top: var(--space-8)"><NuxtLink to="/blog" class="btn btn--ghost">All insights <SiteChevIcon /></NuxtLink></p>
       </div>
     </section>
 
