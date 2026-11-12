@@ -92,6 +92,10 @@ func (s *SmtpService) send(to, cc []string, subject, htmlBody string, attachment
 	if len(cc) > 0 {
 		msg.WriteString(fmt.Sprintf("Cc: %s\r\n", strings.Join(cc, ", ")))
 	}
+	// Strip CR/LF from the subject no matter who built it (PR #128 H1
+	// defence in depth): a newline here would let a caller inject headers
+	// into the mail.
+	subject = strings.NewReplacer("\r", "", "\n", "").Replace(subject)
 	msg.WriteString(fmt.Sprintf("Subject: %s\r\n", subject))
 	msg.WriteString("MIME-Version: 1.0\r\n")
 	msg.WriteString(fmt.Sprintf("Content-Type: multipart/mixed; boundary=%s\r\n", writer.Boundary()))
@@ -285,6 +289,77 @@ func (s *SmtpService) SendContactMessage(msg ContactMessage) error {
 
 	return s.send([]string{adminEmail}, ccList, subject, body, nil)
 }
+
+// SendLeadNotification emails an advisor lead (epic #112) to the configured
+// lead recipient (LEADS_TO, default SendFrom). The recipient uses the
+// +lead username alias for Gmail inbox delivery, mirroring SendContactMessage.
+func (s *SmtpService) SendLeadNotification(lead LeadInfo) error {
+	toEmail := s.cfg.LeadTo
+	if toEmail == "" {
+		toEmail = s.cfg.SendFrom
+	}
+	parts := strings.Split(toEmail, "@")
+	var leadRecipient string
+	if len(parts) == 2 {
+		leadRecipient = fmt.Sprintf("%s+lead@%s", parts[0], parts[1])
+	} else {
+		leadRecipient = toEmail
+	}
+
+	subject := fmt.Sprintf("New advisor lead: %s (%s)", lead.Company, lead.Name)
+	return s.send([]string{leadRecipient}, nil, subject, buildLeadNotificationHTML(lead), nil)
+}
+
+// buildLeadNotificationHTML renders the lead email body. Consent is already
+// checked true by the handler before this is called. Source, package, role,
+// interest and insights opt-in are rendered so Nick knows which surface
+// produced the lead and what future consent the visitor gave.
+func buildLeadNotificationHTML(lead LeadInfo) string {
+	packageLine := ""
+	if lead.PackageID != "" {
+		packageLine = fmt.Sprintf("<li><strong>Package:</strong> %s</li>\n", htmlEscape(lead.PackageID))
+	}
+	roleLine := ""
+	if lead.Role != "" {
+		roleLine = fmt.Sprintf("<li><strong>Role:</strong> %s</li>\n", htmlEscape(lead.Role))
+	}
+	interestLine := ""
+	if lead.Interest != "" {
+		interestLine = fmt.Sprintf("<li><strong>Interest:</strong> %s</li>\n", htmlEscape(lead.Interest))
+	}
+	insights := "no"
+	if lead.InsightsOptIn {
+		insights = "yes"
+	}
+	return fmt.Sprintf(`<p><strong>New lead (source: %s) from the ivmanto.com AI service advisor funnel.</strong></p>
+<ul>
+<li><strong>Name:</strong> %s</li>
+<li><strong>Email:</strong> <a href="mailto:%s">%s</a></li>
+<li><strong>Company:</strong> %s</li>
+%s%s%s</ul>
+<p><strong>Request / conversation summary:</strong></p>
+<p>%s</p>
+<p><em>Confirmation ticked: yes. Insights opt-in (consent, Art. 6(1)(a)): %s.</em></p>`,
+		htmlEscape(lead.Source),
+		htmlEscape(lead.Name),
+		htmlEscape(lead.Email), htmlEscape(lead.Email),
+		htmlEscape(lead.Company),
+		packageLine,
+		roleLine,
+		interestLine,
+		htmlEscape(lead.Message),
+		insights)
+}
+
+var htmlEscaper = strings.NewReplacer(
+	"&", "&amp;",
+	"<", "&lt;",
+	">", "&gt;",
+	`"`, "&#34;",
+	"'", "&#39;",
+)
+
+func htmlEscape(s string) string { return htmlEscaper.Replace(s) }
 
 // SendBookingCancellationToClient sends a cancellation confirmation to the user.
 // The visitor's IANA zone and a display label are forwarded from the booking

@@ -61,10 +61,10 @@ func TestBookingConfirmationHTML_AthensInJune(t *testing.T) {
 	// Must NOT contain the organiser's wall-clock or the old empty
 	// parenthesised bug.
 	notWantSubs := []string{
-		"3:30 PM",  // organiser's CEST start
-		"4:00 PM",  // organiser's CEST end
-		"()",       // the original empty-parentheses bug
-		"(CEST)",   // we expect the visitor's TZ, not the organiser's
+		"3:30 PM", // organiser's CEST start
+		"4:00 PM", // organiser's CEST end
+		"()",      // the original empty-parentheses bug
+		"(CEST)",  // we expect the visitor's TZ, not the organiser's
 	}
 	for _, s := range notWantSubs {
 		if strings.Contains(body, s) {
@@ -126,5 +126,26 @@ func TestBookingConfirmationHTML_NoMeetLinkOmitsLine(t *testing.T) {
 	})
 	if strings.Contains(body, "Google Meet Link") {
 		t.Errorf("expected no Meet-link line when MeetLink is empty, body was:\n%s", body)
+	}
+}
+
+func TestBuildLeadNotificationHTMLEscapesUserInput(t *testing.T) {
+	lead := LeadInfo{
+		Name:    "<b>Ada</b>",
+		Email:   "a@b.c",
+		Company: `<script>alert("x")</script>`,
+		Message: `Contact: a</p><script>evil()</script>`,
+		Consent: true,
+	}
+	html := buildLeadNotificationHTML(lead)
+	for _, bad := range []string{"<script>", "</script>", "<b>Ada</b>"} {
+		if strings.Contains(html, bad) {
+			t.Errorf("user input leaked into email HTML unescaped: %q", bad)
+		}
+	}
+	for _, good := range []string{"&lt;script&gt;", "&lt;b&gt;Ada&lt;/b&gt;", "a&lt;/p&gt;"} {
+		if !strings.Contains(html, good) {
+			t.Errorf("expected escaped form %q in html:\n%s", good, html)
+		}
 	}
 }

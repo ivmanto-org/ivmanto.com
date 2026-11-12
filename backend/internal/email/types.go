@@ -35,3 +35,30 @@ type GeneratedIdea struct {
 	Title   string
 	Summary string
 }
+
+// LeadInfo holds the data from the lead-capture forms (epic #112, spec:
+// LeadForm). Source is which surface produced the lead (advisor | order |
+// contact | ivgil); PackageID is set only on the advisor order flow (rendered
+// into the email, never used to look anything up server-side). Role and
+// Interest are the ivGIL form's optional fields (visitor's role; early
+// access vs design partner) — forwarded to Nick, never acted on
+// server-side. Name, Email, Company and Message are required; Consent
+// documents the confirmation tick and must be true
+// for the email to be sent: the processing basis for the lead mail is
+// Art. 6(1)(b) (steps at the visitor's request before a contract,
+// Ivgil's verdict 2026-11-11); only InsightsOptIn is consent,
+// Art. 6(1)(a). InsightsOptIn is the visitor's insights double-opt-in
+// flag — captured and forwarded to Nick, never acted on server-side.
+// The lead is emailed to Nick and NOT stored.
+type LeadInfo struct {
+	Source        string
+	PackageID     string
+	Role          string
+	Interest      string
+	Name          string
+	Email         string
+	Company       string
+	Message       string
+	Consent       bool
+	InsightsOptIn bool
+}
