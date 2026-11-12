@@ -1,7 +1,6 @@
 {
-  "_status": "v1 (2026-11-11): Nick chose the 6-package line-up from the market research (tmp/2026-11-11-answers-and-market-research.md). Prices are the research recommendations; Nick confirms before go-live. Until then prices_confirmed stays false and the site shows the placeholder. line: governance | engineering | platform.",
+  "_status": "v1 (2026-11-11): Nick chose the 6-package line-up from the market research (tmp/2026-11-11-answers-and-market-research.md). Prices are NOT in this file (Nick, 2026-11-12): it ships in the site bundle. price_eur stays null and the site shows the placeholder until Nick confirms the prices from the market research and the GTM strategy. line: governance | engineering | platform.",
   "version": 1,
-  "prices_confirmed": false,
   "currency": "EUR",
   "pillars": [
     {
@@ -46,7 +45,7 @@
         "Snapshot of the AI tools and systems in use",
         "Memo: your five biggest AI risks and the first steps"
       ],
-      "price_eur": 1900,
+      "price_eur": null,
       "price_note": "Fully credited if you order a follow-on package within 3 months.",
       "pillar_recommended": true
     },
@@ -73,7 +72,7 @@
         "Half-day in-house AI literacy session",
         "Record of who was trained, and when"
       ],
-      "price_eur": 6500
+      "price_eur": null
     },
     {
       "line": "governance",
@@ -98,7 +97,7 @@
         "Help with AI incidents and questions from auditors",
         "Short monthly status note"
       ],
-      "price_eur": 1500,
+      "price_eur": null,
       "price_unit": "month"
     },
     {
@@ -124,7 +123,7 @@
         "Prioritised risk report with mitigation plan",
         "Risk register in your own tools, with owners and review dates"
       ],
-      "price_eur": 8500,
+      "price_eur": null,
       "pillar_recommended": true
     },
     {
@@ -148,7 +147,7 @@
         "Gap analysis against the obligations that apply",
         "12-month roadmap"
       ],
-      "price_eur": 9500,
+      "price_eur": null,
       "pillar_recommended": true
     },
     {
@@ -171,8 +170,7 @@
         "Interviews",
         "Gap report with priorities"
       ],
-      "price_eur": 9900,
-      "price_note": "For companies with ISO/IEC 27001 in place. Without it: €12,900."
+      "price_eur": null
     },
     {
       "line": "engineering",
