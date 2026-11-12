@@ -16,6 +16,10 @@
 # ivmanto-com-sta (2026-11-12, by hand in Cloud Shell, not in Terraform). If the
 # org policies are managed as code elsewhere, the override belongs there too.
 #
+# Order on a fresh project: apply, add a staging-users secret version, deploy.
+# Between apply and the first deploy the URL shows Google's public placeholder
+# page (nothing of ours); deploy right after applying.
+#
 # No backend here yet: /api/* answers 404 until the content phase adds it.
 
 locals {

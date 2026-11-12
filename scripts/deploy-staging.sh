@@ -39,5 +39,8 @@ if [[ "${1:-}" == "--no-deploy" ]]; then
   exit 0
 fi
 
-gcloud run deploy "${SERVICE}" --project="${PROJECT_ID}" --region="${REGION}" --image="${image}" --quiet
+# The service account is pinned so a recreated service never falls back to the
+# compute default (which cannot read the credentials secret).
+gcloud run deploy "${SERVICE}" --project="${PROJECT_ID}" --region="${REGION}" --image="${image}" \
+  --service-account="staging-site-sa@${PROJECT_ID}.iam.gserviceaccount.com" --quiet
 gcloud run services describe "${SERVICE}" --project="${PROJECT_ID}" --region="${REGION}" --format='value(status.url)'

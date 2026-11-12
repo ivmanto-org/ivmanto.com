@@ -77,6 +77,9 @@ func TestEveryResponseIsMarkedNoindex(t *testing.T) {
 		if !strings.Contains(rec.Header().Get("X-Robots-Tag"), "noindex") {
 			t.Errorf("status %d: missing noindex header", rec.Code)
 		}
+		if rec.Header().Get("X-Content-Type-Options") != "nosniff" || rec.Header().Get("X-Frame-Options") != "DENY" {
+			t.Errorf("status %d: missing hardening headers", rec.Code)
+		}
 	}
 }
 
