@@ -147,6 +147,7 @@
 import { trackEvent } from '~/services/analytics'
 import DOMPurify from 'dompurify'
 import type { Article } from '~/types/article'
+import { articleProvenanceHead } from '~/utils/articleProvenance'
 
 const route = useRoute()
 const slug = computed(() => route.params.slug as string)
@@ -192,13 +193,16 @@ useSeoMeta({
   twitterDescription: computed(() => article.value?.summary ?? ''),
 })
 
+// AI provenance marking (IPTC DigitalSourceType), empty for unmarked and human articles
+const provenanceHead = computed(() => articleProvenanceHead(article.value))
+
 // Head Management for SEO (Fix Soft 404)
 useHead({
   meta: computed(() => {
     if (!isLoadingContent.value && !article.value) {
       return [{ name: 'robots', content: 'noindex' }]
     }
-    return []
+    return provenanceHead.value.meta
   }),
   script: computed(() => {
     if (article.value) {
@@ -226,6 +230,7 @@ useHead({
             url: `https://ivmanto.com/blog/${article.value.slug}`,
           }),
         },
+        ...provenanceHead.value.script,
       ]
     }
     return []
