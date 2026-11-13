@@ -154,7 +154,8 @@ func (h *Handler) handleCancelBooking(w http.ResponseWriter, r *http.Request) {
 	go func() {
 		err := h.emailSvc.SendBookingCancellationToClient(clientName, clientEmail, startTime, visitorLoc, visitorTZLabel)
 		if err != nil {
-			h.logger.Error("Failed to send cancellation email to client", "client_email", clientEmail, "error", err)
+			// client_email deliberately omitted: error logs must stay PII-free (Art 5(1)(c) minimisation).
+			h.logger.Error("Failed to send cancellation email to client", "error", err)
 		}
 	}()
 
@@ -313,7 +314,8 @@ func (h *Handler) handleCreateBooking(w http.ResponseWriter, r *http.Request) {
 			IcsTimezone:     req.VisitorTimezone,
 		}
 		if err := h.emailSvc.SendBookingConfirmation(emailDetails); err != nil {
-			h.logger.Error("Failed to send booking confirmation to client", "client_email", req.Email, "error", err)
+			// client_email deliberately omitted: error logs must stay PII-free (Art 5(1)(c) minimisation).
+			h.logger.Error("Failed to send booking confirmation to client", "error", err)
 		}
 	}()
 	go func() {
