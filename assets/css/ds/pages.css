@@ -48,3 +48,10 @@
 .fieldset { border: 0; padding: 0; margin: 0 0 var(--space-8); }
 .fieldset legend { font: 600 var(--text-xl) var(--font-headline); margin-bottom: var(--space-4); }
 .two { display: grid; gap: 0 var(--space-4); grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+
+/* v1.5 page-local styles of the DS previews (pages/about.html) */
+.closing .row { justify-content: center; }
+.two-col { display: grid; gap: var(--space-8) var(--space-16); }
+@media (min-width: 900px) { .two-col { grid-template-columns: 1fr 1.4fr; } }
+/* The package page's .facts (grid, above) and the booking page's .facts list (components.css, v1.5) share a name. */
+.booking .facts { display: block; margin: var(--space-8) 0 0; }

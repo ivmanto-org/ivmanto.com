@@ -1,114 +1,121 @@
 <script setup lang="ts">
+// Book a call (DS v1.5, pages/booking.md). Layout, copy and formats only:
+// the API calls and what they send are the ones the page had before.
 import { getGaSessionInfo } from '~/services/analytics'
 import { toYYYYMMDD } from '~/composables/useDate'
+import { CALL_MINUTES, formatLongDate, formatTime24 } from '~/utils/bookingFormat'
 
 useSeoMeta({
-  title: 'Contact us | ivmanto.com',
-  description:
-    'Get in touch with IVMANTO to discuss your data and AI challenges. Book a free consultation or send us a message to start your data transformation journey.',
+  title: 'Book a call | ivmanto.com',
+  description: 'Book a 30-minute call with Nikolay Tonev to find the first step for AI governance in your company.',
   robots: 'noindex, nofollow',
 })
 
-type TimeSlot = {
-  id: string
-  start: string
-  end: string
-}
+type TimeSlot = { id: string; start: string; end: string }
+type Step = 1 | 2 | 3
+
+const GA_MEASUREMENT_ID = 'G-W1TJ3KMZ6V'
+const COOKIE_CONSENT_KEY = 'cookie_consent'
+const HTTP_CONFLICT = 409
+const SKELETON_SLOTS = 3
+// Visitors can book up to ~3 months ahead. The AfB scheduler fills the calendar
+// 12 weeks ahead, so the 90-day window always has bookable slots.
+const BOOKING_WINDOW_DAYS = 90
+const STEPS = ['Pick a time', 'Your details', 'Confirmed'] as const
 
 const route = useRoute()
 
-const selectedDate = ref(new Date())
-// Visitors can book up to ~3 months ahead. The AfB scheduler (see
-// ~/.hermes/profiles/ivmo/scripts/afb_scheduler.py) populates events with
-// WEEKS_AHEAD=12 starting 4 weeks out, so the 90-day window always has
-// bookable slots once the Monday cron has run for the week.
-const bookingWindowDays = 90
-const availableSlots = ref<TimeSlot[]>([])
-// Calendar bounds. `today` is captured at mount so the bounds do not drift
-// while the page is open; matches the prior day-stepper's behaviour where
-// the prev-day button was disabled once the selected day was today.
+// `today` is captured at setup so the bounds do not drift while the page is open.
 const today = new Date()
-const maxBookingDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + bookingWindowDays)
+const maxBookingDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + BOOKING_WINDOW_DAYS)
+
+const step = ref<Step>(1)
+const selectedDate = ref(new Date())
+const availableSlots = ref<TimeSlot[]>([])
 const selectedSlot = ref<TimeSlot | null>(null)
-const isLoading = ref(false)
-const error = ref<string | null>(null)
+const isLoadingSlots = ref(false)
+const isSubmitting = ref(false)
+const slotsError = ref(false)
+const slotTaken = ref(false)
+const submitError = ref(false)
+const fieldErrors = ref<{ name?: string; email?: string }>({})
 
-const bookingDetails = ref({
-  name: '',
-  email: '',
-  notes: '',
-})
+const bookingDetails = ref({ name: '', email: '', notes: '' })
 
-const isBookingConfirmed = ref(false)
+const nameInput = ref<HTMLInputElement | null>(null)
+const doneHeading = ref<HTMLElement | null>(null)
 
-const formattedDate = computed(() => {
-  return selectedDate.value.toLocaleDateString('en-US', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  })
-})
-
-// timezoneIana is the visitor's IANA timezone name (e.g. "Europe/Berlin").
-// Sent in the POST body so the backend can localise the confirmation
-// email and .ics attachment to the visitor's zone.
+// The visitor's IANA time zone (e.g. "Europe/Berlin"). Sent with the booking so the
+// backend can localise the confirmation email and the calendar file.
 const timezoneIana = computed(() => {
   if (typeof Intl === 'undefined' || typeof Intl.DateTimeFormat === 'undefined') return ''
   return Intl.DateTimeFormat().resolvedOptions().timeZone
 })
 
-// timezone is the human-readable form of the visitor's IANA name
-// (underscores replaced with spaces) for the on-screen "Timezone:"
-// label. Falls back to "Unknown" when Intl is unavailable.
-const timezone = computed(() => {
-  const iana = timezoneIana.value
-  return iana ? iana.replace(/_/g, ' ') : 'Unknown'
-})
+const pickedLine = computed(() =>
+  selectedSlot.value ? `${formatLongDate(selectedDate.value, true)}, ${formatTime24(selectedSlot.value.start)}` : '',
+)
 
 async function fetchAvailability(date: Date) {
-  isLoading.value = true
-  error.value = null
+  isLoadingSlots.value = true
+  slotsError.value = false
   selectedSlot.value = null
   availableSlots.value = []
   try {
-    const dateStr = toYYYYMMDD(date)
-    const response = await fetch(`/api/booking/availability?date=${dateStr}`)
+    const response = await fetch(`/api/booking/availability?date=${toYYYYMMDD(date)}`)
     if (!response.ok) throw new Error(`Server responded with status ${response.status}`)
     const data = await response.json().catch(() => null)
-    let slots = data || []
-
-    const now = new Date()
-    const isFetchingForToday =
-      date.getFullYear() === now.getFullYear() &&
-      date.getMonth() === now.getMonth() &&
-      date.getDate() === now.getDate()
-
-    if (isFetchingForToday) {
-      slots = slots.filter((slot: TimeSlot) => new Date(slot.start).getTime() > now.getTime())
-    }
-
-    availableSlots.value = slots
-  } catch (e: any) {
+    const slots: TimeSlot[] = Array.isArray(data) ? data : []
+    const now = Date.now()
+    // Only today can hold times that have already passed.
+    availableSlots.value = slots.filter((slot) => new Date(slot.start).getTime() > now)
+  } catch (e) {
     console.error('Failed to fetch availability:', e)
-    error.value = 'Could not load available time slots. Please try again later.'
-    availableSlots.value = []
+    slotsError.value = true
   } finally {
-    isLoading.value = false
+    isLoadingSlots.value = false
   }
 }
 
 function selectSlot(slot: TimeSlot) {
   selectedSlot.value = slot
+  slotTaken.value = false
+  submitError.value = false
+  step.value = 2
+  nextTick(() => nameInput.value?.focus())
+}
+
+function backToTimes() {
+  step.value = 1
+  selectedSlot.value = null
+}
+
+function validate(): boolean {
+  const errors: { name?: string; email?: string } = {}
+  if (!bookingDetails.value.name.trim()) errors.name = 'Please enter your name.'
+  if (!/^\S+@\S+\.\S+$/.test(bookingDetails.value.email.trim())) errors.email = 'Please enter a valid email address.'
+  fieldErrors.value = errors
+  return Object.keys(errors).length === 0
+}
+
+// Analytics ids go along only while the visitor's consent stands. Cookies from an
+// earlier "Accept" can outlive a later "Reject", so the cookies alone are not enough.
+function analyticsIds() {
+  let hasConsent = false
+  try {
+    hasConsent = localStorage.getItem(COOKIE_CONSENT_KEY) === 'accepted'
+  } catch {
+    hasConsent = false
+  }
+  return hasConsent ? getGaSessionInfo(GA_MEASUREMENT_ID) : { clientId: null, sessionId: null }
 }
 
 async function handleBookingSubmit() {
-  if (!selectedSlot.value) return
-  isLoading.value = true
-  error.value = null
+  if (!selectedSlot.value || isSubmitting.value || !validate()) return
+  isSubmitting.value = true
+  submitError.value = false
   try {
-    const measurementId = 'G-W1TJ3KMZ6V'
-    const { clientId, sessionId } = getGaSessionInfo(measurementId)
+    const { clientId, sessionId } = analyticsIds()
     const response = await fetch('/api/booking/book', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -120,30 +127,28 @@ async function handleBookingSubmit() {
         ...bookingDetails.value,
       }),
     })
-    if (!response.ok) {
-      const errorData = await response.text()
-      throw new Error(errorData || 'Booking failed. Please try again.')
+    if (response.status === HTTP_CONFLICT) {
+      // Someone else took the time: back to step 1 with a fresh list for the same day.
+      step.value = 1
+      await fetchAvailability(selectedDate.value)
+      slotTaken.value = true
+      return
     }
-    isBookingConfirmed.value = true
-  } catch (e: any) {
-    error.value = e.message || 'An unexpected error occurred during booking.'
+    if (!response.ok) throw new Error(`Server responded with status ${response.status}`)
+    step.value = 3
+    nextTick(() => doneHeading.value?.focus())
+  } catch (e) {
+    console.error('Booking failed:', e)
+    submitError.value = true
   } finally {
-    isLoading.value = false
+    isSubmitting.value = false
   }
 }
 
-function resetBookingProcess() {
-  isBookingConfirmed.value = false
-  selectedSlot.value = null
-  bookingDetails.value = { name: '', email: '', notes: '' }
-  fetchAvailability(selectedDate.value)
-}
-
-function formatTime(dateString: string) {
-  return new Date(dateString).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })
-}
-
-watch(selectedDate, (newDate) => { fetchAvailability(newDate) })
+watch(selectedDate, (newDate) => {
+  slotTaken.value = false
+  fetchAvailability(newDate)
+})
 
 onMounted(() => {
   const { topic, summary } = route.query
@@ -156,100 +161,120 @@ onMounted(() => {
 </script>
 
 <template>
-  <section class="py-16 md:py-24 bg-surface-sunken min-h-[70vh]">
-  <div class="max-w-2xl mx-auto bg-surface p-8 rounded-2xl shadow-lg">
-    <div v-if="!isBookingConfirmed">
-      <h1 class="text-2xl font-bold text-dark-slate mb-6 text-center">Book a Consultation</h1>
-
-      <!-- The date, timezone and slots depend on the visitor's clock, so this part renders
-           in the browser only (the pre-rendered page would carry the build date). -->
-      <ClientOnly>
-      <!-- Date Selector: month-grid calendar view -->
-      <div class="mb-2">
-        <BookingCalendarMonthGrid
-          v-model="selectedDate"
-          :min-date="today"
-          :max-date="maxBookingDate"
-          :disabled="isLoading"
-        />
-      </div>
-      <p class="text-xs text-muted text-center mb-6">Timezone: {{ timezone }}</p>
-
-      <!-- Error Message -->
-      <div v-if="error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
-        <span class="block sm:inline">{{ error }}</span>
-      </div>
-
-      <!-- Loading Spinner -->
-      <div v-if="isLoading" class="grid grid-cols-2 sm:grid-cols-3 gap-4">
-        <div v-for="n in 6" :key="n" class="p-3 h-12 bg-border rounded-lg animate-pulse"></div>
+  <section class="section" style="padding-top: var(--space-12)">
+    <div class="container booking">
+      <div>
+        <p class="overline">Book a call</p>
+        <h1>30 minutes to find the first step</h1>
+        <p class="lead">Tell me where you stand with AI. You leave the call knowing which service fits, or that you need none.</p>
+        <ul class="facts">
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></svg>
+            <div><strong>30 minutes</strong><small>[Free and without obligation: Nick to confirm]</small></div>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="12" height="12" rx="2" /><path d="M15 10.5l6-3.5v10l-6-3.5z" /></svg>
+            <div><strong>Video call</strong><small>The link comes with the confirmation email.</small></div>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4" /><path d="M4 20.5a8 8 0 0 1 16 0" /></svg>
+            <div><strong>With Nikolay Tonev</strong><small>[In English or German: Nick to confirm]</small></div>
+          </li>
+        </ul>
+        <p class="small muted" style="margin-top: var(--space-6)">Prefer to write? <NuxtLink to="/contact">Send a message</NuxtLink></p>
       </div>
 
-      <!-- Time Slots -->
-      <div v-else-if="!selectedSlot" class="min-h-[100px]">
-        <h4 class="text-sm font-medium text-muted mb-3 text-center">
-          Available slots for {{ formattedDate }}
-        </h4>
-        <div v-if="availableSlots.length > 0" class="grid grid-cols-2 sm:grid-cols-3 gap-4">
-          <button
-            v-for="slot in availableSlots"
-            :key="slot.start"
-            @click="selectSlot(slot)"
-            class="p-3 border rounded-lg text-center text-primary hover:bg-primary hover:text-white transition-colors"
-          >
-            {{ formatTime(slot.start) }}
-          </button>
-        </div>
-        <div v-else-if="!error" class="flex items-center justify-center bg-surface-sunken border border-border text-muted px-4 py-3 rounded-lg" role="status">
-          <svg class="w-5 h-5 mr-3 text-muted" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
-          </svg>
-          <span class="block sm:inline">There are no available slots for this day. Please try another date.</span>
-        </div>
-      </div>
+      <div class="booking__panel">
+        <ol class="stepper" aria-label="Booking steps">
+          <li v-for="(label, i) in STEPS" :key="label" :class="{ done: i + 1 < step }" :aria-current="i + 1 === step ? 'step' : undefined">
+            <span>{{ label }}</span>
+          </li>
+        </ol>
 
-      <!-- Booking Form -->
-      <form v-else @submit.prevent="handleBookingSubmit">
-        <h4 class="text-xl font-semibold mb-4">Confirming for: {{ formatTime(selectedSlot.start) }}</h4>
-        <div class="space-y-4">
-          <div>
-            <label for="name" class="block text-muted font-medium mb-1">Full Name</label>
-            <input type="text" id="name" v-model="bookingDetails.name" required class="form-field" />
+        <!-- The date, time zone and times depend on the visitor's clock, so the panel renders
+             in the browser only (the pre-rendered page would carry the build date). -->
+        <ClientOnly>
+          <!-- Step 1: pick a time -->
+          <div v-if="step === 1">
+            <div v-if="slotTaken" class="notice notice--error" role="alert" style="margin-bottom: var(--space-4)">
+              <p><strong>This time has just been taken.</strong> Please pick another one.</p>
+            </div>
+            <BookingCalendarMonthGrid v-model="selectedDate" :min-date="today" :max-date="maxBookingDate" />
+            <p class="cal__tz">Times are shown in your time zone: {{ timezoneIana || 'unknown' }}</p>
+
+            <h3 class="slots__title">Free times on {{ formatLongDate(selectedDate) }}</h3>
+            <div v-if="isLoadingSlots" class="slots">
+              <span v-for="n in SKELETON_SLOTS" :key="n" class="slot slot--skeleton" aria-hidden="true"></span>
+              <span class="sr-only" role="status">Loading the times…</span>
+            </div>
+            <div v-else-if="slotsError" class="notice notice--error" role="alert">
+              <p><strong>That didn’t work.</strong> Please try again, or <NuxtLink to="/contact">send a message</NuxtLink> instead.</p>
+            </div>
+            <div v-else-if="availableSlots.length > 0" class="slots">
+              <button v-for="slot in availableSlots" :key="slot.id" type="button" class="slot" @click="selectSlot(slot)">
+                {{ formatTime24(slot.start) }}
+              </button>
+            </div>
+            <div v-else class="notice" role="status">
+              <p style="margin: 0">No free times on this day. Please pick another date.</p>
+            </div>
           </div>
-          <div>
-            <label for="email" class="block text-muted font-medium mb-1">Email</label>
-            <input type="email" id="email" v-model="bookingDetails.email" required class="form-field" />
+
+          <!-- Step 2: your details -->
+          <form v-else-if="step === 2" novalidate @submit.prevent="handleBookingSubmit">
+            <div class="picked">
+              <span><strong>{{ pickedLine }}</strong> · {{ CALL_MINUTES }} minutes</span>
+              <button type="button" @click="backToTimes">Change</button>
+            </div>
+            <div class="field" :class="{ 'field--error': fieldErrors.name }">
+              <label for="bk-name">Name</label>
+              <input id="bk-name" ref="nameInput" v-model="bookingDetails.name" class="input" autocomplete="name" required :aria-invalid="fieldErrors.name ? 'true' : undefined" :aria-describedby="fieldErrors.name ? 'bk-name-err' : undefined" />
+              <span v-if="fieldErrors.name" id="bk-name-err" class="hint">{{ fieldErrors.name }}</span>
+            </div>
+            <div class="field" :class="{ 'field--error': fieldErrors.email }">
+              <label for="bk-mail">Work email</label>
+              <input id="bk-mail" v-model="bookingDetails.email" class="input" type="email" autocomplete="email" required :aria-invalid="fieldErrors.email ? 'true' : undefined" aria-describedby="bk-mail-hint" />
+              <span id="bk-mail-hint" class="hint">{{ fieldErrors.email || 'The confirmation and the calendar file go here.' }}</span>
+            </div>
+            <div class="field">
+              <label for="bk-notes">What would you like to talk about? <span class="muted" style="font-weight: 400">(optional)</span></label>
+              <textarea id="bk-notes" v-model="bookingDetails.notes" rows="3"></textarea>
+            </div>
+            <p class="form-note">
+              I use these details only to hold and prepare this call (Art. 6(1)(b) GDPR).
+              <NuxtLink to="/privacy-policy">Privacy notice</NuxtLink>
+            </p>
+            <div v-if="submitError" class="notice notice--error" role="alert" style="margin-bottom: var(--space-4)">
+              <p><strong>That didn’t work.</strong> Please try again, or <NuxtLink to="/contact">send a message</NuxtLink> instead.</p>
+            </div>
+            <button class="btn btn--primary btn--block" type="submit" :disabled="isSubmitting">
+              {{ isSubmitting ? 'Booking…' : 'Book the call' }}
+            </button>
+          </form>
+
+          <!-- Step 3: confirmed -->
+          <div v-else>
+            <span class="done-mark">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>
+            </span>
+            <h2 ref="doneHeading" class="h3" tabindex="-1">Your call is booked</h2>
+            <p><strong>{{ pickedLine }}</strong> · {{ CALL_MINUTES }} minutes · video call</p>
+            <p class="muted">A confirmation with a calendar file is on its way to your inbox. It also has a link to cancel.</p>
+            <div class="row" style="margin-top: var(--space-6)">
+              <NuxtLink to="/" class="btn btn--secondary">Back to home</NuxtLink>
+              <NuxtLink to="/blog" class="btn btn--ghost">Read the insights <SiteChevIcon /></NuxtLink>
+            </div>
           </div>
-          <div>
-            <label for="notes" class="block text-muted font-medium mb-1">Project Notes (Optional)</label>
-            <textarea id="notes" v-model="bookingDetails.notes" rows="3" class="form-field"></textarea>
-          </div>
-        </div>
-        <div class="flex justify-end gap-4 mt-6">
-          <button type="button" @click="selectedSlot = null" class="px-6 py-2 bg-border text-text rounded-lg hover:bg-border">Back</button>
-          <button type="submit" :disabled="isLoading" class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark disabled:bg-gray-400 disabled:cursor-not-allowed">
-            <span v-if="isLoading">Booking...</span>
-            <span v-else>Confirm Booking</span>
-          </button>
-        </div>
-      </form>
-      <template #fallback>
-        <p class="text-sm text-muted text-center" role="status">Loading the calendar…</p>
-      </template>
-      </ClientOnly>
+
+          <template #fallback>
+            <p class="muted small" role="status">Loading the calendar…</p>
+          </template>
+        </ClientOnly>
+      </div>
     </div>
-
-    <!-- Confirmation Message -->
-    <div v-else class="text-center py-12">
-      <h2 class="text-2xl font-bold text-green-600 mb-4">Booking Confirmed!</h2>
-      <p class="text-muted">
-        Thank you, {{ bookingDetails.name }}. A confirmation email has been sent to {{ bookingDetails.email }}.
-      </p>
-      <div class="flex justify-center gap-4 mt-8">
-        <NuxtLink to="/" class="px-6 py-2 bg-border text-text rounded-lg hover:bg-border">Home</NuxtLink>
-        <button @click="resetBookingProcess" class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark">Book Another</button>
-      </div>
-    </div>
-  </div>
   </section>
 </template>
+
+<style scoped>
+h2[tabindex='-1']:focus { outline: none; }
+</style>
