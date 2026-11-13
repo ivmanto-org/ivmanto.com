@@ -1,67 +1,58 @@
-<template>
-  <div class="container mx-auto px-4 py-16 text-center">
-    <div v-if="isLoading" class="prose lg:prose-xl">
-      <h1 class="text-2xl font-bold">Cancelling Your Booking...</h1>
-      <p>Please wait while we process your request.</p>
-    </div>
-
-    <div v-else-if="error" class="prose lg:prose-xl text-red-600">
-      <h1 class="text-2xl font-bold">Cancellation Failed</h1>
-      <p>{{ error }}</p>
-      <p>
-        Please
-        <NuxtLink to="/booking" class="text-muted hover:underline">contact us</NuxtLink>
-        if you need further assistance.
-      </p>
-    </div>
-
-    <div v-else class="prose lg:prose-xl">
-      <h1 class="text-2xl font-bold text-green-600">Booking Cancelled Successfully</h1>
-      <p>Your consultation has been cancelled. You will receive a confirmation email shortly.</p>
-      <p>
-        If you'd like to schedule a new time, feel free to visit our
-        <NuxtLink to="/booking" class="text-muted hover:underline">booking page</NuxtLink>
-        again.
-      </p>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
+// Cancel page (DS v1.5, pages/booking.md): one centred panel, three states.
 useSeoMeta({
-  title: 'Cancel Booking | ivmanto.com',
-  description: 'Cancel your scheduled consultation with IVMANTO. Contact us if you need further assistance modifying your appointment.',
+  title: 'Cancel your call | ivmanto.com',
+  description: 'Cancel a call you booked with ivmanto.',
   robots: 'noindex, nofollow',
 })
 
 const route = useRoute()
 const isLoading = ref(true)
-const error = ref<string | null>(null)
+const hasFailed = ref(false)
 
 onMounted(async () => {
   const token = route.query.token
-
-  if (!token) {
-    error.value = 'Invalid or missing cancellation token in the URL.'
+  if (!token || typeof token !== 'string') {
+    hasFailed.value = true
     isLoading.value = false
     return
   }
-
   try {
     const response = await fetch('/api/booking/cancel', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ token }),
     })
-
-    if (!response.ok) {
-      const errData = await response.json()
-      throw new Error(errData.message || 'The server returned an error.')
-    }
-  } catch (e: any) {
-    error.value = e.message || 'An unexpected error occurred.'
+    if (!response.ok) throw new Error(`Server responded with status ${response.status}`)
+  } catch (e) {
+    console.error('Cancelling failed:', e)
+    hasFailed.value = true
   } finally {
     isLoading.value = false
   }
 })
 </script>
+
+<template>
+  <section class="section" style="padding-top: var(--space-12)">
+    <div class="container">
+      <div class="booking__panel cancel-panel">
+        <p v-if="isLoading" class="muted" role="status" style="margin: 0">Cancelling your call…</p>
+        <template v-else-if="hasFailed">
+          <h1 class="h3">This cancel link no longer works</h1>
+          <p class="muted">The call may already be cancelled. If not, reply to the confirmation email and I’ll cancel it for you.</p>
+          <NuxtLink to="/booking" class="btn btn--secondary">Book a call</NuxtLink>
+        </template>
+        <template v-else>
+          <h1 class="h3">Your call is cancelled</h1>
+          <p class="muted">The time is free again. You can book a new one whenever it suits you.</p>
+          <NuxtLink to="/booking" class="btn btn--primary">Book a new time</NuxtLink>
+        </template>
+      </div>
+    </div>
+  </section>
+</template>
+
+<style scoped>
+.cancel-panel { max-width: 560px; margin: 0 auto; }
+</style>

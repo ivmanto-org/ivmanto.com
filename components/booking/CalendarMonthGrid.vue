@@ -1,22 +1,11 @@
 <script setup lang="ts">
-import { buildMonthGrid, isSameDay, clampDate } from '~/composables/useDate'
+// Month calendar of the booking panel (DS v1.5, pages/booking.md): weeks from Monday,
+// 44px day buttons, the full date as each button's label. The parent owns the chosen day;
+// this component only holds the month on display.
+import { isSameDay, clampDate } from '~/composables/useDate'
+import { WEEKDAY_LABELS, buildMondayGrid, formatLongDate, formatMonth } from '~/utils/bookingFormat'
 
-/**
- * Month-grid date picker used by the booking page. Renders a 6×7 grid of
- * days for the currently displayed month (with out-of-month padding days as
- * inert cells) and lets visitors jump between months and select a day.
- *
- * Selection is two-way bound via v-model:modelValue. The parent's
- * `selectedDate` is the source of truth — this component only holds an
- * internal `displayMonth` ref for the month currently being viewed, which
- * is initialised from `modelValue` and does NOT change `selectedDate` when
- * the visitor navigates months. Only a day click updates the bound date.
- *
- * Bounds: cells outside [minDate, maxDate] are rendered as disabled. The
- * prev-month button is disabled when `displayMonth` is the current month;
- * the next-month button is disabled when `displayMonth` is the month
- * containing `maxDate`.
- */
+const DEFAULT_WINDOW_DAYS = 30
 
 const props = withDefaults(
   defineProps<{
@@ -25,39 +14,22 @@ const props = withDefaults(
     maxDate?: Date
     disabled?: boolean
   }>(),
-  {
-    minDate: undefined,
-    maxDate: undefined,
-    disabled: false,
-  },
+  { minDate: undefined, maxDate: undefined, disabled: false },
 )
 
-const emit = defineEmits<{
-  'update:modelValue': [Date]
-}>()
+const emit = defineEmits<{ 'update:modelValue': [Date] }>()
 
-// Effective bounds: today and today+30 by default. The parent normally
-// passes these explicitly; the defaults are here so the component can be
-// rendered standalone (Storybook / preview) without surprises.
-const today = new Date()
-const minDate = computed(() => props.minDate ?? new Date(today.getFullYear(), today.getMonth(), today.getDate()))
-const maxDate = computed(() => {
-  if (props.maxDate) return props.maxDate
-  const d = new Date(today.getFullYear(), today.getMonth(), today.getDate())
-  d.setDate(d.getDate() + 30)
-  return d
-})
+// Captured once, so "today" and the bounds do not drift while the page stays open.
+const now = new Date()
+const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+const minDate = computed(() => props.minDate ?? today)
+const maxDate = computed(
+  () => props.maxDate ?? new Date(today.getFullYear(), today.getMonth(), today.getDate() + DEFAULT_WINDOW_DAYS),
+)
 
-// Internal month being shown. Initialised from the bound value. Prev/next
-// arrows only mutate this ref, never modelValue.
 const displayMonth = ref(new Date(props.modelValue.getFullYear(), props.modelValue.getMonth(), 1))
 
-// Today (midnight) — used for the "today" ring on the cell. Captured once at
-// component setup so the ring stays put as the wall clock advances during a
-// long session.
-const todayMidnight = new Date(today.getFullYear(), today.getMonth(), today.getDate())
-
-// If the bound value jumps to a different month (e.g. parent reset), realign.
+// If the bound value jumps to another month (parent reset), follow it.
 watch(
   () => props.modelValue,
   (v) => {
@@ -67,116 +39,63 @@ watch(
   },
 )
 
-const monthLabel = computed(() =>
-  displayMonth.value.toLocaleDateString('en-US', { month: 'long', year: 'numeric' }),
-)
+const grid = computed(() => buildMondayGrid(displayMonth.value))
 
-const grid = computed(() => buildMonthGrid(displayMonth.value))
-
-const isPrevMonthDisabled = computed(() => {
-  const firstOfDisplay = new Date(displayMonth.value.getFullYear(), displayMonth.value.getMonth(), 1)
-  const firstOfMinMonth = new Date(minDate.value.getFullYear(), minDate.value.getMonth(), 1)
-  return firstOfDisplay.getTime() <= firstOfMinMonth.getTime()
-})
-
-const isNextMonthDisabled = computed(() => {
-  const d = displayMonth.value
-  const m = maxDate.value
-  return d.getFullYear() > m.getFullYear()
-    || (d.getFullYear() === m.getFullYear() && d.getMonth() >= m.getMonth())
-})
-
-const dayLabels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+const monthIndex = (d: Date) => d.getFullYear() * 12 + d.getMonth()
+const isPrevMonthDisabled = computed(() => monthIndex(displayMonth.value) <= monthIndex(minDate.value))
+const isNextMonthDisabled = computed(() => monthIndex(displayMonth.value) >= monthIndex(maxDate.value))
 
 function inCurrentMonth(d: Date): boolean {
   return d.getMonth() === displayMonth.value.getMonth()
 }
 
 function isDisabledCell(d: Date): boolean {
-  return !isSameDay(d, minDate.value) && d.getTime() < minDate.value.getTime()
-    || d.getTime() > maxDate.value.getTime()
+  return (!isSameDay(d, minDate.value) && d.getTime() < minDate.value.getTime()) || d.getTime() > maxDate.value.getTime()
+}
+
+function dayLabel(d: Date): string {
+  return isSameDay(d, today) ? `${formatLongDate(d)}, today` : formatLongDate(d)
 }
 
 function selectDay(d: Date) {
-  if (props.disabled) return
-  if (isDisabledCell(d)) return
-  // Clamp to bounds just in case (defensive — UI should already enforce).
-  const clamped = clampDate(d, minDate.value, maxDate.value)
-  emit('update:modelValue', clamped)
+  if (props.disabled || isDisabledCell(d)) return
+  emit('update:modelValue', clampDate(d, minDate.value, maxDate.value))
 }
 
 function shiftMonth(amount: number) {
   if (amount < 0 && isPrevMonthDisabled.value) return
   if (amount > 0 && isNextMonthDisabled.value) return
-  const next = new Date(displayMonth.value.getFullYear(), displayMonth.value.getMonth() + amount, 1)
-  displayMonth.value = next
+  displayMonth.value = new Date(displayMonth.value.getFullYear(), displayMonth.value.getMonth() + amount, 1)
 }
 </script>
 
 <template>
-  <div class="w-full" :class="{ 'opacity-60 pointer-events-none': disabled }">
-    <!-- Month header + nav -->
-    <div class="flex items-center justify-between mb-3">
-      <button
-        type="button"
-        @click="shiftMonth(-1)"
-        class="btn-day-nav"
-        :disabled="isPrevMonthDisabled"
-        aria-label="Previous month"
-      >
-        <svg class="w-6 h-6 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-        </svg>
+  <div class="cal">
+    <div class="cal__head">
+      <button class="icon-btn" type="button" :disabled="isPrevMonthDisabled" aria-label="Previous month" @click="shiftMonth(-1)">
+        <svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3L5 8l5 5" /></svg>
       </button>
-      <h3 class="text-lg font-semibold text-muted">{{ monthLabel }}</h3>
-      <button
-        type="button"
-        @click="shiftMonth(1)"
-        class="btn-day-nav"
-        :disabled="isNextMonthDisabled"
-        aria-label="Next month"
-      >
-        <svg class="w-6 h-6 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-        </svg>
+      <h2 aria-live="polite">{{ formatMonth(displayMonth) }}</h2>
+      <button class="icon-btn" type="button" :disabled="isNextMonthDisabled" aria-label="Next month" @click="shiftMonth(1)">
+        <svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l5 5-5 5" /></svg>
       </button>
     </div>
-
-    <!-- Day-of-week header -->
-    <div class="grid grid-cols-7 gap-1 mb-1">
-      <div v-for="d in dayLabels" :key="d" class="text-center text-xs font-medium text-muted">
-        {{ d }}
-      </div>
-    </div>
-
-    <!-- Day grid -->
-    <div class="grid grid-cols-7 gap-1">
-      <template v-for="(cell, idx) in grid" :key="idx">
+    <div class="cal__grid">
+      <div v-for="d in WEEKDAY_LABELS" :key="d" class="cal__dow" aria-hidden="true">{{ d }}</div>
+      <template v-for="cell in grid" :key="cell.getTime()">
         <button
           v-if="inCurrentMonth(cell)"
           type="button"
-          @click="selectDay(cell)"
-          :disabled="isDisabledCell(cell)"
-          :class="[
-            'aspect-square rounded-lg text-sm flex items-center justify-center transition-colors',
-            isDisabledCell(cell)
-              ? 'text-gray-300 cursor-not-allowed'
-              : isSameDay(cell, modelValue)
-                ? 'bg-primary text-white font-semibold'
-                : isSameDay(cell, todayMidnight) && !isSameDay(cell, modelValue)
-                  ? 'border border-primary text-primary font-semibold hover:bg-primary hover:text-white cursor-pointer'
-                  : 'text-muted hover:bg-primary hover:text-white cursor-pointer',
-          ]"
-          :aria-label="cell.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })"
+          class="cal__day"
+          :class="{ 'is-today': isSameDay(cell, today) }"
+          :disabled="disabled || isDisabledCell(cell)"
+          :aria-label="dayLabel(cell)"
           :aria-pressed="isSameDay(cell, modelValue)"
+          @click="selectDay(cell)"
         >
           {{ cell.getDate() }}
         </button>
-        <div
-          v-else
-          class="aspect-square rounded-lg"
-          aria-hidden="true"
-        ></div>
+        <span v-else aria-hidden="true"></span>
       </template>
     </div>
   </div>
