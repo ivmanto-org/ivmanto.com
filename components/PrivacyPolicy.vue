@@ -636,6 +636,7 @@
   text-align: left;
   line-height: 1.6;
   color: var(--text);
+  overflow-wrap: anywhere; /* long URLs must not widen the page on phones */
 }
 
 h1 {

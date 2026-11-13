@@ -161,7 +161,10 @@ onMounted(() => {
     <div v-if="!isBookingConfirmed">
       <h1 class="text-2xl font-bold text-dark-slate mb-6 text-center">Book a Consultation</h1>
 
-      <!-- Date Selector — month-grid calendar view -->
+      <!-- The date, timezone and slots depend on the visitor's clock, so this part renders
+           in the browser only (the pre-rendered page would carry the build date). -->
+      <ClientOnly>
+      <!-- Date Selector: month-grid calendar view -->
       <div class="mb-2">
         <BookingCalendarMonthGrid
           v-model="selectedDate"
@@ -230,6 +233,10 @@ onMounted(() => {
           </button>
         </div>
       </form>
+      <template #fallback>
+        <p class="text-sm text-muted text-center" role="status">Loading the calendar…</p>
+      </template>
+      </ClientOnly>
     </div>
 
     <!-- Confirmation Message -->
