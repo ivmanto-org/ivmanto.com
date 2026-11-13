@@ -6,7 +6,8 @@ locals {
     "calendar-json.googleapis.com",    # booking (Google Calendar via DWD)
     "cloudbuild.googleapis.com",       # CI/CD (cloudbuild*.yaml)
     "cloudresourcemanager.googleapis.com",
-    "compute.googleapis.com", # serverless NEGs, backend services, Cloud Armor
+    "cloudscheduler.googleapis.com", # daily booking-retention run (booking_retention.tf)
+    "compute.googleapis.com",        # serverless NEGs, backend services, Cloud Armor
     "iam.googleapis.com",
     "iamcredentials.googleapis.com", # DWD token impersonation
     "logging.googleapis.com",
