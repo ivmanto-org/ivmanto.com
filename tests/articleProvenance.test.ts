@@ -7,6 +7,7 @@ const article = {
   title: 'AI transparency rules now apply: what small companies must label',
   date: '2026-11-12',
 }
+const NOTHING = { meta: [], script: [] }
 
 function jsonLd(value: string) {
   const head = articleProvenanceHead({ ...article, digital_source_type: value })
@@ -15,8 +16,8 @@ function jsonLd(value: string) {
   return JSON.parse(head.script[0].innerHTML)
 }
 
-test('emits the CreativeWork block from the spec for an AI-assisted article', () => {
-  assert.deepEqual(jsonLd('algorithmicMedia'), {
+test('emits the CreativeWork block for an article created with generative AI', () => {
+  assert.deepEqual(jsonLd('trainedAlgorithmicMedia'), {
     '@context': 'https://schema.org',
     '@type': 'CreativeWork',
     name: article.title,
@@ -25,40 +26,43 @@ test('emits the CreativeWork block from the spec for an AI-assisted article', ()
     creator: { '@type': 'Organization', name: 'Editorial team ivmanto.com' },
     publisher: { '@type': 'Organization', name: 'ivmanto.com' },
     usageInfo: 'https://iptc.org/standards/digital-source-type/',
-    identifier: 'http://cv.iptc.org/codes/digitalSourceType/algorithmicMedia',
+    identifier: 'http://cv.iptc.org/newscodes/digitalsourcetype/trainedAlgorithmicMedia',
     about:
-      'DigitalSourceType: algorithmicMedia — AI-assisted, human-reviewed per the IPTC DigitalSourceType vocabulary and the EU Code of Practice on Transparency of AI-generated Content',
+      'DigitalSourceType: trainedAlgorithmicMedia — Created using Generative AI, reviewed and edited by the editorial team, per the IPTC DigitalSourceType vocabulary and the EU Code of Practice on Transparency of AI-generated Content',
   })
 })
 
-test('describes a purely generated article as generated with AI', () => {
-  const data = jsonLd('trainedAlgorithmicMedia')
-  assert.equal(data.identifier, 'http://cv.iptc.org/codes/digitalSourceType/trainedAlgorithmicMedia')
-  assert.match(data.about, /^DigitalSourceType: trainedAlgorithmicMedia — generated with AI per the IPTC/)
+test('uses the IPTC concept name of the other generative AI codes', () => {
+  assert.match(jsonLd('compositeSynthetic').about, /— Composite including generative AI elements, reviewed/)
+  const edited = jsonLd('compositeWithTrainedAlgorithmicMedia')
+  assert.equal(edited.identifier, 'http://cv.iptc.org/newscodes/digitalsourcetype/compositeWithTrainedAlgorithmicMedia')
+  assert.match(edited.about, /— Edited using Generative AI, reviewed/)
 })
 
-test('emits the meta tag with the short vocabulary name', () => {
-  const head = articleProvenanceHead({ ...article, digital_source_type: 'algorithmicMedia' })
-  assert.deepEqual(head.meta, [{ name: 'ai-digital-source-type', content: 'algorithmicMedia' }])
-})
-
-test('emits nothing for a human-written article', () => {
-  assert.deepEqual(articleProvenanceHead({ ...article, digital_source_type: 'human' }), { meta: [], script: [] })
+test('emits the meta tag with the vocabulary code', () => {
+  const head = articleProvenanceHead({ ...article, digital_source_type: 'trainedAlgorithmicMedia' })
+  assert.deepEqual(head.meta, [{ name: 'ai-digital-source-type', content: 'trainedAlgorithmicMedia' }])
 })
 
 test('emits nothing when the payload has no digital source type', () => {
-  assert.deepEqual(articleProvenanceHead(article), { meta: [], script: [] })
-  assert.deepEqual(articleProvenanceHead(null), { meta: [], script: [] })
+  assert.deepEqual(articleProvenanceHead(article), NOTHING)
+  assert.deepEqual(articleProvenanceHead(null), NOTHING)
 })
 
-test('emits nothing for a value outside the IPTC vocabulary we use', () => {
-  for (const value of ['', 'AlgorithmicMedia', 'compositeSynthetic', '"></script><script>alert(1)']) {
-    assert.deepEqual(articleProvenanceHead({ ...article, digital_source_type: value }), { meta: [], script: [] })
+test('emits nothing for non-generative codes, including algorithmicMedia (pure algorithm, no trained model)', () => {
+  for (const value of ['algorithmicMedia', 'digitalCreation', 'humanEdits', 'human']) {
+    assert.deepEqual(articleProvenanceHead({ ...article, digital_source_type: value }), NOTHING)
+  }
+})
+
+test('emits nothing for a value outside the vocabulary', () => {
+  for (const value of ['', 'TrainedAlgorithmicMedia', 'toString', '"></script><script>alert(1)']) {
+    assert.deepEqual(articleProvenanceHead({ ...article, digital_source_type: value }), NOTHING)
   }
 })
 
 test('keeps a title with markup characters from closing the script element', () => {
-  const head = articleProvenanceHead({ ...article, title: 'A </script><b> title', digital_source_type: 'algorithmicMedia' })
+  const head = articleProvenanceHead({ ...article, title: 'A </script><b> title', digital_source_type: 'trainedAlgorithmicMedia' })
   assert.ok(!head.script[0].innerHTML.includes('</script'))
   assert.equal(JSON.parse(head.script[0].innerHTML).name, 'A </script><b> title')
 })

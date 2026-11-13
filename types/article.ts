@@ -4,7 +4,7 @@ export interface ArticleMeta {
   summary: string
   date: string
   published: boolean
-  /** IPTC DigitalSourceType short name; set by the publishing pipeline. */
+  /** IPTC Digital Source Type code (e.g. trainedAlgorithmicMedia); set by the publishing pipeline. */
   digital_source_type?: string
 }
 
