@@ -53,8 +53,8 @@ const declineCookies = () => {
     <h4>Cookies</h4>
     <p>
       We use analytics cookies only if you agree.
-      <span class="cookie__long">You can change this any time under “Cookie settings” in the footer.</span>
-      <NuxtLink to="/privacy-policy">Details</NuxtLink>
+      <!-- One line on purpose: Vue drops a line break between two elements, and with it the space. -->
+      <span class="cookie__long">You can change this any time under “Cookie settings” in the footer.</span> <NuxtLink to="/privacy-policy">Details</NuxtLink>
     </p>
     <div class="row">
       <button type="button" class="btn btn--secondary btn--sm" @click="declineCookies">Reject</button>
