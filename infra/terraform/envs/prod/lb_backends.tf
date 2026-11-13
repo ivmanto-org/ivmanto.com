@@ -42,7 +42,7 @@ resource "google_compute_security_policy" "edge" {
     description = "Per-IP rate limit for /api/advisor and /api/leads"
     match {
       expr {
-        expression = "request.path.matches(\"^/api/(advisor|leads)(/.*)?$\")"
+        expression = "request.path.matches(\"^/api/(?:advisor|leads)(?:/.*)?$\")"
       }
     }
     rate_limit_options {
