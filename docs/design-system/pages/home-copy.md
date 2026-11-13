@@ -21,7 +21,7 @@ Only the copy that changed is listed; everything else stays as built on `dev-v0.
 | 5 | How it works | Deliver | Workshops and documents, built with you. |
 | 5 | How it works | Hand over | Everything stays in your tools. |
 | 6 | About | Text | I'm Nikolay Tonev. You work with me directly, from the first call to the handover. |
-| 6 | About | Credentials | the sentence is replaced by badges: `CredentialBadge` (MIT Professional Education, wording rules in `components/credential.md`) and the Google Cloud Professional Cloud Architect badge already used on /about, with the line "Certified 2019, 2022 and 2024" (Nick, 2026-11-11: the last certificate expired 2026-09-01, so the badge states history; never show it bare). Then a link "More about me" to /about. |
+| 6 | About | Credentials | the sentence is replaced by badges: `CredentialBadge` (MIT Professional Education, wording rules in `components/credential.md`; links to `https://www.credential.net/100ff9ab-e82e-41ee-b16e-4ce596b190bb#acc.9ELbmKGO`, new tab; Nick, 2026-11-13) and the Google Cloud Professional Cloud Architect badge already used on /about, with the line "Certified 2019, 2022 and 2024" (Nick, 2026-11-11: the last certificate expired 2026-09-01, so the badge states history; never show it bare). Then a link "More about me" to /about. |
 | 7 | Insights | Cards | date and title only, no summary |
 | 8 | FAQ | Questions | "Do you also build data platforms?" removed (section 4b covers it) |
 | 9 | Closing | Lead | A 30-minute call finds the first step. |

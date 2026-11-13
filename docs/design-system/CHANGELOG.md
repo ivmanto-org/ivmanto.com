@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.5.0 · 2026-11-13 (plan and four recommendations approved by Nick; copy in brackets open)
+- 2026-11-13, about page: MIT certificate image in the credential block (`.credential--certificate`, `assets/credentials/`), Credly and Accredible links, Nick's own bio paragraphs, title "AI & Data Governance Consultant". Build: `{{DATAURI:path}}` placeholder.
+- **Three new page specs:** `pages/blog.md` (insights index and article), `pages/booking.md` (book a call and the cancel page), `pages/about.md` (new message and copy).
+- **Four new previews:** `pages/blog.html`, `pages/post.html`, `pages/booking.html` (working calendar, made-up times), `pages/about.html`.
+- **Insights:** 12 articles per page with a pager, topic filter (Governance, Risk, Compliance, Engineering), one grid, PostCard with one meta line. Articles need a new `topic` field. The article loses its card and top toolbar and gains a byline, a next-step block, newer and older links and related articles.
+- **Booking:** two columns (what the call is; the panel), three steps, Monday-first weeks, 24-hour times, dates as "Monday 16 November 2026".
+- **About:** repositioned from data architect to AI governance; Frank Lloyd Wright section, "Core Expertise", badge images and "Featured Insights" removed; data and cloud background kept as one block.
+- **Stylesheet:** new block "v1.5" in `components/ivmanto.css` (`.page-head`, `.post-grid`, `.toolbar`, `.filter`, `.pager`, `.article`, `.prose`, `.next-step`, `.post-nav`, `.booking`, `.facts`, `.cal`, `.slots`, `.picked`, `.about-hero`, `.portrait`, `.principles`, `.cred-list`). No token changed.
+- Build: new icons (`heart`, `check`, `video`, `user`, `chevleft`, `chevright`); the preview header links Insights, About and "Book a call" to the new previews. All previews regenerated.
+
 ## v1.4.0 · 2026-11-13 (approved by Nick)
 - **Pillar index opens in place.** New markup (`.pillar-index__head` + `.pillar-index__panel`); `.pillar-index__item` and `__go` are gone. Spec in `components/cards.md`.
 - **Compact ticket opens in place:** `.ticket__toggle` "What’s included" + `.ticket__more` (includes and "Not included").

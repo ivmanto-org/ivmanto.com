@@ -1,7 +1,7 @@
 # ivmanto design system
 
 Owner: Brio (design). Implementation: Clauco (Nuxt 3 + Tailwind). Review: Ivmo. Sign-off: Nick.
-Status: **v1.0, approved by Nick** (2026-11-10); Later versions (now v1.4.0: home hero motion, text cut, dark band, ticket package cards, pillars and tickets that open in place) are in `CHANGELOG.md` and `DECISIONS.md`. Handed to Clauco for the new site.
+Status: **v1.0, approved by Nick** (2026-11-10); Later versions (now v1.5.0: home hero motion, text cut, dark band, ticket package cards, pillars and tickets that open in place, specs for insights, booking and about) are in `CHANGELOG.md` and `DECISIONS.md`. Handed to Clauco for the new site.
 
 **What is decided, what is a placeholder, and what was rejected: see [`DECISIONS.md`](DECISIONS.md).** It wins over any other file or chat.
 

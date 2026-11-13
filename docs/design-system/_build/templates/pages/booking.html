@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>ivmanto book a call</title>
+{{HEAD}}
+</head>
+<body>
+{{HEADER}}
+<main>
+  <section class="section" style="padding-top:var(--space-12)"><div class="container booking">
+    <div>
+      <p class="overline">Book a call</p>
+      <h1>30 minutes to find the first step</h1>
+      <p class="lead">Tell me where you stand with AI. You leave the call knowing which service fits, or that you need none.</p>
+      <ul class="facts">
+        <li>{{ICON:clock}}<div><strong>30 minutes</strong><small>[Free and without obligation: Nick to confirm]</small></div></li>
+        <li>{{ICON:video}}<div><strong>Video call</strong><small>The link comes with the confirmation email.</small></div></li>
+        <li>{{ICON:user}}<div><strong>With Nikolay Tonev</strong><small>[In English or German: Nick to confirm]</small></div></li>
+      </ul>
+      <p class="small muted" style="margin-top:var(--space-6)">Prefer to write? <a href="#">Send a message</a></p>
+    </div>
+
+    <div class="booking__panel" data-booking>
+      <ol class="stepper" aria-label="Booking steps">
+        <li aria-current="step"><span>Pick a time</span></li><li><span>Your details</span></li><li><span>Confirmed</span></li>
+      </ol>
+
+      <!-- Step 1 -->
+      <div data-step="1">
+        <div class="cal">
+          <div class="cal__head">
+            <button class="icon-btn" type="button" data-prev aria-label="Previous month">{{ICON:chevleft}}</button>
+            <h2 data-month aria-live="polite">November 2026</h2>
+            <button class="icon-btn" type="button" data-next aria-label="Next month">{{ICON:chevright}}</button>
+          </div>
+          <div class="cal__grid" data-grid></div>
+          <p class="cal__tz">Times are shown in your time zone: Europe/Berlin</p>
+        </div>
+        <h3 class="slots__title" data-slots-title>Free times on Monday 16 November</h3>
+        <div class="slots" data-slots></div>
+      </div>
+
+      <!-- Step 2 -->
+      <form data-step="2" hidden>
+        <div class="picked"><span><strong data-picked>Monday, 16 November 2026, 12:30</strong> · 30 minutes</span><button type="button" data-change>Change</button></div>
+        <div class="field"><label for="bk-name">Name</label><input class="input" id="bk-name" autocomplete="name" required></div>
+        <div class="field"><label for="bk-mail">Work email</label><input class="input" id="bk-mail" type="email" autocomplete="email" required><span class="hint">The confirmation and the calendar file go here.</span></div>
+        <div class="field"><label for="bk-notes">What would you like to talk about? <span class="muted" style="font-weight:400">(optional)</span></label><textarea id="bk-notes" rows="3"></textarea></div>
+        <p class="form-note">I use these details only to hold and prepare this call (Art. 6(1)(b) GDPR). <a href="#">Privacy notice</a></p>
+        <button class="btn btn--primary btn--block" type="submit">Book the call</button>
+      </form>
+
+      <!-- Step 3 -->
+      <div data-step="3" hidden>
+        <span class="done-mark">{{ICON:check}}</span>
+        <h2 class="h3" tabindex="-1" data-done>Your call is booked</h2>
+        <p><strong data-picked>Monday, 16 November 2026, 12:30</strong> · 30 minutes · video call</p>
+        <p class="muted">A confirmation with a calendar file is on its way to your inbox. It also has a link to cancel.</p>
+        <div class="row" style="margin-top:var(--space-6)"><a class="btn btn--secondary" href="home.html">Back to home</a><a class="btn btn--ghost" href="blog.html">Read the insights {{ICON:chev}}</a></div>
+      </div>
+    </div>
+  </div></section>
+
+  <section class="section section--sunken"><div class="container">
+    <div class="section-head"><p class="overline">States</p><h2>The other states of the panel</h2></div>
+    <div class="grid grid-2">
+      <div><div class="ds-label">Loading the times</div><div class="ds-box"><div class="slots"><span class="slot slot--skeleton"></span><span class="slot slot--skeleton"></span><span class="slot slot--skeleton"></span></div></div></div>
+      <div><div class="ds-label">No free time on the chosen day</div><div class="ds-box"><div class="notice"><p style="margin:0">No free times on this day. Please pick another date.</p></div></div></div>
+      <div><div class="ds-label">Times could not be loaded, or the booking failed</div><div class="ds-box"><div class="notice notice--error" role="alert"><p><strong>That didn't work.</strong> Please try again, or <a href="#">send a message</a> instead.</p></div></div></div>
+      <div><div class="ds-label">The time was taken in the meantime</div><div class="ds-box"><div class="notice notice--error" role="alert"><p><strong>This time has just been taken.</strong> Please pick another one.</p></div></div></div>
+      <div><div class="ds-label">Cancel page: cancelled</div><div class="ds-box"><h3>Your call is cancelled</h3><p class="muted">The time is free again. You can book a new one whenever it suits you.</p><a class="btn btn--primary" href="booking.html">Book a new time</a></div></div>
+      <div><div class="ds-label">Cancel page: link invalid or already used</div><div class="ds-box"><h3>This cancel link no longer works</h3><p class="muted">The call may already be cancelled. If not, reply to the confirmation email and I'll cancel it for you.</p><a class="btn btn--secondary" href="booking.html">Book a call</a></div></div>
+    </div>
+  </div></section>
+</main>
+{{FOOTER}}
+{{THEME_JS}}
+<script>
+/* Preview only: a fixed "today" (13 Nov 2026) and made-up free times. The site keeps its own calendar logic. */
+(function () {
+  var root = document.querySelector('[data-booking]'); if (!root) return;
+  var TODAY = new Date(2026, 10, 13), MAX = new Date(2027, 1, 11);
+  var view = new Date(2026, 10, 1), picked = new Date(2026, 10, 16), slot = null;
+  var grid = root.querySelector('[data-grid]'), slots = root.querySelector('[data-slots]');
+  var fmtMonth = new Intl.DateTimeFormat('en-GB', { month: 'long', year: 'numeric' });
+  var fmtDay = new Intl.DateTimeFormat('en-GB', { weekday: 'long', day: 'numeric', month: 'long' });
+  var fmtFull = new Intl.DateTimeFormat('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+  function same(a, b) { return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate(); }
+  function timesFor(d) { var wd = d.getDay(); if (wd === 0 || wd === 6) return []; return [[], ['09:30', '13:30', '16:00'], ['12:30', '15:00'], ['10:00', '14:30'], ['11:00']][(d.getDate() + wd) % 5]; }
+  function drawMonth() {
+    root.querySelector('[data-month]').textContent = fmtMonth.format(view);
+    var html = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(function (d) { return '<span class="cal__dow">' + d + '</span>'; }).join('');
+    var lead = (new Date(view.getFullYear(), view.getMonth(), 1).getDay() + 6) % 7;
+    for (var i = 0; i < lead; i++) html += '<span></span>';
+    var days = new Date(view.getFullYear(), view.getMonth() + 1, 0).getDate();
+    for (var n = 1; n <= days; n++) {
+      var d = new Date(view.getFullYear(), view.getMonth(), n), off = d < TODAY || d > MAX;
+      html += '<button type="button" class="cal__day' + (same(d, TODAY) ? ' is-today' : '') + '" data-day="' + n + '"' + (off ? ' disabled' : '') + ' aria-pressed="' + same(d, picked) + '" aria-label="' + fmtDay.format(d) + (same(d, TODAY) ? ', today' : '') + '">' + n + '</button>';
+    }
+    grid.innerHTML = html;
+    root.querySelector('[data-prev]').disabled = view.getFullYear() === TODAY.getFullYear() && view.getMonth() === TODAY.getMonth();
+    root.querySelector('[data-next]').disabled = view.getFullYear() === MAX.getFullYear() && view.getMonth() === MAX.getMonth();
+  }
+  function drawSlots() {
+    root.querySelector('[data-slots-title]').textContent = 'Free times on ' + fmtDay.format(picked);
+    var t = timesFor(picked);
+    slots.innerHTML = t.length ? t.map(function (x) { return '<button type="button" class="slot" data-slot="' + x + '">' + x + '</button>'; }).join('') : '<div class="notice" style="grid-column:1/-1"><p style="margin:0">No free times on this day. Please pick another date.</p></div>';
+  }
+  function step(n) {
+    root.querySelectorAll('[data-step]').forEach(function (el) { el.hidden = el.getAttribute('data-step') !== String(n); });
+    root.querySelectorAll('.stepper li').forEach(function (li, i) { li.classList.toggle('done', i < n - 1); if (i === n - 1) li.setAttribute('aria-current', 'step'); else li.removeAttribute('aria-current'); });
+    root.querySelectorAll('[data-picked]').forEach(function (el) { el.textContent = fmtFull.format(picked) + ', ' + slot; });
+    if (n === 2) root.querySelector('#bk-name').focus();
+    if (n === 3) root.querySelector('[data-done]').focus();
+  }
+  root.addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    if (b.hasAttribute('data-prev')) { view = new Date(view.getFullYear(), view.getMonth() - 1, 1); drawMonth(); }
+    else if (b.hasAttribute('data-next')) { view = new Date(view.getFullYear(), view.getMonth() + 1, 1); drawMonth(); }
+    else if (b.hasAttribute('data-day')) { picked = new Date(view.getFullYear(), view.getMonth(), +b.getAttribute('data-day')); drawMonth(); drawSlots(); }
+    else if (b.hasAttribute('data-slot')) { slot = b.getAttribute('data-slot'); step(2); }
+    else if (b.hasAttribute('data-change')) { step(1); }
+  });
+  root.querySelector('form').addEventListener('submit', function (e) { e.preventDefault(); step(3); });
+  drawMonth(); drawSlots();
+})();
+</script>
+</body>
+</html>

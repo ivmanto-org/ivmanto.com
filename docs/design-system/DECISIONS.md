@@ -8,6 +8,8 @@ Owner: Brio. Last updated 2026-11-12 (hero headline).
 
 | Date | Decision | Where |
 |---|---|---|
+| 2026-11-13 | **About page approved by Nick.** Bio paragraphs in his own wording (verbatim); title "AI & Data Governance Consultant"; data governance named beside AI governance; MIT certificate image served from our own site. | `pages/about.md` |
+| 2026-11-13 | **Insights, booking and about get their own specs (v1.5).** About: the Frank Lloyd Wright section is cut and the data and cloud background stays as one short block linking to Data & AI engineering. Insights: 12 articles per page with a topic filter (Governance, Risk, Compliance, Engineering). Booking: weeks start on Monday, 24-hour times. Copy in brackets is not approved yet. | `pages/blog.md`, `pages/booking.md`, `pages/about.md` |
 | 2026-11-13 | **Open in place: pillars and tickets (both).** A pillar on the home page opens a panel with its summary and packages; a compact ticket unfolds "What’s included". Three drawn pillar icons. Trade-off accepted: the pillar page is one click further from the home page. | `components/cards.md`, `previews/open-in-place.html` |
 | 2026-11-13 | **Pillar numerals in Fraunces** (digits only, OFL, self-hosted on the site). Montserrat, Instrument Serif and Big Shoulders Display were the alternatives. Fraunces is used for these numerals only. | `components/cards.md` |
 | 2026-11-12 | **Home headline: two lines on desktop, option C.** Text column a little wider (`1.15fr` / `1fr`), headline at most 48px on the home hero. Options A (wider column only) and B (smaller headline only) are not used. | `pages/home-copy.md`, `previews/hero-headline.html` |
@@ -62,6 +64,8 @@ Owner: Brio. Last updated 2026-11-12 (hero headline).
 | Disclosure that site texts are drafted with AI help (Brio recommends yes; not legally required for human-reviewed copy) | Nick |
 | Accredible credential URL, programme name, portrait photo | Nick |
 | FAQ answers, blog teasers, package timelines and FAQs (`[brackets]` in the previews) | Nick / Ivgil |
+| **v1.5 booking:** "free and without obligation", call languages, retention time for booking data (`pages/booking.md`) | Nick (retention with Ivgil) |
+| **v1.5 insights:** which articles stay and which topic each gets (`pages/blog.md`) | Nick / Ivmo |
 
 ## 5. Open, not blocking the build
 

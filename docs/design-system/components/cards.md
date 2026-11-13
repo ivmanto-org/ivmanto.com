@@ -40,4 +40,4 @@ Props: `id`, `pillar`, `title`, `price` (EUR, net), `duration`, `deliverable`, `
 - The buy box on the package page keeps the plain card (`.card.package`); it is not a ticket.
 
 ## PostCard (insights)
-Meta line (topic · reading time, uppercase 12px), Montserrat h3 title, one-line summary. On the home page (v1.1): meta line and title only, no summary. No images by default; an optional 16:9 image goes above the meta line.
+v1.5: one meta line (`TOPIC · 18 SEP 2026 · 6 MIN`, JetBrains Mono 12px uppercase, topic in `--accent`), Montserrat h3 title (18px; the only link, covers the card), summary clamped to two lines. Grid: `.post-grid` (3 columns from 1000px, 2 from 640px). On the home page (v1.1): date and title only, no summary. No images by default; an optional 16:9 image goes above the meta line. Full rules: `../pages/blog.md`.

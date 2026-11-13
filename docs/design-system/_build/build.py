@@ -5,6 +5,7 @@ Regenerates tokens (build_tokens.py), logo and favicon SVGs (build_logo.py) and 
 from _build/templates/. Each preview inlines all CSS so it opens anywhere (Claude Desktop,
 a browser, a file share) without a server.
 """
+import base64
 import re, subprocess, sys
 from pathlib import Path
 
@@ -32,6 +33,12 @@ ICONS = {
 }
 
 ICONS["arrow"] = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>'
+ICONS["heart"] = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20.5l-7.7-7.7a4.5 4.5 0 0 1 6.4-6.4L12 7.7l1.3-1.3a4.5 4.5 0 0 1 6.4 6.4z"/></svg>'
+ICONS["check"] = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>'
+ICONS["video"] = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="12" height="12" rx="2"/><path d="M15 10.5l6-3.5v10l-6-3.5z"/></svg>'
+ICONS["user"] = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20.5a8 8 0 0 1 16 0"/></svg>'
+ICONS["chevleft"] = '<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3L5 8l5 5"/></svg>'
+ICONS["chevright"] = '<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg>'
 ICONS["pause"] = '<svg class="i-pause" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M9 6v12M15 6v12"/></svg>'
 ICONS["play"] = '<svg class="i-play" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true" hidden><path d="M8 5.5l10 6.5-10 6.5z"/></svg>'
 # How-it-works step icons and pillar icons (v1.4): the files in assets/icons are the source
@@ -86,6 +93,7 @@ def render(text):
         for k, v in PARTIALS.items():
             text = text.replace("{{" + k + "}}", v)
         text = re.sub(r"\{\{ICON:(\w+)\}\}", lambda m: ICONS[m.group(1)], text)
+        text = re.sub(r"\{\{DATAURI:([\w./-]+)\}\}", lambda m: "data:image/png;base64," + base64.b64encode((DS / m.group(1)).read_bytes()).decode(), text)
         text = re.sub(r"\{\{PILLAR:(\w)\}\}", lambda m: pillar_icon(m.group(1)), text)
         text = text.replace("{{AVATAR}}", AVATAR)
         for key, fn, default in (("WORDMARK", wordmark, 24), ("SYMBOL", symbol, 32), ("LOCKUP", lockup, 32), ("SHORT", short, 32)):

@@ -8,6 +8,10 @@ Self-contained HTML previews (open in Claude Desktop or any browser; the header 
 | `pillar.html` | Pillar page (Governance; Risk and Compliance use the same template) | Explain the pillar in executive terms, then route to its packages |
 | `package.html` | Package detail | Everything needed to decide: scope, timeline, exclusions, fixed price, order |
 | `order.html` | Order flow, step 2 | B2B order request with a sticky summary |
+| `blog.html` | Insights index (v1.5) | 12 articles per page, topic filter, search, pager. Spec: `blog.md` |
+| `post.html` | Article (v1.5) | One text column, byline, next step, related articles. Spec: `blog.md` |
+| `booking.html` | Book a call (v1.5) | What the call is, then pick a time, details, confirmation. Spec: `booking.md` |
+| `about.html` | About (v1.5) | Nick and why governance, how he works, credentials. Spec: `about.md` |
 
 ## Home: section order and why
 v1.1 (2026-11-11): the order is unchanged, the copy is cut by about half (`home-copy.md`) and the hero has motion (`../components/hero-motion.md`, preview `../previews/hero-motion.html`). v1.2 (2026-11-12): sections 4b and 5 sit in one dark band and the closing CTA is tinted (`../components/backgrounds.md`). `home.html` shows all of this.
@@ -28,5 +32,5 @@ Hero (pillar icon, outcome headline, "you likely need this if…" checklist) →
 Breadcrumb → tags → title + outcome lead → fact row (duration, your effort, format, company size) → what you get → week-by-week timeline → **not included** (it builds trust and sets scope) → FAQ. Right column (sticky): price, three reassurance ticks, Order (primary), Book a call first (secondary), credential.
 
 ## Existing features carried over
-Booking calendar (restyle with tokens; target of "Book a call"), blog (PostCard + prose styles: Montserrat headings / Inter body), contact form (same field and consent styles as LeadForm), cookie consent (see `components/cookie-banner.md`).
+Booking calendar and blog: specified in v1.5 (`booking.md`, `blog.md`); about: `about.md`. Contact form (same field and consent styles as LeadForm), cookie consent (see `components/cookie-banner.md`).
 The ideas generator is replaced by the advisor (#112). Whether the assessment page stays is open with Nick; if it stays, it uses the order stepper as its question progress bar.
