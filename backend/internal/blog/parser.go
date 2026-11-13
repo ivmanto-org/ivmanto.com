@@ -3,6 +3,7 @@ package blog
 import (
 	"bytes"
 	"fmt"
+	"strings"
 
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/extension"
@@ -50,8 +51,34 @@ func (p *Parser) Parse(source []byte, slug string) (*Article, error) {
 
 	meta.Slug = slug
 
+	meta.ReadingMinutes = readingMinutes(buf.String())
+
 	return &Article{
 		ArticleMeta: meta,
 		Content:     buf.String(),
 	}, nil
+}
+
+// readingMinutes estimates reading time from a rendered HTML body:
+// words/200 rounded up, minimum 1 (a body with zero words still counts
+// as one minute). Tags are stripped so markup never inflates the count.
+func readingMinutes(htmlBody string) int {
+	var text strings.Builder
+	inTag := false
+	for _, r := range htmlBody {
+		switch {
+		case r == '<':
+			inTag = true
+		case r == '>':
+			inTag = false
+		case !inTag && r != '\n':
+			text.WriteRune(r)
+		}
+	}
+	words := len(strings.Fields(text.String()))
+	minutes := (words + 199) / 200
+	if minutes < 1 {
+		minutes = 1
+	}
+	return minutes
 }
