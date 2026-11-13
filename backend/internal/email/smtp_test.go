@@ -149,3 +149,37 @@ func TestBuildLeadNotificationHTMLEscapesUserInput(t *testing.T) {
 		}
 	}
 }
+
+func TestBuildMessageReplyToPresent(t *testing.T) {
+	msg := string(buildMessage("IVMANTO", "noreply@ivmanto.com", []string{"nick@ivmanto.com"}, nil, "visitor@example.com", "New advisor lead", "b123"))
+	if !strings.Contains(msg, "Reply-To: visitor@example.com\r\n") {
+		t.Errorf("expected Reply-To header with visitor address, message was:\n%s", msg)
+	}
+}
+
+func TestBuildMessageReplyToOmittedWhenEmpty(t *testing.T) {
+	msg := string(buildMessage("IVMANTO", "noreply@ivmanto.com", []string{"nick@ivmanto.com"}, nil, "", "Subject", "b123"))
+	if strings.Contains(msg, "Reply-To:") {
+		t.Errorf("expected no Reply-To header when replyTo is empty, message was:\n%s", msg)
+	}
+}
+
+func TestBuildMessageReplyToAndSubjectStripCRLFInjection(t *testing.T) {
+	msg := string(buildMessage(
+		"IVMANTO", "noreply@ivmanto.com",
+		[]string{"nick@ivmanto.com"}, nil,
+		"visitor@example.com\r\nBcc: attacker@evil.example",
+		"Subject\r\nX-Spam: yes",
+		"b123"))
+	for _, bad := range []string{"\r\nBcc:", "\r\nX-Spam:"} {
+		if strings.Contains(msg, bad) {
+			t.Errorf("CR/LF injection started a new header line %q in message:\n%s", bad, msg)
+		}
+	}
+	if !strings.Contains(msg, "Reply-To: visitor@example.comBcc: attacker@evil.example\r\n") {
+		t.Errorf("expected Reply-To with CR/LF stripped, message was:\n%s", msg)
+	}
+	if !strings.Contains(msg, "Subject: SubjectX-Spam: yes\r\n") {
+		t.Errorf("expected Subject with CR/LF stripped, message was:\n%s", msg)
+	}
+}
