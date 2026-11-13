@@ -1,11 +1,20 @@
 <script setup lang="ts">
 // Home: the funnel (docs/design-system/pages/README.md, section order and why).
 // Copy in [brackets] and '€ [price]' are placeholders for Nick.
-const { pillars, featured } = useCatalogue()
+const { featured } = useCatalogue()
 const { fetchArticles, sortedArticles } = useArticles()
 
 await useAsyncData('home-articles', () => fetchArticles())
 const insights = computed(() => sortedArticles.value.slice(0, 3))
+
+// Compact tickets: "What's included" opens in place (DS v1.4 cards.md).
+const featuredPackages = featured()
+const openTickets = ref<string[]>([])
+
+function toggleTicket(id: string) {
+  const row = featuredPackages.map((p) => p.id)
+  openTickets.value = toggleTickets(openTickets.value, id, row, window.matchMedia(TICKET_ROW_MIN_WIDTH).matches)
+}
 
 const frameworks = ['EU AI Act', 'ISO/IEC 42001', 'ISO/IEC 27001', 'NIST AI RMF', 'GDPR']
 
@@ -75,23 +84,14 @@ function formatDate(iso: string): string {
       </div>
     </section>
 
-    <!-- 3 · Pillars: numbered index (DS v1.3 cards.md) -->
+    <!-- 3 · Pillars: numbered index that opens in place (DS v1.4 cards.md) -->
     <section class="section section--sunken">
       <div class="container">
         <div class="section-head">
           <p class="overline">What we do</p>
           <h2>Three pillars, one accountable partner</h2>
         </div>
-        <ol class="pillar-index">
-          <li v-for="(p, i) in pillars" :key="p.id" class="pillar-index__item">
-            <span class="pillar-index__no" aria-hidden="true">{{ String(i + 1).padStart(2, '0') }}</span>
-            <h3><NuxtLink :to="`/services/${p.id}`" class="card__link">{{ p.name }}</NuxtLink></h3>
-            <p class="muted">{{ p.tagline }}</p>
-            <span class="pillar-index__go" aria-hidden="true">
-              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
-            </span>
-          </li>
-        </ol>
+        <SitePillarIndex />
       </div>
     </section>
 
@@ -103,7 +103,7 @@ function formatDate(iso: string): string {
           <h2>Fixed scope. Fixed price. Order directly.</h2>
         </div>
         <div class="grid grid-3">
-          <SitePackageCard v-for="pk in featured()" :key="pk.id" :pkg="pk" compact />
+          <SitePackageCard v-for="pk in featuredPackages" :key="pk.id" :pkg="pk" compact :open="openTickets.includes(pk.id)" @toggle="toggleTicket(pk.id)" />
         </div>
         <p style="margin-top: var(--space-8)"><NuxtLink to="/packages" class="btn btn--ghost">All packages <SiteChevIcon /></NuxtLink></p>
       </div>
