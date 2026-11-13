@@ -39,6 +39,10 @@ type gcalService struct {
 	calendarID           string
 	location             *time.Location
 	availableSlotSummary string
+
+	// testCalls, when non-nil, replaces the real calendar calls in
+	// CleanupExpiredBookings (unit tests only; see retention.go).
+	testCalls calendarCalls
 }
 
 // BookingDetails contains information for a new booking.
