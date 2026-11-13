@@ -15,11 +15,17 @@ COPY . .
 # -ldflags="-w -s" strips debug information to create a smaller binary.
 RUN CGO_ENABLED=0 GOOS=linux go build -a -ldflags="-w -s" -o ivmanto-backend-service ./cmd/server
 
+# booking-cleanup is the booking-data retention job (Cloud Run Job,
+# scheduled daily via Cloud Scheduler) — it ships in the same image so
+# the backend image serves both the service and the job.
+RUN CGO_ENABLED=0 GOOS=linux go build -a -ldflags="-w -s" -o booking-cleanup ./cmd/booking-cleanup
+
 # Stage 2: Create the final, minimal image using distroless.
 FROM gcr.io/distroless/static-debian11
 
-# Copy only the compiled binary from the builder stage.
+# Copy only the compiled binaries from the builder stage.
 COPY --from=builder /app/ivmanto-backend-service /
+COPY --from=builder /app/booking-cleanup /booking-cleanup
 
 # Set the entrypoint for the container. Cloud Run will provide the PORT.
 ENTRYPOINT ["/ivmanto-backend-service"]
