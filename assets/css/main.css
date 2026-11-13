@@ -8,6 +8,9 @@
 @import './ds/tokens.css';
 @import './ds/foundation.css';
 
+/* Fraunces 600, digits 0-9 only: the pillar index numerals and nothing else (DS v1.4). OFL, see public/fonts/OFL-Fraunces.txt. */
+@font-face { font-family: 'Fraunces'; font-style: normal; font-weight: 600; font-display: swap; src: url('/fonts/fraunces-600-digits.woff2') format('woff2'); unicode-range: U+30-39; }
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

@@ -48,11 +48,12 @@ const declineCookies = () => {
 </script>
 
 <template>
-  <div v-if="showBanner" class="cookie" role="dialog" aria-labelledby="cookie-title">
-    <h4 id="cookie-title">Cookies</h4>
+  <!-- DS v1.4 cookie-banner.md: below 600px the heading and .cookie__long are hidden (compact variant). -->
+  <div v-if="showBanner" class="cookie" role="dialog" aria-label="Cookie consent">
+    <h4>Cookies</h4>
     <p>
-      We use analytics cookies only if you agree. You can change this any time under
-      “Cookie settings” in the footer.
+      We use analytics cookies only if you agree.
+      <span class="cookie__long">You can change this any time under “Cookie settings” in the footer.</span>
       <NuxtLink to="/privacy-policy">Details</NuxtLink>
     </p>
     <div class="row">
