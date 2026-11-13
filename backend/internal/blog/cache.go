@@ -135,6 +135,15 @@ func (c *Cache) refresh(ctx context.Context) error {
 			c.logger.Warn("article missing date", "slug", slug, "file", filename)
 		}
 
+		// Fail closed on off-vocabulary topics: the /blog filter only knows
+		// governance/risk/compliance/engineering, so an unknown value is
+		// dropped from the API rather than passed through.
+		if article.Topic != "" && !validTopics[article.Topic] {
+			c.logger.Warn("article topic not in vocabulary, dropped",
+				"slug", slug, "topic", article.Topic)
+			article.Topic = ""
+		}
+
 		if !article.Published {
 			c.logger.Info("skipping unpublished article (published != true)", "slug", slug)
 			newSkipped = append(newSkipped, SkippedArticle{
