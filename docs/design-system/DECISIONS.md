@@ -8,6 +8,8 @@ Owner: Brio. Last updated 2026-11-12 (hero headline).
 
 | Date | Decision | Where |
 |---|---|---|
+| 2026-11-13 | **Open in place: pillars and tickets (both).** A pillar on the home page opens a panel with its summary and packages; a compact ticket unfolds "What’s included". Three drawn pillar icons. Trade-off accepted: the pillar page is one click further from the home page. | `components/cards.md`, `previews/open-in-place.html` |
+| 2026-11-13 | **Pillar numerals in Fraunces** (digits only, OFL, self-hosted on the site). Montserrat, Instrument Serif and Big Shoulders Display were the alternatives. Fraunces is used for these numerals only. | `components/cards.md` |
 | 2026-11-12 | **Home headline: two lines on desktop, option C.** Text column a little wider (`1.15fr` / `1fr`), headline at most 48px on the home hero. Options A (wider column only) and B (smaller headline only) are not used. | `pages/home-copy.md`, `previews/hero-headline.html` |
 | 2026-11-12 | **Cards, concept B "Ticket".** The package card is a ticket (scope above a perforation, price on the stub; recommended = teal outline and filled stub). The three pillar cards on the home page become a numbered index with outlined numerals. Chosen from three concepts (A Cell, B Ticket, C Rows); A and C are not used. | `components/cards.md`, `components/ivmanto.css`, `previews/cards-alternatives.html` |
 | 2026-11-12 | **Hero pause button: bottom-left corner, hidden under reduced motion.** It was bottom right, where the cookie banner covered it on a first visit. With `prefers-reduced-motion: reduce` nothing moves, so the button is not shown. | `components/hero-motion.md`, `components/ivmanto.css` |
@@ -44,6 +46,8 @@ Owner: Brio. Last updated 2026-11-12 (hero headline).
 | 2026-11-11 | **Ivgil verdict on the advisor privacy notice + /ai page: allow-with-obligation.** Before publishing: every `[bracket]` filled from verified fact; the AI provider's DPA checked (training, retention, EU location); Ivgil writes the Art. 6(1)(f) balancing tests; a lawyer reads the final privacy texts; Nick approves. One legal basis per purpose (lead form = Art. 6(1)(b)). | Ivgil |
 | 2026-11-11 | Catalogue wording (Ivgil): the incident package says "handle AI incidents" and checks *whether* something is reportable (Art. 73 is a high-risk provider duty), never implies every client must report. The staff briefing *supports* the client's own Art. 4 duty and does not discharge it. | Ivgil |
 | 2026-11-10 | Naming: **ivGIL** outward, "Ivgil" for the internal agent. No absolute "no one does X" claims. Comparative or legal-effect claims go to Ivgil before publishing. | Ivgil |
+
+| 2026-11-13 | Cookie banner: Reject and Accept only (no Settings button while there is one optional category); compact variant on phones. | Brio and Clauco |
 
 ## 4. Placeholders: do not publish
 

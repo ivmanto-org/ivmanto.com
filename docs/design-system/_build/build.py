@@ -34,8 +34,8 @@ ICONS = {
 ICONS["arrow"] = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>'
 ICONS["pause"] = '<svg class="i-pause" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M9 6v12M15 6v12"/></svg>'
 ICONS["play"] = '<svg class="i-play" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true" hidden><path d="M8 5.5l10 6.5-10 6.5z"/></svg>'
-# How-it-works step icons: the files in assets/icons are the source
-for _f in sorted((DS / "assets/icons").glob("step-*.svg")):
+# How-it-works step icons and pillar icons (v1.4): the files in assets/icons are the source
+for _f in sorted((DS / "assets/icons").glob("*.svg")):
     ICONS[_f.stem.replace("-", "_")] = _f.read_text().strip().replace("<svg ", '<svg aria-hidden="true" ', 1)
 
 def pillar_icon(letter):
@@ -68,6 +68,7 @@ PARTIALS = {
     "FOOTER": (DS / "_build/templates/_footer.html").read_text(),
     "THEME_JS": (DS / "_build/templates/_theme.js").read_text(),
     "HERO_MOTION_JS": (DS / "_build/templates/_hero_motion.js").read_text(),
+    "DISCLOSURE_JS": (DS / "_build/templates/_disclosure.js").read_text(),
 }
 
 HEAD = """<meta charset="utf-8">
@@ -75,6 +76,7 @@ HEAD = """<meta charset="utf-8">
 <!-- Preview only: fonts from Google Fonts. The live site self-hosts them (GDPR). -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&text=0123456789&display=swap" rel="stylesheet">
 <style>
 """ + CSS + "\n</style>"
 

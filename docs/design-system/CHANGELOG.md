@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.4.0 · 2026-11-13 (approved by Nick)
+- **Pillar index opens in place.** New markup (`.pillar-index__head` + `.pillar-index__panel`); `.pillar-index__item` and `__go` are gone. Spec in `components/cards.md`.
+- **Compact ticket opens in place:** `.ticket__toggle` "What’s included" + `.ticket__more` (includes and "Not included").
+- **Pillar icons:** `assets/icons/pillar-governance.svg`, `pillar-risk.svg`, `pillar-compliance.svg`; build placeholders `{{ICON:pillar_governance}}` etc.
+- **Numerals in Fraunces** (digits only), outline drawn with `paint-order: stroke fill`, which removes the inner contour lines.
+- New script `_build/templates/_disclosure.js` (`{{DISCLOSURE_JS}}`). Templates changed: `pages/home.html`, `components.html`.
+- **Cookie banner:** Reject and Accept only; compact phone variant below 600px (`components/cookie-banner.md`, `.cookie` in `components/ivmanto.css`).
+- New preview `previews/open-in-place.html` (Today / Proposal, four numeral typefaces).
+
 ## v1.3.1 · 2026-11-12 (decided by Nick)
 - **Home headline on two lines on desktop** (option C of `previews/hero-headline.html`): text column `1.15fr`, advisor `1fr`; home hero headline at most 48px, `clamp(2.25rem, calc(4.4vw - 7px), 3rem)` from 1000px up. Rule in `pages/home-copy.md`; styles are page-local in `_build/templates/pages/home.html`. `pages/home.html` rebuilt.
 

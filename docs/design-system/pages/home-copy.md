@@ -11,9 +11,9 @@ Only the copy that changed is listed; everything else stays as built on `dev-v0.
 | 3 | Pillars | Risk management tagline | Find and reduce your AI risks. |
 | 3 | Pillars | Compliance tagline | Know your obligations. Prove you meet them. |
 | 3 | Pillars | Package lists in the cards | removed (home only) |
-| 3 | Pillars | Layout | numbered index 01 to 03 instead of cards (v1.3) |
+| 3 | Pillars | Layout | numbered index 01 to 03 (v1.3) that opens in place (v1.4): click shows the pillar `summary`, its packages and "More about <pillar>"; label "Packages and details" / "Close" |
 | 4 | Packages | Lead | removed |
-| 4 | Packages | Cards | compact ticket: no ticks list (home only); see `components/cards.md` |
+| 4 | Packages | Cards | compact ticket (home only); "What’s included" opens the `includes` list and a "Not included" line in place (v1.4); see `components/cards.md` |
 | 4b | Engineering | Data & AI card | Data platforms and AI agents, built in your own Google Cloud project. |
 | 4b | Engineering | ivGIL card | Our AI governance platform. Early access is open. |
 | 5 | How it works | Describe | Ask the advisor or book a call. |
