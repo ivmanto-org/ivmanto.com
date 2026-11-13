@@ -100,11 +100,48 @@ steps:
       - '--set-env-vars=PUBSUB_PUSH_AUDIENCE=${_PUBSUB_PUSH_AUDIENCE}'
     waitFor: ['backend-push']
 
+  # Booking-data retention job (Cloud Run Job, started daily by Cloud Scheduler;
+  # infra/terraform/envs/prod/booking_retention.tf). Same image as the backend,
+  # different command. config.Load() in the backend requires the full server
+  # configuration, so the job gets the same required values as the service.
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    id: 'booking-cleanup-deploy'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'jobs'
+      - 'deploy'
+      - '${_BOOKING_CLEANUP_JOB_NAME}'
+      - '--image=europe-west3-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/${_BACKEND_SERVICE_NAME}:${COMMIT_SHA}'
+      - '--command=/booking-cleanup'
+      - '--region=europe-west3'
+      - '--project=${PROJECT_ID}'
+      - '--service-account=${_BACKEND_SA_NAME}'
+      - '--max-retries=1'
+      - '--task-timeout=600s'
+      - '--set-secrets=SMTP_PASS=${_SMTP_SECRET_NAME}:latest'
+      - '--set-secrets=GA_API_SECRET=${_GA_API_SECRET_NAME}:latest'
+      - '--set-env-vars=BOOKING_RETENTION_DAYS=${_BOOKING_RETENTION_DAYS}'
+      - '--set-env-vars=CALENDAR_ID=${_CALENDAR_ID}'
+      - '--set-env-vars=GCAL_AVAILABLE_SLOT_SUMMARY=${_GCAL_AVAILABLE_SLOT_SUMMARY}'
+      - '--set-env-vars=GCAL_SA_EMAIL=${_GCAL_SA_EMAIL}'
+      - '--set-env-vars=GCAL_IMPERSONATE_USER=${_GCAL_IMPERSONATE_USER}'
+      - '--set-env-vars=SMTP_HOST=${_SMTP_HOST}'
+      - '--set-env-vars=SMTP_PORT=${_SMTP_PORT}'
+      - '--set-env-vars=SEND_FROM=${_SEND_FROM}'
+      - '--set-env-vars=GCP_PROJECT_ID=${_GCP_PROJECT_ID}'
+      - '--set-env-vars=GCP_LOCATION=${_GCP_LOCATION}'
+      - '--set-env-vars=GA_MEASUREMENT_ID=${_GA_MEASUREMENT_ID}'
+      - '--set-env-vars=GCS_BLOG_BUCKET=${_GCS_BLOG_BUCKET}'
+    waitFor: ['backend-push']
+
 # Substitution variables to be configured in the Cloud Build trigger.
 substitutions:
   _FRONTEND_SERVICE_NAME: 'ivmanto-com'
   _BACKEND_SERVICE_NAME: 'ivmanto-backend-service'
   _BACKEND_SA_NAME: 'ivmanto-backend-sa'
+  _BOOKING_CLEANUP_JOB_NAME: 'ivmanto-booking-cleanup'
+  _BOOKING_RETENTION_DAYS: '10' # Nick, 2026-11-13: deleted 10 days after the call
   _REPO_NAME: 'ivmanto-com-repo'
   _SMTP_SECRET_NAME: 'smtp-password'
   # These must be configured in the Cloud Build Trigger UI.
