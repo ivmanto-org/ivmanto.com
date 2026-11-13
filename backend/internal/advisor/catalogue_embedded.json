@@ -1,0 +1,199 @@
+{
+  "_status": "v1 (2026-11-11): Nick chose the 6-package line-up from the market research (tmp/2026-11-11-answers-and-market-research.md). Prices are NOT in this file (Nick, 2026-11-12): it ships in the site bundle. price_eur stays null and the site shows the placeholder until Nick confirms the prices from the market research and the GTM strategy. line: governance | engineering | platform.",
+  "version": 1,
+  "currency": "EUR",
+  "pillars": [
+    {
+      "id": "governance",
+      "name": "Governance",
+      "tagline": "Who decides what about AI.",
+      "summary": "Roles, decision rights and policies for how your company uses AI."
+    },
+    {
+      "id": "risk",
+      "name": "Risk management",
+      "tagline": "Find and reduce your AI risks.",
+      "summary": "Identify, assess and reduce AI, data and vendor risks, with countermeasures on record."
+    },
+    {
+      "id": "compliance",
+      "name": "Compliance",
+      "tagline": "Know your obligations. Prove you meet them.",
+      "summary": "Know your obligations and prove you meet them: audit-ready documentation, not binders."
+    }
+  ],
+  "packages": [
+    {
+      "line": "governance",
+      "not_included": [
+        "Detailed risk assessment (see AI risk assessment)"
+      ],
+      "frameworks": [
+        "EU AI Act",
+        "ISO/IEC 42001"
+      ],
+      "recommended": false,
+      "id": "gov-quick-check",
+      "pillar": "governance",
+      "name": "AI governance quick check",
+      "outcome": "In one day: what AI you use today, your five biggest risks, and where to start.",
+      "duration_weeks": 1,
+      "duration_label": "1 day",
+      "deliverable": "Snapshot + top-5 risk memo",
+      "includes": [
+        "Interview with your management (half day)",
+        "Snapshot of the AI tools and systems in use",
+        "Memo: your five biggest AI risks and the first steps"
+      ],
+      "price_eur": null,
+      "price_note": "Fully credited if you order a follow-on package within 3 months.",
+      "pillar_recommended": true
+    },
+    {
+      "line": "governance",
+      "not_included": [
+        "Legal review of the policy; we work alongside your lawyer"
+      ],
+      "frameworks": [
+        "EU AI Act",
+        "ISO/IEC 42001"
+      ],
+      "recommended": false,
+      "id": "gov-policy-literacy",
+      "pillar": "governance",
+      "name": "AI policy & literacy",
+      "outcome": "A written AI policy your staff can follow, and a training that supports their AI literacy (EU AI Act Art. 4).",
+      "duration_weeks": 4,
+      "deliverable": "Policy + rules + training record",
+      "includes": [
+        "Kickoff workshop",
+        "AI policy and acceptable-use rules",
+        "Approval workflow for new AI tools",
+        "Half-day in-house AI literacy session",
+        "Record of who was trained, and when"
+      ],
+      "price_eur": null
+    },
+    {
+      "line": "governance",
+      "not_included": [
+        "Unused days do not carry over"
+      ],
+      "frameworks": [
+        "EU AI Act",
+        "ISO/IEC 42001"
+      ],
+      "recommended": false,
+      "id": "gov-retainer",
+      "pillar": "governance",
+      "name": "AI governance retainer",
+      "outcome": "An external AI governance lead on call: one day a month for reviews, questions, vendor checks and incidents.",
+      "duration_weeks": 12,
+      "duration_label": "Monthly, 3-month minimum",
+      "deliverable": "1 day a month + monthly note",
+      "includes": [
+        "One consulting day per month",
+        "Review of new AI tools and vendors",
+        "Help with AI incidents and questions from auditors",
+        "Short monthly status note"
+      ],
+      "price_eur": null,
+      "price_unit": "month"
+    },
+    {
+      "line": "governance",
+      "not_included": [
+        "Technical security testing of the systems"
+      ],
+      "frameworks": [
+        "ISO/IEC 42001",
+        "ISO/IEC 23894",
+        "EU AI Act"
+      ],
+      "recommended": false,
+      "id": "risk-ai-assessment",
+      "pillar": "risk",
+      "name": "AI risk assessment",
+      "outcome": "A prioritised view of your AI risks with a mitigation plan, and a risk register your team keeps using.",
+      "duration_weeks": 4,
+      "deliverable": "Risk report + working register",
+      "includes": [
+        "Inventory of the AI systems in scope",
+        "Risk workshops with the owners",
+        "Prioritised risk report with mitigation plan",
+        "Risk register in your own tools, with owners and review dates"
+      ],
+      "price_eur": null,
+      "pillar_recommended": true
+    },
+    {
+      "line": "governance",
+      "not_included": [
+        "Legal advice; we work alongside your lawyer"
+      ],
+      "frameworks": [
+        "EU AI Act"
+      ],
+      "recommended": true,
+      "id": "comp-eu-ai-act-readiness",
+      "pillar": "compliance",
+      "name": "EU AI Act readiness",
+      "outcome": "Know which obligations apply to you and what to do about them in the next 12 months.",
+      "duration_weeks": 5,
+      "deliverable": "Inventory + gap report + roadmap",
+      "includes": [
+        "Inventory of your AI systems, with an owner for each",
+        "Classification under the EU AI Act",
+        "Gap analysis against the obligations that apply",
+        "12-month roadmap"
+      ],
+      "price_eur": null,
+      "pillar_recommended": true
+    },
+    {
+      "line": "governance",
+      "not_included": [
+        "Certification audit"
+      ],
+      "frameworks": [
+        "ISO/IEC 42001"
+      ],
+      "recommended": false,
+      "id": "comp-iso-42001-gap",
+      "pillar": "compliance",
+      "name": "ISO/IEC 42001 gap assessment",
+      "outcome": "A clause-by-clause view of where you stand against ISO/IEC 42001.",
+      "duration_weeks": 3,
+      "deliverable": "Gap assessment",
+      "includes": [
+        "Document review",
+        "Interviews",
+        "Gap report with priorities"
+      ],
+      "price_eur": null
+    },
+    {
+      "line": "engineering",
+      "not_included": [
+        "Implementation (available as a project on request)"
+      ],
+      "frameworks": [
+        "Google Cloud"
+      ],
+      "recommended": false,
+      "id": "eng-architecture-review",
+      "pillar": "engineering",
+      "name": "Data & AI architecture review",
+      "outcome": "A clear review of your data and AI setup on Google Cloud, with a plan for what to build next.",
+      "duration_weeks": 2,
+      "deliverable": "Architecture review + roadmap",
+      "includes": [
+        "Workshops with your data and IT team",
+        "Review of your current data and AI architecture",
+        "Risks, costs and quick wins",
+        "Target architecture and roadmap"
+      ],
+      "price_eur": null
+    }
+  ]
+}

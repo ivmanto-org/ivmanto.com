@@ -61,10 +61,10 @@ func TestBookingConfirmationHTML_AthensInJune(t *testing.T) {
 	// Must NOT contain the organiser's wall-clock or the old empty
 	// parenthesised bug.
 	notWantSubs := []string{
-		"3:30 PM",  // organiser's CEST start
-		"4:00 PM",  // organiser's CEST end
-		"()",       // the original empty-parentheses bug
-		"(CEST)",   // we expect the visitor's TZ, not the organiser's
+		"3:30 PM", // organiser's CEST start
+		"4:00 PM", // organiser's CEST end
+		"()",      // the original empty-parentheses bug
+		"(CEST)",  // we expect the visitor's TZ, not the organiser's
 	}
 	for _, s := range notWantSubs {
 		if strings.Contains(body, s) {
@@ -126,5 +126,60 @@ func TestBookingConfirmationHTML_NoMeetLinkOmitsLine(t *testing.T) {
 	})
 	if strings.Contains(body, "Google Meet Link") {
 		t.Errorf("expected no Meet-link line when MeetLink is empty, body was:\n%s", body)
+	}
+}
+
+func TestBuildLeadNotificationHTMLEscapesUserInput(t *testing.T) {
+	lead := LeadInfo{
+		Name:    "<b>Ada</b>",
+		Email:   "a@b.c",
+		Company: `<script>alert("x")</script>`,
+		Message: `Contact: a</p><script>evil()</script>`,
+		Consent: true,
+	}
+	html := buildLeadNotificationHTML(lead)
+	for _, bad := range []string{"<script>", "</script>", "<b>Ada</b>"} {
+		if strings.Contains(html, bad) {
+			t.Errorf("user input leaked into email HTML unescaped: %q", bad)
+		}
+	}
+	for _, good := range []string{"&lt;script&gt;", "&lt;b&gt;Ada&lt;/b&gt;", "a&lt;/p&gt;"} {
+		if !strings.Contains(html, good) {
+			t.Errorf("expected escaped form %q in html:\n%s", good, html)
+		}
+	}
+}
+
+func TestBuildMessageReplyToPresent(t *testing.T) {
+	msg := string(buildMessage("IVMANTO", "noreply@ivmanto.com", []string{"nick@ivmanto.com"}, nil, "visitor@example.com", "New advisor lead", "b123"))
+	if !strings.Contains(msg, "Reply-To: visitor@example.com\r\n") {
+		t.Errorf("expected Reply-To header with visitor address, message was:\n%s", msg)
+	}
+}
+
+func TestBuildMessageReplyToOmittedWhenEmpty(t *testing.T) {
+	msg := string(buildMessage("IVMANTO", "noreply@ivmanto.com", []string{"nick@ivmanto.com"}, nil, "", "Subject", "b123"))
+	if strings.Contains(msg, "Reply-To:") {
+		t.Errorf("expected no Reply-To header when replyTo is empty, message was:\n%s", msg)
+	}
+}
+
+func TestBuildMessageReplyToAndSubjectStripCRLFInjection(t *testing.T) {
+	msg := string(buildMessage(
+		"IVMANTO", "noreply@ivmanto.com",
+		[]string{"nick@ivmanto.com"}, nil,
+		"visitor@example.com\r\nBcc: attacker@evil.example",
+		"Subject\r\nX-Spam: yes",
+		"b123"))
+	for _, bad := range []string{"\r\nBcc:", "\r\nX-Spam:"} {
+		if strings.Contains(msg, bad) {
+			t.Errorf("CR/LF injection started a new header line %q in message:\n%s", bad, msg)
+		}
+	}
+	if !strings.Contains(msg, "Reply-To: visitor@example.comBcc: attacker@evil.example\r\n") {
+		t.Errorf("expected Reply-To with CR/LF stripped, message was:\n%s", msg)
+	}
+	if !strings.Contains(msg, "Subject: SubjectX-Spam: yes\r\n") {
+		t.Errorf("expected Subject with CR/LF stripped, message was:\n%s", msg)
 	}
 }

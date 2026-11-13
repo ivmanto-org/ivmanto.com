@@ -8,13 +8,13 @@ useHead({
         '@context': 'https://schema.org',
         '@type': ['Organization', 'ProfessionalService'],
         '@id': 'https://ivmanto.com/#organization',
-        name: 'IVMANTO',
-        alternateName: 'IVMANTO - Nikolay Tonev Data & Cloud Solutions',
+        name: 'ivmanto',
+        alternateName: 'ivmanto - AI governance, risk and compliance services',
         url: 'https://ivmanto.com',
-        logo: 'https://ivmanto.com/logo.png',
-        image: 'https://ivmanto.com/social-sharing-card.webp',
+        logo: 'https://ivmanto.com/icon-512.png',
+        image: 'https://ivmanto.com/og-image.png',
         description:
-          'Expert Cloud Data Architecture & AI Solutions built on Google Cloud Platform.',
+          'AI governance, risk and compliance services for SMEs: EU AI Act, ISO/IEC 42001, NIST AI RMF. Delivered by Nikolay Tonev.',
         address: {
           '@type': 'PostalAddress',
           addressCountry: 'DE',
@@ -48,11 +48,12 @@ useHead({
 
 <template>
   <div class="flex flex-col min-h-screen">
-    <LayoutAppHeader />
-    <main class="flex-1">
+    <a href="#main" class="sr-only focus:not-sr-only">Skip to content</a>
+    <SiteHeader />
+    <main id="main" class="flex-1">
       <slot />
     </main>
-    <LayoutTheFooter />
+    <SiteFooter />
     <CookieBanner />
   </div>
 </template>

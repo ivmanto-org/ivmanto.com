@@ -28,6 +28,9 @@ type Service interface {
 	BookSlot(details BookingDetails) (*calendar.Event, error)
 	CancelBooking(ctx context.Context, token string) (*calendar.Event, error)
 	Location() *time.Location
+	// CleanupExpiredBookings deletes held bookings whose call ended
+	// before cutoff (booking-data retention; see retention.go).
+	CleanupExpiredBookings(ctx context.Context, cutoff time.Time, dryRun bool) ([]string, error)
 }
 
 // gcalService implements the Service interface for Google Calendar.
@@ -36,6 +39,10 @@ type gcalService struct {
 	calendarID           string
 	location             *time.Location
 	availableSlotSummary string
+
+	// testCalls, when non-nil, replaces the real calendar calls in
+	// CleanupExpiredBookings (unit tests only; see retention.go).
+	testCalls calendarCalls
 }
 
 // BookingDetails contains information for a new booking.

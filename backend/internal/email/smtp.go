@@ -53,8 +53,37 @@ func stripPlusAlias(email string) string {
 	return fmt.Sprintf("%s@%s", localPart[:plusIndex], domainPart)
 }
 
+// buildMessage assembles the top-level RFC 5322 headers for an outgoing
+// mail. It is a pure function so the header-injection guards (subject and
+// Reply-To) are unit-testable without an SMTP server.
+func buildMessage(fromAlias, from string, to, cc []string, replyTo, subject, boundary string) []byte {
+	var msg bytes.Buffer
+	msg.WriteString(fmt.Sprintf("From: %s <%s>\r\n", fromAlias, from))
+	msg.WriteString(fmt.Sprintf("To: %s\r\n", strings.Join(to, ", ")))
+	if len(cc) > 0 {
+		msg.WriteString(fmt.Sprintf("Cc: %s\r\n", strings.Join(cc, ", ")))
+	}
+	// Strip CR/LF from the subject no matter who built it (PR #128 H1
+	// defence in depth): a newline here would let a caller inject headers
+	// into the mail.
+	subject = strings.NewReplacer("\r", "", "\n", "").Replace(subject)
+	msg.WriteString(fmt.Sprintf("Subject: %s\r\n", subject))
+	// Reply-To carries the visitor's address on lead mail (deferred LOW
+	// from the #128 review). Strip CR/LF no matter who built it, same
+	// defence in depth as the subject: a newline here would inject
+	// headers into the mail.
+	if replyTo != "" {
+		replyTo = strings.NewReplacer("\r", "", "\n", "").Replace(replyTo)
+		msg.WriteString(fmt.Sprintf("Reply-To: %s\r\n", replyTo))
+	}
+	msg.WriteString("MIME-Version: 1.0\r\n")
+	msg.WriteString(fmt.Sprintf("Content-Type: multipart/mixed; boundary=%s\r\n", boundary))
+	msg.WriteString("\r\n")
+	return msg.Bytes()
+}
+
 // send is a private helper to construct and dispatch an email.
-func (s *SmtpService) send(to, cc []string, subject, htmlBody string, attachment *ical.Attachment) error {
+func (s *SmtpService) send(to, cc []string, replyTo, subject, htmlBody string, attachment *ical.Attachment) error {
 	// Build the message body using multipart writer for attachments.
 	var bodyBuffer bytes.Buffer
 	writer := multipart.NewWriter(&bodyBuffer)
@@ -86,17 +115,8 @@ func (s *SmtpService) send(to, cc []string, subject, htmlBody string, attachment
 	writer.Close()
 
 	// Build the full message with top-level headers.
-	var msg bytes.Buffer
-	msg.WriteString(fmt.Sprintf("From: %s <%s>\r\n", s.cfg.SendFromAlias, s.cfg.SendFrom))
-	msg.WriteString(fmt.Sprintf("To: %s\r\n", strings.Join(to, ", ")))
-	if len(cc) > 0 {
-		msg.WriteString(fmt.Sprintf("Cc: %s\r\n", strings.Join(cc, ", ")))
-	}
-	msg.WriteString(fmt.Sprintf("Subject: %s\r\n", subject))
-	msg.WriteString("MIME-Version: 1.0\r\n")
-	msg.WriteString(fmt.Sprintf("Content-Type: multipart/mixed; boundary=%s\r\n", writer.Boundary()))
-	msg.WriteString("\r\n")
-	msg.Write(bodyBuffer.Bytes())
+	msg := buildMessage(s.cfg.SendFromAlias, s.cfg.SendFrom, to, cc, replyTo, subject, writer.Boundary())
+	msg = append(msg, bodyBuffer.Bytes()...)
 
 	addr := fmt.Sprintf("%s:%s", s.cfg.SmtpHost, s.cfg.SmtpPort)
 
@@ -161,7 +181,7 @@ func (s *SmtpService) send(to, cc []string, subject, htmlBody string, attachment
 		s.logger.Error("SMTP DATA command failed", "error", err)
 		return err
 	}
-	_, err = wc.Write(msg.Bytes())
+	_, err = wc.Write(msg)
 	if err != nil {
 		s.logger.Error("Failed to write email body to SMTP connection", "error", err)
 		return err
@@ -244,7 +264,7 @@ func (s *SmtpService) SendBookingConfirmation(details BookingConfirmationDetails
 		Body: []byte(icsContent),
 	}
 
-	return s.send([]string{details.ToEmail}, nil, subject, htmlBody, attachment)
+	return s.send([]string{details.ToEmail}, nil, "", subject, htmlBody, attachment)
 }
 
 // SendBookingNotificationToAdmin sends a notification email to the admin.
@@ -260,7 +280,7 @@ func (s *SmtpService) SendBookingNotificationToAdmin(name, clientEmail string, s
 
 	subject := "New Consultation Booked!"
 	body := fmt.Sprintf("New booking with:<br>Name: %s<br>Email: %s<br>Time: %s<br>Notes: %s", name, clientEmail, startTime.Format(time.RFC1123), notes)
-	return s.send([]string{adminEmail}, nil, subject, body, nil)
+	return s.send([]string{adminEmail}, nil, "", subject, body, nil)
 }
 
 // SendContactMessage sends the contact form message to the admin.
@@ -283,8 +303,80 @@ func (s *SmtpService) SendContactMessage(msg ContactMessage) error {
 		ccList = append(ccList, msg.Email)
 	}
 
-	return s.send([]string{adminEmail}, ccList, subject, body, nil)
+	return s.send([]string{adminEmail}, ccList, "", subject, body, nil)
 }
+
+// SendLeadNotification emails an advisor lead (epic #112) to the configured
+// lead recipient (LEADS_TO, default SendFrom). The recipient uses the
+// +lead username alias for Gmail inbox delivery, mirroring SendContactMessage.
+// Reply-To is set to the visitor's address so Nick can answer the mail directly.
+func (s *SmtpService) SendLeadNotification(lead LeadInfo) error {
+	toEmail := s.cfg.LeadTo
+	if toEmail == "" {
+		toEmail = s.cfg.SendFrom
+	}
+	parts := strings.Split(toEmail, "@")
+	var leadRecipient string
+	if len(parts) == 2 {
+		leadRecipient = fmt.Sprintf("%s+lead@%s", parts[0], parts[1])
+	} else {
+		leadRecipient = toEmail
+	}
+
+	subject := fmt.Sprintf("New advisor lead: %s (%s)", lead.Company, lead.Name)
+	return s.send([]string{leadRecipient}, nil, lead.Email, subject, buildLeadNotificationHTML(lead), nil)
+}
+
+// buildLeadNotificationHTML renders the lead email body. Consent is already
+// checked true by the handler before this is called. Source, package, role,
+// interest and insights opt-in are rendered so Nick knows which surface
+// produced the lead and what future consent the visitor gave.
+func buildLeadNotificationHTML(lead LeadInfo) string {
+	packageLine := ""
+	if lead.PackageID != "" {
+		packageLine = fmt.Sprintf("<li><strong>Package:</strong> %s</li>\n", htmlEscape(lead.PackageID))
+	}
+	roleLine := ""
+	if lead.Role != "" {
+		roleLine = fmt.Sprintf("<li><strong>Role:</strong> %s</li>\n", htmlEscape(lead.Role))
+	}
+	interestLine := ""
+	if lead.Interest != "" {
+		interestLine = fmt.Sprintf("<li><strong>Interest:</strong> %s</li>\n", htmlEscape(lead.Interest))
+	}
+	insights := "no"
+	if lead.InsightsOptIn {
+		insights = "yes"
+	}
+	return fmt.Sprintf(`<p><strong>New lead (source: %s) from the ivmanto.com AI service advisor funnel.</strong></p>
+<ul>
+<li><strong>Name:</strong> %s</li>
+<li><strong>Email:</strong> <a href="mailto:%s">%s</a></li>
+<li><strong>Company:</strong> %s</li>
+%s%s%s</ul>
+<p><strong>Request / conversation summary:</strong></p>
+<p>%s</p>
+<p><em>Confirmation ticked: yes. Insights opt-in (consent, Art. 6(1)(a)): %s.</em></p>`,
+		htmlEscape(lead.Source),
+		htmlEscape(lead.Name),
+		htmlEscape(lead.Email), htmlEscape(lead.Email),
+		htmlEscape(lead.Company),
+		packageLine,
+		roleLine,
+		interestLine,
+		htmlEscape(lead.Message),
+		insights)
+}
+
+var htmlEscaper = strings.NewReplacer(
+	"&", "&amp;",
+	"<", "&lt;",
+	">", "&gt;",
+	`"`, "&#34;",
+	"'", "&#39;",
+)
+
+func htmlEscape(s string) string { return htmlEscaper.Replace(s) }
 
 // SendBookingCancellationToClient sends a cancellation confirmation to the user.
 // The visitor's IANA zone and a display label are forwarded from the booking
@@ -314,7 +406,7 @@ func (s *SmtpService) SendBookingCancellationToClient(toName, toEmail string, st
 		toName,
 		slotLabel)
 
-	return s.send([]string{toEmail}, nil, subject, htmlBody, nil)
+	return s.send([]string{toEmail}, nil, "", subject, htmlBody, nil)
 }
 
 // SendBookingCancellationToAdmin sends a notification to the admin about a client cancellation.
@@ -330,7 +422,7 @@ func (s *SmtpService) SendBookingCancellationToAdmin(clientName, clientEmail str
 
 	subject := "Consultation Cancelled by Client"
 	body := fmt.Sprintf("The consultation with <strong>%s (%s)</strong> for <strong>%s</strong> has been cancelled by the client.", clientName, clientEmail, startTime.Format(time.RFC1123))
-	return s.send([]string{adminEmail}, nil, subject, body, nil)
+	return s.send([]string{adminEmail}, nil, "", subject, body, nil)
 }
 
 // SendGeneratedIdeas sends an email with the list of generated ideas.
@@ -348,5 +440,5 @@ func (s *SmtpService) SendGeneratedIdeas(toEmail, topic string, ideasBody string
 		ideasBody, // Now directly use the pre-formatted ideasBody
 	)
 
-	return s.send([]string{toEmail}, nil, subject, htmlBody, nil)
+	return s.send([]string{toEmail}, nil, "", subject, htmlBody, nil)
 }

@@ -1,66 +1,54 @@
 {
   "redirects": [
-    { "source": "/search", "destination": "/blog", "type": 301 },
     {
-      "source": "/blog/2026-04-20-common-architectural-patterns",
-      "destination": "/blog/common-architectural-patterns",
+      "source": "/services/cloud-data-engineering",
+      "destination": "/data-ai/cloud-data-engineering",
       "type": 301
     },
     {
-      "source": "/blog/2026-05-11-ai-agents-always-on-workflows",
-      "destination": "/blog/ai-agents-always-on-workflows",
+      "source": "/services/custom-ai-agents",
+      "destination": "/data-ai/custom-ai-agents",
       "type": 301
     },
     {
-      "source": "/blog/2026-05-18-the-pivot-to-agentic-ai-usage-based-pricing",
-      "destination": "/blog/the-pivot-to-agentic-ai-usage-based-pricing",
+      "source": "/services/private-ai-knowledge-base",
+      "destination": "/data-ai/private-ai-knowledge-base",
       "type": 301
     },
     {
-      "source": "/blog/CommonArchitecturalPatterns",
-      "destination": "/blog/common-architectural-patterns",
+      "source": "/services/support-and-evolution",
+      "destination": "/data-ai/support-and-evolution",
       "type": 301
     },
     {
-      "source": "/blog/VertexAiProduction",
-      "destination": "/blog/vertex-ai-production-gotchas",
+      "source": "/services/principles",
+      "destination": "/data-ai/principles",
       "type": 301
     },
     {
-      "source": "/blog/DamaPrinciples",
-      "destination": "/blog/dama-ai-governance",
+      "source": "/services/sovereigncloud",
+      "destination": "/data-ai/sovereigncloud",
       "type": 301
     },
     {
-      "source": "/blog/_FromBigDataTo",
-      "destination": "/blog/FromBigDataTo",
+      "source": "/services/data-architecture",
+      "destination": "/data-ai/data-architecture",
       "type": 301
     },
     {
-      "source": "/services/ai-automation-discovery",
-      "destination": "/services/ai-readiness-audit",
+      "source": "/services/ml-engineering",
+      "destination": "/data-ai/ml-engineering",
       "type": 301
     },
     {
-      "source": "/services/data-pipeline-engineering",
-      "destination": "/services/cloud-data-engineering",
+      "source": "/services/data-strategy-and-governance",
+      "destination": "/data-ai/data-strategy-and-governance",
       "type": 301
     },
     {
-      "source": "/services/agentic-ai-solutions",
-      "destination": "/services/custom-ai-agents",
+      "source": "/services/ai-readiness-audit",
+      "destination": "/packages/eng-architecture-review",
       "type": 301
-    }
-  ],
-  "headers": [
-    {
-      "source": "_nuxt/**",
-      "headers": [
-        {
-          "key": "X-Robots-Tag",
-          "value": "noindex"
-        }
-      ]
     }
   ]
 }

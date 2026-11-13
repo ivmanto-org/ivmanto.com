@@ -1,6 +1,6 @@
 {
   "name": "ivmanto.com",
-  "version": "0.1.11",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "engines": {
@@ -14,7 +14,8 @@
     "postinstall": "nuxt prepare",
     "lint": "node scripts/check-dashes.mjs && eslint . --fix",
     "format": "prettier --write .",
-    "lint:dashes": "node scripts/check-dashes.mjs"
+    "lint:dashes": "node scripts/check-dashes.mjs",
+    "test": "node --test \"tests/**/*.test.ts\""
   },
   "dependencies": {
     "@nuxt/image": "^2.0.0",
@@ -23,6 +24,9 @@
     "vue": "^3.4.31"
   },
   "devDependencies": {
+    "@fontsource/inter": "^5.3.0",
+    "@fontsource/jetbrains-mono": "^5.3.0",
+    "@fontsource/montserrat": "^5.3.0",
     "@nuxtjs/google-fonts": "^3.2.0",
     "@nuxtjs/sitemap": "^7.6.0",
     "@nuxtjs/tailwindcss": "^6.13.2",

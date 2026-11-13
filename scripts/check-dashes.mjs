@@ -10,6 +10,15 @@ const targets = [
   'components/services-content',
   'components/layout/AppHeader.vue',
   'composables/usePageMetadata.ts',
+  // Relaunch (v0.2.0): funnel, catalogue and advisor copy.
+  'pages/index.vue',
+  'pages/packages',
+  'pages/order',
+  'pages/ai-use.vue',
+  'components/site',
+  'components/advisor',
+  'composables/useCatalogue.ts',
+  'data/catalogue.json',
   ...process.argv.slice(2),
 ]
 

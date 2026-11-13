@@ -23,8 +23,8 @@ type Cache struct {
 	mu         sync.RWMutex
 	articles   map[string]*Article // keyed by slug
 	metaList   []ArticleMeta       // published only, sorted by date desc
-	skipped    []SkippedArticle     // articles skipped during last refresh
-	totalFiles int                  // total .md files found in last refresh
+	skipped    []SkippedArticle    // articles skipped during last refresh
+	totalFiles int                 // total .md files found in last refresh
 
 	stopCh chan struct{}
 

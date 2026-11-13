@@ -1,145 +1,72 @@
 <template>
-  <div class="bg-light-gray py-12 sm:py-16" @click="closeDropdown">
-    <!-- Loading State -->
-    <div v-if="isLoadingContent" class="text-center py-16">
-      <div
-        class="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
-        role="status"
-      >
-        <span class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
-          >Loading...</span
-        >
-      </div>
-    </div>
+  <div>
+    <!-- DS v1.5 (pages/blog.md): one text column on the page ground, no card, no top toolbar. -->
+    <section class="section" style="padding-top: var(--space-8)">
+      <div class="container">
+        <p v-if="isLoadingContent" class="muted" role="status">Loading the article…</p>
 
-    <!-- Article Content -->
-    <div v-else-if="article" class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-      <!-- Top Navigation Bar -->
-      <div
-        class="mb-8 p-2 bg-white rounded-lg shadow-sm flex items-center justify-between gap-2 text-sm font-medium"
-      >
-        <!-- Previous Article Button -->
-        <NuxtLink
-          v-if="previousArticle"
-          :to="`/blog/${previousArticle.slug}`"
-          class="nav-button"
-          :title="`Previous: ${previousArticle.title}`"
-        >
-          <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
-          </svg>
-        </NuxtLink>
-        <span v-else class="nav-button-disabled">
-          <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
-          </svg>
-        </span>
+        <article v-else-if="article" class="article">
+          <NuxtLink to="/blog" class="back-link"><SiteChevIcon /> All insights</NuxtLink>
+          <header class="article__head">
+            <p class="post">
+              <span class="meta"><template v-if="topic"><b>{{ topic }}</b> · </template>{{ formatArticleDate(article.date) }} · {{ minutes }} min read</span>
+            </p>
+            <h1>{{ article.title }}</h1>
+            <p class="lead">{{ article.summary }}</p>
+            <p class="byline">
+              <img src="/images/nick-portrait.jpg" alt="" width="40" height="40" loading="lazy" />
+              <span>By <NuxtLink to="/about">Nikolay Tonev</NuxtLink> · AI &amp; Data Governance Consultant</span>
+            </p>
+          </header>
 
-        <!-- Custom Dropdown -->
-        <div class="relative flex-grow flex justify-center">
-          <button @click.stop="toggleDropdown" class="nav-button-dropdown">
-            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" />
-            </svg>
-            <span class="hidden sm:inline ml-2">Articles</span>
-          </button>
-          <transition
-            enter-active-class="transition ease-out duration-100"
-            enter-from-class="transform opacity-0 scale-95"
-            enter-to-class="transform opacity-100 scale-100"
-            leave-active-class="transition ease-in duration-75"
-            leave-from-class="transform opacity-100 scale-100"
-            leave-to-class="transform opacity-0 scale-95"
-          >
-            <div v-if="isDropdownOpen" class="absolute top-full mt-2 w-72 max-h-80 overflow-y-auto bg-white rounded-lg shadow-xl ring-1 ring-black ring-opacity-5 z-50">
-              <div class="py-1">
-                <button v-for="a in otherArticles" :key="a.slug" @click="navigateToArticle(a.slug)" class="dropdown-item">
-                  {{ a.title }}
-                </button>
-              </div>
+          <div class="prose max-w-none" v-html="sanitizedContent"></div>
+
+          <footer class="article__foot">
+            <button class="like" type="button" :aria-pressed="isLiked" :disabled="isLoadingLikes" @click="handleLike">
+              <svg viewBox="0 0 24 24" :fill="isLiked ? 'currentColor' : 'none'" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20.5l-7.7-7.7a4.5 4.5 0 0 1 6.4-6.4L12 7.7l1.3-1.3a4.5 4.5 0 0 1 6.4 6.4z" /></svg>
+              <span>Helpful</span>
+              <span v-if="!isLoadingLikes" class="like__count" :aria-label="`${likeCount} ${likeCount === 1 ? 'reader' : 'readers'} found this helpful`">{{ likeCount }}</span>
+            </button>
+            <button class="btn btn--ghost" type="button" @click="copyLink">
+              <span aria-live="polite">{{ copied ? 'Link copied' : 'Copy link' }}</span>
+            </button>
+          </footer>
+
+          <aside class="next-step" aria-labelledby="next-h">
+            <h2 id="next-h">Does this apply to your company?</h2>
+            <p>A 30-minute call finds the first step.</p>
+            <div class="row">
+              <NuxtLink to="/booking" class="btn btn--primary">Book a call</NuxtLink>
+              <NuxtLink to="/#main" class="btn btn--ghost">Ask the advisor <SiteChevIcon /></NuxtLink>
             </div>
-          </transition>
-        </div>
+          </aside>
 
-        <!-- Next Article Button -->
-        <NuxtLink
-          v-if="nextArticle"
-          :to="`/blog/${nextArticle.slug}`"
-          class="nav-button"
-          :title="`Next: ${nextArticle.title}`"
-        >
-          <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-          </svg>
-        </NuxtLink>
-        <span v-else class="nav-button-disabled">
-          <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-          </svg>
-        </span>
+          <nav v-if="newerArticle || olderArticle" class="post-nav" aria-label="More articles">
+            <NuxtLink v-if="newerArticle" :to="`/blog/${newerArticle.slug}`"><small>Newer</small>{{ newerArticle.title }}</NuxtLink>
+            <span v-else aria-hidden="true"></span>
+            <NuxtLink v-if="olderArticle" :to="`/blog/${olderArticle.slug}`"><small>Older</small>{{ olderArticle.title }}</NuxtLink>
+          </nav>
+        </article>
 
-        <!-- Share Button -->
-        <div class="border-l border-gray-200 pl-2">
-          <button @click="shareArticle" class="nav-button" title="Share article">
-            <svg v-if="!copied" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-              <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" />
-            </svg>
-            <svg v-else class="h-5 w-5 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-            </svg>
-          </button>
+        <div v-else class="article">
+          <h1>Article not found</h1>
+          <p class="lead">This article may have moved.</p>
+          <NuxtLink to="/blog" class="btn btn--primary">All insights</NuxtLink>
         </div>
       </div>
+    </section>
 
-      <!-- Article Content -->
-      <div class="bg-white rounded-lg shadow-lg p-8 md:p-12">
-        <div class="mb-8 border-b pb-8 border-gray-200">
-          <p class="text-base text-gray-500">Published on {{ formatDate(article.date) }}</p>
-          <h1 class="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-            {{ article.title }}
-          </h1>
-          <p class="mt-6 text-xl leading-8 text-gray-700">{{ article.summary }}</p>
+    <section v-if="article && related.length > 0" class="section section--sunken">
+      <div class="container">
+        <div class="section-head">
+          <p class="overline">Keep reading</p>
+          <h2>{{ topic ? `More on ${topic.toLowerCase()}` : 'More insights' }}</h2>
         </div>
-        <div class="prose prose-lg max-w-none" v-html="sanitizedContent"></div>
-
-        <!-- Like button section -->
-        <div class="mt-12 pt-8 border-t border-gray-200 flex justify-end items-center">
-          <button
-            @click="handleLike"
-            :disabled="isLoadingLikes"
-            class="flex items-center gap-2 text-gray-500 hover:text-primary disabled:text-primary disabled:cursor-not-allowed transition-colors"
-            title="Like this article"
-          >
-            <svg
-              class="h-6 w-6"
-              :class="{ 'text-red-500 fill-current': isLiked }"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.5l1.318-1.182a4.5 4.5 0 116.364 6.364L12 20.364l-7.682-7.682a4.5 4.5 0 010-6.364z"
-              />
-            </svg>
-            <span v-if="!isLoadingLikes" class="font-semibold text-lg tabular-nums">{{ likeCount }}</span>
-            <span v-else class="font-semibold text-lg">...</span>
-          </button>
+        <div class="post-grid">
+          <SitePostCard v-for="a in related" :key="a.slug" :article="a" />
         </div>
       </div>
-    </div>
-
-    <!-- Article Not Found State -->
-    <div v-else class="text-center py-16">
-      <h1 class="text-3xl font-bold">Article not found</h1>
-      <p class="mt-4">Sorry, we couldn't find the article you're looking for.</p>
-      <NuxtLink to="/blog" class="mt-6 inline-block text-primary hover:underline">
-        &larr; Back to all articles
-      </NuxtLink>
-    </div>
+    </section>
   </div>
 </template>
 
@@ -147,13 +74,14 @@
 import { trackEvent } from '~/services/analytics'
 import DOMPurify from 'dompurify'
 import type { Article } from '~/types/article'
+import { articleProvenanceHead } from '~/utils/articleProvenance'
+import { cardReadingMinutes, formatArticleDate, jsonLd, markSources, readingMinutes, relatedArticles, topicLabel } from '~/utils/insights'
 
 const route = useRoute()
 const slug = computed(() => route.params.slug as string)
 
 const { sortedArticles, fetchArticles, fetchArticle } = useArticles()
 
-const isDropdownOpen = ref(false)
 const copied = ref(false)
 const likeCount = ref(0)
 const isLiked = ref(false)
@@ -192,13 +120,16 @@ useSeoMeta({
   twitterDescription: computed(() => article.value?.summary ?? ''),
 })
 
+// AI provenance marking (IPTC DigitalSourceType), empty for unmarked and human articles
+const provenanceHead = computed(() => articleProvenanceHead(article.value))
+
 // Head Management for SEO (Fix Soft 404)
 useHead({
   meta: computed(() => {
     if (!isLoadingContent.value && !article.value) {
       return [{ name: 'robots', content: 'noindex' }]
     }
-    return []
+    return provenanceHead.value.meta
   }),
   script: computed(() => {
     if (article.value) {
@@ -209,7 +140,7 @@ useHead({
       return [
         {
           type: 'application/ld+json',
-          innerHTML: JSON.stringify({
+          innerHTML: jsonLd({
             '@context': 'https://schema.org',
             '@type': 'BlogPosting',
             mainEntityOfPage: {
@@ -226,6 +157,7 @@ useHead({
             url: `https://ivmanto.com/blog/${article.value.slug}`,
           }),
         },
+        ...provenanceHead.value.script,
       ]
     }
     return []
@@ -236,60 +168,48 @@ const sanitizedContent = computed(() => {
   if (!article.value?.content) return ''
   // Strip the leading <h1> from the content to avoid duplicating the title
   // which is already rendered from article.title in the template above.
-  const contentWithoutLeadingH1 = article.value.content.replace(/^\s*<h1[^>]*>.*?<\/h1>\s*/i, '')
+  const contentWithoutLeadingH1 = markSources(article.value.content.replace(/^\s*<h1[^>]*>.*?<\/h1>\s*/i, ''))
   // DOMPurify only works client-side; during SSR, return raw content
   if (import.meta.server) return contentWithoutLeadingH1
   return DOMPurify.sanitize(contentWithoutLeadingH1)
 })
+
+const topic = computed(() => topicLabel(article.value?.topic))
+const minutes = computed(() => {
+  if (!article.value) return 1
+  return cardReadingMinutes(article.value) ?? readingMinutes(article.value.content)
+})
+const related = computed(() => (article.value ? relatedArticles(sortedArticles.value, article.value) : []))
 
 const currentArticleIndex = computed(() => {
   if (!article.value) return -1
   return sortedArticles.value.findIndex((a) => a.slug === article.value?.slug)
 })
 
-const previousArticle = computed(() => {
-  if (currentArticleIndex.value > 0) return sortedArticles.value[currentArticleIndex.value - 1]
-  return undefined
-})
+// sortedArticles is newest first: the one before is newer, the one after is older.
+const newerArticle = computed(() => (currentArticleIndex.value > 0 ? sortedArticles.value[currentArticleIndex.value - 1] : undefined))
+const olderArticle = computed(() =>
+  currentArticleIndex.value !== -1 && currentArticleIndex.value < sortedArticles.value.length - 1
+    ? sortedArticles.value[currentArticleIndex.value + 1]
+    : undefined,
+)
 
-const nextArticle = computed(() => {
-  if (currentArticleIndex.value < sortedArticles.value.length - 1 && currentArticleIndex.value !== -1)
-    return sortedArticles.value[currentArticleIndex.value + 1]
-  return undefined
-})
+const COPIED_LABEL_MS = 2000
+let copiedTimer: ReturnType<typeof setTimeout> | undefined
 
-const otherArticles = computed(() => {
-  if (!article.value) return []
-  return sortedArticles.value.filter((a) => a.slug !== article.value?.slug)
-})
-
-function navigateToArticle(targetSlug: string) {
-  navigateTo(`/blog/${targetSlug}`)
-}
-
-function toggleDropdown() {
-  isDropdownOpen.value = !isDropdownOpen.value
-}
-
-function closeDropdown() {
-  isDropdownOpen.value = false
-}
-
-async function shareArticle() {
-  if (!article.value) return
-  const shareData = {
-    title: article.value.title,
-    text: article.value.summary,
-    url: window.location.href,
-  }
-  if (navigator.share) {
-    try { await navigator.share(shareData) } catch (err) { console.error('Error sharing:', err) }
-  } else {
+async function copyLink() {
+  try {
     await navigator.clipboard.writeText(window.location.href)
-    copied.value = true
-    setTimeout(() => { copied.value = false }, 2000)
+  } catch {
+    // Clipboard blocked (permissions, insecure origin): the label stays, the address bar still has the link.
+    return
   }
+  copied.value = true
+  clearTimeout(copiedTimer)
+  copiedTimer = setTimeout(() => { copied.value = false }, COPIED_LABEL_MS)
 }
+
+onBeforeUnmount(() => clearTimeout(copiedTimer))
 
 async function fetchLikes() {
   if (!article.value) return
@@ -324,10 +244,6 @@ async function handleLike() {
   } catch (error) { console.error('Network error while syncing like status:', error) }
 }
 
-function formatDate(dateString: string) {
-  return new Date(dateString).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
-}
-
 // Client-only: fetch likes and check localStorage on mount
 onMounted(() => {
   fetchLikes()
@@ -336,7 +252,7 @@ onMounted(() => {
 
 // When slug changes client-side (navigation), reset likes state
 watch(slug, (newSlug) => {
-  closeDropdown()
+  copied.value = false
   likeCount.value = 0
   isLiked.value = false
   isLoadingLikes.value = true
@@ -348,20 +264,11 @@ watch(slug, (newSlug) => {
 })
 </script>
 
-<style lang="postcss" scoped>
-.nav-button {
-  @apply h-10 w-10 flex items-center justify-center bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-primary rounded-md transition-all duration-200 hover:scale-110;
-}
-.nav-button-dropdown {
-  @apply h-10 px-4 flex items-center justify-center bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-primary rounded-md transition-all duration-200;
-}
-.nav-button-disabled {
-  @apply h-10 w-10 flex items-center justify-center bg-gray-100 text-gray-400 rounded-md cursor-not-allowed opacity-75;
-}
-.dropdown-item {
-  @apply block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900;
-}
-.tabular-nums {
-  font-variant-numeric: tabular-nums;
-}
+<style scoped>
+.like__count { font-variant-numeric: tabular-nums; }
+.like[disabled] { cursor: default; }
+.byline img { object-position: 50% 20%; }
+/* An empty first cell keeps "Older" in the right column when there is no newer article. */
+.post-nav > span { display: none; }
+@media (min-width: 640px) { .post-nav > span { display: block; } }
 </style>

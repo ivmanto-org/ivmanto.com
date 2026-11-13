@@ -17,6 +17,7 @@ type Config struct {
 	Ideas     IdeasConfig
 	Analytics AnalyticsConfig
 	Blog      BlogConfig
+	Advisor   AdvisorConfig
 }
 
 // ServiceConfig holds configuration for the HTTP service.
@@ -31,6 +32,7 @@ type EmailConfig struct {
 	SendFrom      string
 	SendFromAlias string
 	SmtpPass      string // Loaded from Secret Manager
+	LeadTo        string // Recipient of advisor leads (LEADS_TO); default SendFrom
 }
 
 // GCalConfig holds configuration for the Google Calendar service.
@@ -67,6 +69,16 @@ type AnalyticsConfig struct {
 	MeasurementID string `env:"GA_MEASUREMENT_ID,required"`
 }
 
+// AdvisorConfig holds configuration for the AI service advisor (#112).
+// All fields are optional: an empty MistralAPIKey leaves the advisor
+// unconfigured (POST /api/advisor answers 503) rather than failing boot —
+// the advisor is a funnel enhancement, not a startup dependency.
+type AdvisorConfig struct {
+	MistralAPIKey string
+	MistralModel  string // empty = advisor.DefaultMistralModel
+	CataloguePath string // empty = the catalogue compiled into the binary
+}
+
 // Load reads configuration from environment variables.
 func Load() (*Config, error) {
 	var missingVars []string
@@ -93,6 +105,8 @@ func Load() (*Config, error) {
 	if smtpPass == "" {
 		missingVars = append(missingVars, "SMTP_PASS")
 	}
+	// LEADS_TO is optional: when unset, advisor leads go to SEND_FROM.
+	leadTo := os.Getenv("LEADS_TO")
 
 	calendarID := os.Getenv("CALENDAR_ID")
 	if calendarID == "" {
@@ -151,13 +165,18 @@ func Load() (*Config, error) {
 		missingVars = append(missingVars, "GA_MEASUREMENT_ID")
 	}
 
+	// Load advisor config (all optional; see AdvisorConfig).
+	mistralAPIKey := os.Getenv("MISTRAL_API_KEY")
+	mistralModel := os.Getenv("MISTRAL_MODEL")
+	cataloguePath := os.Getenv("CATALOGUE_PATH")
+
 	if len(missingVars) > 0 {
 		return nil, fmt.Errorf("missing required environment variables: %s", strings.Join(missingVars, ", "))
 	}
 
 	return &Config{
 		Service: ServiceConfig{Port: port},
-		Email:   EmailConfig{SmtpHost: smtpHost, SmtpPort: smtpPort, SendFrom: sendFrom, SendFromAlias: sendFromAlias, SmtpPass: smtpPass},
+		Email:   EmailConfig{SmtpHost: smtpHost, SmtpPort: smtpPort, SendFrom: sendFrom, SendFromAlias: sendFromAlias, SmtpPass: smtpPass, LeadTo: leadTo},
 		GCal: GCalConfig{
 			CalendarID:           calendarID,
 			AvailableSlotSummary: availableSlotSummary,
@@ -176,6 +195,11 @@ func Load() (*Config, error) {
 			PubSubPushSAEmail:         pubsubPushSAEmail,
 			PubSubPushAudience:        pubsubPushAudience,
 			FrontendRebuildWebhookURL: os.Getenv("FRONTEND_REBUILD_WEBHOOK_URL"),
+		},
+		Advisor: AdvisorConfig{
+			MistralAPIKey: mistralAPIKey,
+			MistralModel:  mistralModel,
+			CataloguePath: cataloguePath,
 		},
 	}, nil
 }

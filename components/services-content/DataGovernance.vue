@@ -1,13 +1,6 @@
-<script setup lang="ts">
-// 1. Import your composable
-// usePageMetadata is auto-imported by Nuxt
-// 2. Get the reactive title
-const { cleanTitle } = usePageMetadata()
-</script>
-
+<!-- Long-form background text. The page (pages/data-ai/[id].vue) owns the h1. -->
 <template>
   <article class="prose prose-sm lg:prose-base max-w-none p-6">
-    <h1>{{ cleanTitle }}</h1>
     <p class="italic lg:text-l">
       Stop Guessing, Start Governing: A Leader's Guide to Data Strategy
     </p>
@@ -25,12 +18,12 @@ const { cleanTitle } = usePageMetadata()
       These aren't technology problems; they are symptoms of a business operating without a coherent
       <strong>Data Strategy</strong> and effective <strong>Data Governance.</strong>
     </p>
-    <P
-      >At Ivmanto, we see data not as a byproduct of your operations, but as your most valuable,
+    <p>
+      At Ivmanto, we see data not as a byproduct of your operations, but as your most valuable,
       underleveraged asset. Our Data Strategy and Governance service is designed to transform this
       asset from a source of chaos into a wellspring of decisive action and competitive
-      advantage.</P
-    >
+      advantage.
+    </p>
     <h3>The High Cost of an Ungoverned Data Landscape</h3>
     <p>
       Operating without a formal data strategy is like navigating a ship without a map or a compass.

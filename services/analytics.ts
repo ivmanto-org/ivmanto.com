@@ -22,6 +22,8 @@ export const trackEvent = (eventName: string, params: Record<string, any> = {}) 
   })
 }
 
+const PRODUCTION_HOSTS = ['ivmanto.com', 'www.ivmanto.com']
+
 /**
  * Injects the Google Tag Manager script into the page.
  * This should be called once, after cookie consent is given.
@@ -32,6 +34,11 @@ export const initGtm = () => {
 
   // Ensure this only runs in the browser and hasn't been run before.
   if (typeof window === 'undefined' || window.gtmInitialized) {
+    return
+  }
+  // Analytics runs on the production domain only: staging, previews and local
+  // builds must not send visits into the production data (Nick, 2026-11-12).
+  if (!PRODUCTION_HOSTS.includes(window.location.hostname)) {
     return
   }
   window.gtmInitialized = true

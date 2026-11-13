@@ -1,9 +1,9 @@
 # IV-INFRA-03: Secret Manager secret shells (import-only).
 #
-# All six secrets already exist in ivmanto-com-prod-514215 (values migrated
-# out-of-band by Nick, each with version 1 enabled and user-managed
-# replication in europe-west3). Terraform adopts them via import blocks —
-# it must NOT create, replace or destroy them:
+# All seven secrets already exist in ivmanto-com-prod-514215 (values migrated
+# out-of-band by Nick or an operator, each with version 1 enabled and
+# user-managed replication in europe-west3). Terraform adopts them via import
+# blocks — it must NOT create, replace or destroy them:
 #   - replication is pinned to user-managed europe-west3; any mismatch
 #     forces replacement, which would DESTROY the stored values;
 #   - lifecycle.prevent_destroy is a second line of defence;
@@ -14,7 +14,14 @@
 # Accessor IAM bindings do NOT live here: they ride in #99 (IV-INFRA-02 /
 # service_accounts.tf) because they reference google_service_account.backend.
 #
-# Acceptance: terraform plan = 6 to import, 0 to add, 0 to change, 0 to destroy.
+# ivmanto-github-oauth (added this PR, #125) records the dasiyes PAT secret
+# Nick created out-of-band on 2026-11-10 to authorise the Cloud Build GitHub
+# connection (#105). See infra/terraform/manual-grants-2026-11-10.md.
+#
+# Acceptance: terraform plan = 1 to import, 0 to add, 1 to change
+# (labels: managed-by/workload, in place), 0 to destroy. The six older
+# secrets are already in state; only ivmanto-github-oauth imports, and the
+# live secret has no labels while the resource sets them (review #130).
 
 locals {
   secrets = {
@@ -24,6 +31,7 @@ locals {
     pubsub-push-token            = "Shared bearer token for the operator-only articles status endpoint (Authorization header, constant-time compare, #115)"
     frontend-rebuild-webhook-url = "Cloud Build webhook trigger URL used by the backend after a blog publish (new version once #105 creates the trigger)"
     webhook-secret               = "Cloud Build webhook trigger secret (GitHub webhook)"
+    ivmanto-github-oauth         = "dasiyes classic PAT (repo, read:org, read:user) authorising the Cloud Build 2nd-gen GitHub connection (#105). Value added out-of-band; never in Terraform. See infra/terraform/manual-grants-2026-11-10.md"
   }
 }
 
@@ -80,4 +88,9 @@ import {
 import {
   to = google_secret_manager_secret.this["webhook-secret"]
   id = "projects/ivmanto-com-prod-514215/secrets/webhook-secret"
+}
+
+import {
+  to = google_secret_manager_secret.this["ivmanto-github-oauth"]
+  id = "projects/ivmanto-com-prod-514215/secrets/ivmanto-github-oauth"
 }
