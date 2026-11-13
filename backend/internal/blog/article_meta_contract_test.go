@@ -172,7 +172,7 @@ func TestCacheRefresh_TopicVocabulary(t *testing.T) {
 func TestCacheRefresh_AllTopicsValid(t *testing.T) {
 	files := map[string][]byte{}
 	for _, topic := range []string{"governance", "risk", "compliance", "engineering"} {
-		files[topic+".md"] = []byte(articleFrontmatter("topic: "+topic+"\n"))
+		files[topic+".md"] = []byte(articleFrontmatter("topic: " + topic + "\n"))
 	}
 	cache, err := NewCache(context.Background(), &fakeStorage{files: files}, NewParser(), testLogger())
 	if err != nil {

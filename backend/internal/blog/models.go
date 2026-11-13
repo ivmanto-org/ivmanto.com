@@ -30,10 +30,10 @@ type ArticleMeta struct {
 // validTopics is the closed vocabulary for the insights topic filter
 // (governance, risk, compliance, engineering).
 var validTopics = map[string]bool{
-	"governance":   true,
-	"risk":         true,
-	"compliance":   true,
-	"engineering":  true,
+	"governance":  true,
+	"risk":        true,
+	"compliance":  true,
+	"engineering": true,
 }
 
 // Article is the full article with rendered HTML content.
