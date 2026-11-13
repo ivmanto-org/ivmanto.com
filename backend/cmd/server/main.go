@@ -109,18 +109,24 @@ func main() {
 	// catalogue) leaves the provider nil, so /api/advisor answers 503
 	// rather than preventing the rest of the backend (booking, contact,
 	// blog) from starting.
+	// The catalogue is compiled into the binary; CATALOGUE_PATH overrides it.
 	cataloguePath := cfg.Advisor.CataloguePath
-	if cataloguePath == "" {
-		cataloguePath = advisor.DefaultCataloguePath
+	catalogueSource := "embedded"
+	if cataloguePath != "" {
+		catalogueSource = cataloguePath
 	}
 
 	var advisorProvider advisor.Provider
 	var advCatalogue *advisor.Catalogue
 	if cfg.Advisor.MistralAPIKey != "" {
 		var cerr error
-		advCatalogue, cerr = advisor.LoadCatalogue(cataloguePath)
+		if cataloguePath == "" {
+			advCatalogue, cerr = advisor.EmbeddedCatalogue()
+		} else {
+			advCatalogue, cerr = advisor.LoadCatalogue(cataloguePath)
+		}
 		if cerr != nil {
-			slog.Error("MISTRAL_API_KEY set but service catalogue could not be loaded — advisor DISABLED (503)", "path", cataloguePath, "error", cerr)
+			slog.Error("MISTRAL_API_KEY set but service catalogue could not be loaded — advisor DISABLED (503)", "catalogue", catalogueSource, "error", cerr)
 		} else {
 			advisorProvider, err = advisor.NewMistralProvider(advisor.MistralOptions{
 				APIKey:    cfg.Advisor.MistralAPIKey,
@@ -136,7 +142,7 @@ func main() {
 				if model == "" {
 					model = advisor.DefaultMistralModel
 				}
-				slog.Info("advisor enabled", "model", model, "catalogue", cataloguePath)
+				slog.Info("advisor enabled", "model", model, "catalogue", catalogueSource)
 			}
 		}
 	} else {
